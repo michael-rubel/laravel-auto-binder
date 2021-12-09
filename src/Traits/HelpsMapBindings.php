@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MichaelRubel\AutoBinder\Traits;
 
-trait HelpsBindingMapper
+trait HelpsMapBindings
 {
     /**
      * @param string $filename

@@ -6,12 +6,12 @@ namespace MichaelRubel\AutoBinder\Core;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use MichaelRubel\AutoBinder\Traits\HelpsBindingMapper;
+use MichaelRubel\AutoBinder\Traits\HelpsMapBindings;
 use Symfony\Component\Finder\SplFileInfo;
 
 class BindingMapper
 {
-    use HelpsBindingMapper;
+    use HelpsMapBindings;
 
     /**
      * Internal constants.
