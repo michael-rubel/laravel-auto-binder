@@ -1,0 +1,109 @@
+<?php
+
+declare(strict_types=1);
+
+namespace MichaelRubel\AutoBinder\Core;
+
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+use MichaelRubel\AutoBinder\Traits\HelpsBindingMapper;
+use Symfony\Component\Finder\SplFileInfo;
+
+class BindingMapper
+{
+    use HelpsBindingMapper;
+
+    /**
+     * Internal constants.
+     *
+     * @const
+     */
+    public const CLASS_SEPARATOR = '\\';
+
+    /**
+     * @var string
+     */
+    protected string $startNamespace;
+
+    /**
+     * Auto-maps all the classes.
+     */
+    public function __construct()
+    {
+        $namespace = config('auto-binder.start_namespace') ?? 'App';
+
+        $this->startNamespace = Str::ucfirst(
+            $this->cleanupPath(
+                is_string($namespace)
+                    ? $namespace
+                    : 'App'
+            )
+        );
+
+        collect(config('auto-binder.class_folders') ?? [
+            'Services',
+            'Models',
+        ])->each(
+            fn (string $folder) => $this->getFolderFiles($folder)
+                ->each(function (SplFileInfo $file) use ($folder) {
+                    $relativePath             = $file->getRelativePathname();
+                    $filenameWithoutExtension = $file->getFilenameWithoutExtension();
+                    $filenameWithRelativePath = $this->cleanupFilename($relativePath);
+
+                    $interface = $this->startNamespace
+                        . self::CLASS_SEPARATOR
+                        . $folder
+                        . self::CLASS_SEPARATOR
+                        . (config('auto-binder.interface_folder') ?? 'Interfaces')
+                        . self::CLASS_SEPARATOR
+                        . $filenameWithoutExtension
+                        . (config('auto-binder.interface_postfix') ?? 'Interface');
+
+                    $implementation = $this->startNamespace
+                        . self::CLASS_SEPARATOR
+                        . $folder
+                        . self::CLASS_SEPARATOR
+                        . $filenameWithRelativePath;
+
+                    app()->{
+                        config('auto-binder.binding_type') ?? 'singleton'
+                    }($interface, $implementation);
+                })
+        );
+    }
+
+    /**
+     * @param string $folder
+     *
+     * @return Collection
+     */
+    public function getFolderFiles(string $folder): Collection
+    {
+        return collect(
+            app('files')->allFiles(
+                (config('auto-binder.start_folder') ?? 'app')
+                . DIRECTORY_SEPARATOR
+                . $folder
+            )
+        )->reject(function (SplFileInfo $file) {
+            $map = collect(
+                config('auto-binder.ignored_class_folders') ?? [
+                'Interfaces',
+                'Contracts',
+                'Traits',
+                ]
+            )->map(
+                fn ($item) => $this->startNamespace
+                    . BindingMapper::CLASS_SEPARATOR
+                    . $item
+            )->map(
+                fn (string $folder) => str_contains(
+                    $file->getRelativePath(),
+                    $folder
+                )
+            );
+
+            return $map->first() || $map->last();
+        });
+    }
+}
