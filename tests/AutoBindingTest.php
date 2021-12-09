@@ -2,6 +2,7 @@
 
 namespace MichaelRubel\AutoBinder\Tests;
 
+use MichaelRubel\AutoBinder\BindingServiceProvider;
 use MichaelRubel\AutoBinder\Core\BindingMapper;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Models\Example;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Models\Interfaces\ExampleInterface;
@@ -21,7 +22,7 @@ class AutoBindingTest extends TestCase
     }
 
     /** @test */
-    public function testBindingsAreMapped()
+    public function testBindingsAreMappedThroughClass()
     {
         new BindingMapper();
 
@@ -30,6 +31,13 @@ class AutoBindingTest extends TestCase
 
         $hasCorrectImplementation = app(ExampleInterface::class);
         $this->assertInstanceOf(Example::class, $hasCorrectImplementation);
+    }
+
+    /** @test */
+    public function testBindingsAreMappedThroughRegisteredProvider()
+    {
+        $registered = app()->register(BindingServiceProvider::class, true);
+        $this->assertInstanceOf(BindingServiceProvider::class, $registered);
 
         $bound = app()->bound(ExampleServiceInterface::class);
         $this->assertTrue($bound);
