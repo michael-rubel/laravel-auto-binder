@@ -82,30 +82,24 @@ class BindingMapper
         $directory = config('auto-binder.start_folder') ?? 'app';
 
         $path = base_path(is_string($directory) ? $directory : 'app')
-            . DIRECTORY_SEPARATOR
-            . $folder;
+                . DIRECTORY_SEPARATOR
+                . $folder;
 
         $files = app('files')->isDirectory($path)
             ? app('files')->allFiles($path)
             : [];
 
-        return collect($files)->reject(function (SplFileInfo $file) {
-            $map = collect(config('auto-binder.ignored_class_folders') ?? [
+        return collect($files)->reject(
+            fn (SplFileInfo $file) => collect(config('auto-binder.ignored_class_folders') ?? [
                 'Interfaces',
                 'Contracts',
                 'Traits',
             ])->map(
-                fn ($item) => $this->startNamespace
-                    . BindingMapper::CLASS_SEPARATOR
-                    . $item
-            )->map(
                 fn (string $folder) => str_contains(
                     $file->getRelativePath(),
                     $folder
                 )
-            );
-
-            return $map->first() || $map->last();
-        });
+            )->contains(true)
+        );
     }
 }

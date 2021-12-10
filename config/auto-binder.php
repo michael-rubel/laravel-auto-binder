@@ -58,5 +58,8 @@ return [
         'Interfaces',
         'Contracts',
         'Traits',
+        'Relations',
+        'Queries',
+        'QueryScopes',
     ],
 ];
