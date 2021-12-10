@@ -79,20 +79,22 @@ class BindingMapper
      */
     public function getFolderFiles(string $folder): Collection
     {
-        return collect(
-            app('files')->allFiles(
-                (config('auto-binder.start_folder') ?? 'app')
-                . DIRECTORY_SEPARATOR
-                . $folder
-            )
-        )->reject(function (SplFileInfo $file) {
-            $map = collect(
-                config('auto-binder.ignored_class_folders') ?? [
+        $directory = config('auto-binder.start_folder') ?? 'app';
+
+        $path = base_path(is_string($directory) ? $directory : 'app')
+            . DIRECTORY_SEPARATOR
+            . $folder;
+
+        $files = app('files')->isDirectory($path)
+            ? app('files')->allFiles($path)
+            : [];
+
+        return collect($files)->reject(function (SplFileInfo $file) {
+            $map = collect(config('auto-binder.ignored_class_folders') ?? [
                 'Interfaces',
                 'Contracts',
                 'Traits',
-                ]
-            )->map(
+            ])->map(
                 fn ($item) => $this->startNamespace
                     . BindingMapper::CLASS_SEPARATOR
                     . $item

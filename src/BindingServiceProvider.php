@@ -29,13 +29,15 @@ class BindingServiceProvider extends PackageServiceProvider
      *
      * @return void
      */
-    public function packageBooted(): void
+    public function packageRegistered(): void
     {
-        if (config('auto-binder.enabled') ?? false) {
-            $directory = config('auto-binder.start_folder') ?? 'app';
+        if (config('auto-binder.enabled') ?? true) {
+            $directoryPath = config('auto-binder.start_folder') ?? 'app';
 
-            $directoryExists = is_string($directory)
-                && app('files')->isDirectory($directory);
+            $directoryExists = is_string($directoryPath)
+                && app('files')->isDirectory(
+                    base_path($directoryPath)
+                );
 
             if ($directoryExists) {
                 app(BindingMapper::class);
