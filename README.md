@@ -36,7 +36,7 @@ php artisan vendor:publish --tag="auto-binder-config"
 
 ## Usage
 
-Edit the config and put your classes and interfaces to the proper folders with the proper class naming. That's all.
+Edit the config and put your classes and interfaces to the proper folders with proper class naming. That's all.
 
 So, these basic bindings:
 ```php
