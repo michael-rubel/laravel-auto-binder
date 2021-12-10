@@ -15,7 +15,7 @@ One requirement you should follow to use this package:
 
 For example: `App\Services\YourService => App\Services\Interfaces\YourServiceInterface`
 
-Class names and folders to scan are fully customizable.
+You can customize folders to scan and the naming convention of your interfaces in the config.
 
 The package requires PHP `^8.x` and Laravel `^8.67`.
 
