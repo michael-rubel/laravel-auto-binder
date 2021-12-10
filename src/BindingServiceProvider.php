@@ -31,7 +31,7 @@ class BindingServiceProvider extends PackageServiceProvider
      */
     public function packageRegistered(): void
     {
-        if (config('auto-binder.enabled') ?? true) {
+        if (config('auto-binder.enabled') ?? false) {
             $directoryPath = config('auto-binder.start_folder') ?? 'app';
 
             $directoryExists = is_string($directoryPath)
