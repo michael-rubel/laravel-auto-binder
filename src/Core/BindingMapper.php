@@ -79,7 +79,7 @@ class BindingMapper implements BindingMapperContract
         return collect($files)->reject(
             fn (SplFileInfo $file) => collect(
                 config('auto-binder.exclude_from_scan')
-                        ?? ['Interfaces', 'Contracts', 'Traits']
+                    ?? ['Interfaces', 'Contracts', 'Traits']
             )->map(fn (string $folder) => str_contains(
                 $file->getRelativePath(),
                 $folder
