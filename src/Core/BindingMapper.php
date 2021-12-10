@@ -14,8 +14,6 @@ class BindingMapper
     use HelpsMapBindings;
 
     /**
-     * Internal constants.
-     *
      * @const
      */
     public const CLASS_SEPARATOR = '\\';
