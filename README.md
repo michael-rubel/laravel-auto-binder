@@ -38,7 +38,7 @@ php artisan vendor:publish --tag="auto-binder-config"
 
 Edit the config and put your classes and interfaces to the proper folders with proper class naming. That's all.
 
-So, these basic bindings:
+So, this kind of bindings:
 ```php
 $this->app->bind(AuthServiceInterface::class, AuthService::class);
 $this->app->bind(UserServiceInterface::class, UserService::class);
@@ -46,7 +46,7 @@ $this->app->bind(CompanyServiceInterface::class, CompanyService::class);
 ...
 ```
 
-Or this provider's array with bindings:
+Or provider's array:
 ```php
 public array $singletons = [
     AuthServiceInterface::class    => AuthService::class,
@@ -56,8 +56,7 @@ public array $singletons = [
 ];
 ```
 
-
-... Will be registered automatically for you.
+Will be registered automatically for you.
 
 ## Testing
 ```bash
