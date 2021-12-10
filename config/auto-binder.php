@@ -43,9 +43,8 @@ return [
 
     'start_namespace' => 'App',
     'start_folder'    => 'app',
-    'class_folders'   => [
+    'scan_folders'   => [
         'Services',
-        'Models',
     ],
 
     /*
@@ -54,7 +53,7 @@ return [
      * Add any folders you want to exclude while searching your implementations.
      */
 
-    'ignored_class_folders' => [
+    'exclude_from_scan' => [
         'Interfaces',
         'Contracts',
         'Traits',

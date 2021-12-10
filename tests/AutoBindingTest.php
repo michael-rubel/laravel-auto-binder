@@ -20,6 +20,10 @@ class AutoBindingTest extends TestCase
         config([
             'auto-binder.start_namespace' => 'MichaelRubel\\AutoBinder\\Tests\\Boilerplate',
             'auto-binder.start_folder'    => 'tests' . DIRECTORY_SEPARATOR . 'Boilerplate',
+            'auto-binder.scan_folders' => [
+                'Services',
+                'Models',
+            ],
         ]);
 
         app()->setBasePath(__DIR__ . '/../');

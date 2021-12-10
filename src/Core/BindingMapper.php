@@ -40,7 +40,7 @@ class BindingMapper
             )
         );
 
-        collect(config('auto-binder.class_folders') ?? ['Services', 'Models'])
+        collect(config('auto-binder.scan_folders') ?? ['Services'])
             ->each(
                 fn (string $folder) => $this->getFolderFiles($folder)
                     ->each(function (SplFileInfo $file) use ($folder) {
@@ -88,7 +88,7 @@ class BindingMapper
             : [];
 
         return collect($files)->reject(
-            fn (SplFileInfo $file) => collect(config('auto-binder.ignored_class_folders') ?? [
+            fn (SplFileInfo $file) => collect(config('auto-binder.exclude_from_scan') ?? [
                 'Interfaces',
                 'Contracts',
                 'Traits',
