@@ -34,6 +34,22 @@ Then publish and customize the configuration:
 php artisan vendor:publish --tag="auto-binder-config"
 ```
 
+## Usage
+
+Put your classes and interfaces to the proper folders and edit the config. That's all.
+
+So, this:
+```php
+public array $singletons = [
+    AuthServiceInterface::class    => AuthService::class,
+    UserServiceInterface::class    => UserService::class,
+    CompanyServiceInterface::class => CompanyService::class,
+    ...
+];
+```
+
+Will be registered automatically for you.
+
 ## Testing
 ```bash
 composer test
