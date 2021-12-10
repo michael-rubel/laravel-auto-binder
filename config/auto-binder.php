@@ -6,13 +6,11 @@ return [
     | Auto-binder configuration
     |--------------------------------------------------------------------------
     |
-    | This package automatically creates binds the interfaces to its implementations
-    | in the Service Container, scanning the project folders.
+    | This package automatically binds interfaces to its implementations in the Service Container,
+    | scanning the specified project folders. This helps avoid manually registering container bindings when
+    | the project needs to bind a lot of interfaces to its implementations without any additional dependencies.
     |
     | For example: App\Services\YourService => App\Services\Interfaces\YourServiceInterface
-    |
-    | This helps avoid manually registering container bindings when the project needs to
-    | bind a lot of interfaces to its implementations without any additional dependencies.
     |
     | Determine if you want to enable the package.
     |
