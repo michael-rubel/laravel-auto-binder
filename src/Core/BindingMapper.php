@@ -80,8 +80,8 @@ class BindingMapper
         $directory = config('auto-binder.start_folder') ?? 'app';
 
         $path = base_path(is_string($directory) ? $directory : 'app')
-                . DIRECTORY_SEPARATOR
-                . $folder;
+            . DIRECTORY_SEPARATOR
+            . $folder;
 
         $files = app('files')->isDirectory($path)
             ? app('files')->allFiles($path)
