@@ -6,8 +6,8 @@ return [
     | Auto-binder configuration
     |--------------------------------------------------------------------------
     |
-    | The package automatically creates the Service Container binding for an interface from the
-    | subsequent folder to implementation with an identical class name structure from the base folder.
+    | This package automatically creates binds the interfaces to its implementations
+    | in the Service Container, scanning the project folders.
     |
     | For example: App\Services\YourService => App\Services\Interfaces\YourServiceInterface
     |
