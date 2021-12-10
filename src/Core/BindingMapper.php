@@ -40,36 +40,34 @@ class BindingMapper
             )
         );
 
-        collect(config('auto-binder.class_folders') ?? [
-            'Services',
-            'Models',
-        ])->each(
-            fn (string $folder) => $this->getFolderFiles($folder)
-                ->each(function (SplFileInfo $file) use ($folder) {
-                    $relativePath             = $file->getRelativePathname();
-                    $filenameWithoutExtension = $file->getFilenameWithoutExtension();
-                    $filenameWithRelativePath = $this->cleanupFilename($relativePath);
+        collect(config('auto-binder.class_folders') ?? ['Services', 'Models'])
+            ->each(
+                fn (string $folder) => $this->getFolderFiles($folder)
+                    ->each(function (SplFileInfo $file) use ($folder) {
+                        $relativePath             = $file->getRelativePathname();
+                        $filenameWithoutExtension = $file->getFilenameWithoutExtension();
+                        $filenameWithRelativePath = $this->cleanupFilename($relativePath);
 
-                    $interface = $this->startNamespace
-                        . self::CLASS_SEPARATOR
-                        . $folder
-                        . self::CLASS_SEPARATOR
-                        . (config('auto-binder.interface_folder') ?? 'Interfaces')
-                        . self::CLASS_SEPARATOR
-                        . $filenameWithoutExtension
-                        . (config('auto-binder.interface_postfix') ?? 'Interface');
+                        $interface = $this->startNamespace
+                            . self::CLASS_SEPARATOR
+                            . $folder
+                            . self::CLASS_SEPARATOR
+                            . (config('auto-binder.interface_folder') ?? 'Interfaces')
+                            . self::CLASS_SEPARATOR
+                            . $filenameWithoutExtension
+                            . (config('auto-binder.interface_postfix') ?? 'Interface');
 
-                    $implementation = $this->startNamespace
-                        . self::CLASS_SEPARATOR
-                        . $folder
-                        . self::CLASS_SEPARATOR
-                        . $filenameWithRelativePath;
+                        $implementation = $this->startNamespace
+                            . self::CLASS_SEPARATOR
+                            . $folder
+                            . self::CLASS_SEPARATOR
+                            . $filenameWithRelativePath;
 
-                    app()->{
-                        config('auto-binder.binding_type') ?? 'singleton'
-                    }($interface, $implementation);
-                })
-        );
+                        app()->{
+                            config('auto-binder.binding_type') ?? 'singleton'
+                        }($interface, $implementation);
+                    })
+            );
     }
 
     /**
