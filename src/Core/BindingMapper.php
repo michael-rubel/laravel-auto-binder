@@ -9,14 +9,9 @@ use Illuminate\Support\Str;
 use MichaelRubel\AutoBinder\Traits\HelpsMapBindings;
 use Symfony\Component\Finder\SplFileInfo;
 
-class BindingMapper
+class BindingMapper implements BindingMapperContract
 {
     use HelpsMapBindings;
-
-    /**
-     * @const
-     */
-    public const CLASS_SEPARATOR = '\\';
 
     /**
      * @var string
@@ -31,41 +26,35 @@ class BindingMapper
         $namespace = config('auto-binder.start_namespace') ?? 'App';
 
         $this->startNamespace = Str::ucfirst(
-            $this->cleanupPath(
-                is_string($namespace)
-                    ? $namespace
-                    : 'App'
-            )
+            $this->cleanupPath(is_string($namespace) ? $namespace : 'App')
         );
 
         collect(config('auto-binder.scan_folders') ?? ['Services'])
-            ->each(
-                fn (string $folder) => $this->getFolderFiles($folder)
-                    ->each(function (SplFileInfo $file) use ($folder) {
-                        $relativePath             = $file->getRelativePathname();
-                        $filenameWithoutExtension = $file->getFilenameWithoutExtension();
-                        $filenameWithRelativePath = $this->cleanupFilename($relativePath);
+            ->each(fn (string $folder) => $this->getFolderFiles($folder)
+                ->each(function (SplFileInfo $file) use ($folder) {
+                    $relativePath             = $file->getRelativePathname();
+                    $filenameWithoutExtension = $file->getFilenameWithoutExtension();
+                    $filenameWithRelativePath = $this->cleanupFilename($relativePath);
 
-                        $interface = $this->startNamespace
-                            . self::CLASS_SEPARATOR
-                            . $folder
-                            . self::CLASS_SEPARATOR
-                            . (config('auto-binder.interface_folder') ?? 'Interfaces')
-                            . self::CLASS_SEPARATOR
-                            . $filenameWithoutExtension
-                            . (config('auto-binder.interface_postfix') ?? 'Interface');
+                    $interface = $this->startNamespace
+                        . self::CLASS_SEPARATOR
+                        . $folder
+                        . self::CLASS_SEPARATOR
+                        . (config('auto-binder.interface_folder') ?? 'Interfaces')
+                        . self::CLASS_SEPARATOR
+                        . $filenameWithoutExtension
+                        . (config('auto-binder.interface_postfix') ?? 'Interface');
 
-                        $implementation = $this->startNamespace
-                            . self::CLASS_SEPARATOR
-                            . $folder
-                            . self::CLASS_SEPARATOR
-                            . $filenameWithRelativePath;
+                    $implementation = $this->startNamespace
+                        . self::CLASS_SEPARATOR
+                        . $folder
+                        . self::CLASS_SEPARATOR
+                        . $filenameWithRelativePath;
 
-                        app()->{
-                            config('auto-binder.binding_type') ?? 'singleton'
-                        }($interface, $implementation);
-                    })
-            );
+                    app()->{
+                        config('auto-binder.binding_type') ?? 'singleton'
+                    }($interface, $implementation);
+                }));
     }
 
     /**
@@ -81,21 +70,20 @@ class BindingMapper
             . DIRECTORY_SEPARATOR
             . $folder;
 
-        $files = app('files')->isDirectory($path)
-            ? app('files')->allFiles($path)
+        $filesystem = app('files');
+
+        $files = $filesystem->isDirectory($path)
+            ? $filesystem->allFiles($path)
             : [];
 
         return collect($files)->reject(
-            fn (SplFileInfo $file) => collect(config('auto-binder.exclude_from_scan') ?? [
-                'Interfaces',
-                'Contracts',
-                'Traits',
-            ])->map(
-                fn (string $folder) => str_contains(
-                    $file->getRelativePath(),
-                    $folder
-                )
-            )->contains(true)
+            fn (SplFileInfo $file) => collect(
+                config('auto-binder.exclude_from_scan')
+                        ?? ['Interfaces', 'Contracts', 'Traits']
+            )->map(fn (string $folder) => str_contains(
+                $file->getRelativePath(),
+                $folder
+            ))->contains(true)
         );
     }
 }
