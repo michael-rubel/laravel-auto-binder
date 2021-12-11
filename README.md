@@ -8,7 +8,7 @@
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/michael-rubel/laravel-auto-binder/run-tests/main?style=flat-square&label=tests&logo=github)](https://github.com/michael-rubel/laravel-auto-binder/actions)
 [![PHPStan](https://img.shields.io/github/workflow/status/michael-rubel/laravel-auto-binder/phpstan/main?style=flat-square&label=larastan&logo=laravel)](https://github.com/michael-rubel/laravel-auto-binder/actions)
 
-This package automatically binds interfaces to its implementations in the Service Container, scanning the specified project folders. This helps avoid manually registering container bindings when the project needs to bind a lot of interfaces to its implementations without any additional dependencies.
+> This package automatically binds interfaces to implementations in the Service Container, scanning the specified project folders. This helps avoid manually registering container bindings when the project needs to bind a lot of interfaces to its implementations without any additional dependencies.
 
 One requirement you should follow to use this package:
 - Folder with interfaces always should be the child of the folder where it belongs.
