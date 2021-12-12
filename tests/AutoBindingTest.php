@@ -30,16 +30,8 @@ class AutoBindingTest extends TestCase
     }
 
     /** @test */
-    public function testBindingsAreMappedThroughClass()
+    public function testBindingsAreMappedThroughNewClass()
     {
-        $mock = $this->partialMock(Filesystem::class, function (MockInterface $mock) {
-            $mock->shouldReceive('isDirectory')
-                 ->times(2)
-                 ->andReturnTrue();
-        });
-
-        app()->instance('files', $mock);
-
         new BindingMapper();
 
         $bound = app()->bound(ExampleInterface::class);
@@ -47,21 +39,25 @@ class AutoBindingTest extends TestCase
 
         $hasCorrectImplementation = app(ExampleInterface::class);
         $this->assertInstanceOf(Example::class, $hasCorrectImplementation);
+
+        $bound = app()->bound(ExampleServiceInterface::class);
+        $this->assertTrue($bound);
+
+        $hasCorrectImplementation = app(ExampleServiceInterface::class);
+        $this->assertInstanceOf(ExampleService::class, $hasCorrectImplementation);
     }
 
     /** @test */
-    public function testBindingsAreMappedThroughRegisteredProvider()
+    public function testBindingsAreMappedThroughProvider()
     {
-        $mock = $this->partialMock(Filesystem::class, function (MockInterface $mock) {
-            $mock->shouldReceive('isDirectory')
-                 ->times(3)
-                 ->andReturnTrue();
-        });
-
-        app()->instance('files', $mock);
-
         $registered = app()->register(BindingServiceProvider::class, true);
         $this->assertInstanceOf(BindingServiceProvider::class, $registered);
+
+        $bound = app()->bound(ExampleInterface::class);
+        $this->assertTrue($bound);
+
+        $hasCorrectImplementation = app(ExampleInterface::class);
+        $this->assertInstanceOf(Example::class, $hasCorrectImplementation);
 
         $bound = app()->bound(ExampleServiceInterface::class);
         $this->assertTrue($bound);
