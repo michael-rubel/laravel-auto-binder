@@ -23,13 +23,17 @@ class BindingMapper implements BindingMapperContract
      */
     public function __construct()
     {
-        $namespace = config('auto-binder.start_namespace') ?? 'App';
+        $namespace = config('auto-binder.start_namespace') ?? self::DEFAULT_NAMESPACE;
 
         $this->startNamespace = Str::ucfirst(
-            $this->cleanupPath(is_string($namespace) ? $namespace : 'App')
+            $this->cleanupPath(
+                is_string($namespace)
+                    ? $namespace
+                    : self::DEFAULT_NAMESPACE
+            )
         );
 
-        collect(config('auto-binder.scan_folders') ?? ['Services'])
+        collect(config('auto-binder.scan_folders') ?? self::DEFAULT_SCAN_FOLDERS)
             ->each(fn (string $folder) => $this->getFolderFiles($folder)
                 ->each(function (SplFileInfo $file) use ($folder) {
                     $relativePath             = $file->getRelativePathname();
@@ -40,10 +44,10 @@ class BindingMapper implements BindingMapperContract
                         . self::CLASS_SEPARATOR
                         . $folder
                         . self::CLASS_SEPARATOR
-                        . (config('auto-binder.interface_folder') ?? 'Interfaces')
+                        . (config('auto-binder.interface_folder') ?? self::DEFAULT_INTERFACE_FOLDER)
                         . self::CLASS_SEPARATOR
                         . $filenameWithoutExtension
-                        . (config('auto-binder.interface_postfix') ?? 'Interface');
+                        . (config('auto-binder.interface_postfix') ?? self::DEFAULT_INTERFACE_POSTFIX);
 
                     $implementation = $this->startNamespace
                         . self::CLASS_SEPARATOR
@@ -52,7 +56,7 @@ class BindingMapper implements BindingMapperContract
                         . $filenameWithRelativePath;
 
                     app()->{
-                        config('auto-binder.binding_type') ?? 'singleton'
+                        config('auto-binder.binding_type') ?? self::DEFAULT_BINDING_TYPE
                     }($interface, $implementation);
                 }));
     }
@@ -64,9 +68,9 @@ class BindingMapper implements BindingMapperContract
      */
     public function getFolderFiles(string $folder): Collection
     {
-        $directory = config('auto-binder.start_folder') ?? 'app';
+        $directory = config('auto-binder.start_folder') ?? self::DEFAULT_FOLDER;
 
-        $path = base_path(is_string($directory) ? $directory : 'app')
+        $path = base_path(is_string($directory) ? $directory : self::DEFAULT_FOLDER)
             . DIRECTORY_SEPARATOR
             . $folder;
 
@@ -79,7 +83,7 @@ class BindingMapper implements BindingMapperContract
         return collect($files)->reject(
             fn (SplFileInfo $file) => collect(
                 config('auto-binder.exclude_from_scan')
-                    ?? ['Interfaces', 'Contracts', 'Traits']
+                    ?? self::DEFAULT_SCAN_EXCLUDES
             )->map(fn (string $folder) => str_contains(
                 $file->getRelativePath(),
                 $folder
