@@ -40,20 +40,10 @@ Edit the config and put your classes and interfaces to the proper folders with p
 
 So, this kind of bindings:
 ```php
-$this->app->bind(AuthServiceInterface::class, AuthService::class);
-$this->app->bind(UserServiceInterface::class, UserService::class);
-$this->app->bind(CompanyServiceInterface::class, CompanyService::class);
+$this->app->singleton(AuthServiceInterface::class, AuthService::class);
+$this->app->singleton(UserServiceInterface::class, UserService::class);
+$this->app->singleton(CompanyServiceInterface::class, CompanyService::class);
 ...
-```
-
-Or provider's array:
-```php
-public array $singletons = [
-    AuthServiceInterface::class    => AuthService::class,
-    UserServiceInterface::class    => UserService::class,
-    CompanyServiceInterface::class => CompanyService::class,
-    ...
-];
 ```
 
 Will be registered automatically for you.
