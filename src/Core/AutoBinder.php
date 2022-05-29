@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MichaelRubel\AutoBinder\Core;
 
+use Illuminate\Support\Collection;
 use MichaelRubel\AutoBinder\Traits\AutoBinds;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -25,7 +26,7 @@ class AutoBinder implements AutoBinderContract
     private function performAutoBinding(): void
     {
         collect(config('auto-binder.scan_folders', self::DEFAULT_SCAN_FOLDERS))
-            ->pipe(function ($folders) {
+            ->pipe(function (Collection $folders) {
                 $this->prepareNamespace();
 
                 return $folders;
