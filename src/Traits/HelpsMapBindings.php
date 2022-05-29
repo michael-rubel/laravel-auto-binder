@@ -11,7 +11,7 @@ trait HelpsMapBindings
      *
      * @return string
      */
-    public function cleanupFilename(string $filename): string
+    private function cleanupFilename(string $filename): string
     {
         return strtr(
             substr(
@@ -29,7 +29,7 @@ trait HelpsMapBindings
      *
      * @return string
      */
-    public function cleanupPath(string $path): string
+    private function cleanupPath(string $path): string
     {
         return strtr($path, '/', '\\');
     }
