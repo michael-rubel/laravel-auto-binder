@@ -38,15 +38,10 @@ trait AutoBinds
 
         $filesystem = app('files');
 
-        $files = $filesystem->isDirectory($path)
-            ? $filesystem->allFiles($path)
-            : [];
-
-        return collect($files)->reject(
-            fn (SplFileInfo $file) => collect(config('auto-binder.exclude_from_scan', self::DEFAULT_SCAN_EXCLUDES))
-                ->map(fn (string $folder) => str_contains($file->getRelativePath(), $folder))
-                ->contains(true)
-        );
+        return collect($filesystem->isDirectory($path) ? $filesystem->allFiles($path) : [])
+            ->reject(fn (SplFileInfo $file) => collect(config('auto-binder.exclude_from_scan', self::DEFAULT_SCAN_EXCLUDES))
+            ->map(fn (string $folder) => str_contains($file->getRelativePath(), $folder))
+            ->contains(true));
     }
 
     /**
