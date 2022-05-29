@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MichaelRubel\AutoBinder\Core;
 
-interface BindingMapperContract
+interface AutoBinderContract
 {
     /**
      * Defaults & misc.

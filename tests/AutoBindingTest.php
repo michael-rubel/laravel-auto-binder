@@ -4,7 +4,7 @@ namespace MichaelRubel\AutoBinder\Tests;
 
 use Illuminate\Filesystem\Filesystem;
 use MichaelRubel\AutoBinder\BindingServiceProvider;
-use MichaelRubel\AutoBinder\Core\BindingMapper;
+use MichaelRubel\AutoBinder\Core\AutoBinder;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Models\Example;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Models\Interfaces\ExampleInterface;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\ExampleService;
@@ -32,7 +32,7 @@ class AutoBindingTest extends TestCase
     /** @test */
     public function testBindingsAreMappedThroughNewClass()
     {
-        new BindingMapper();
+        new AutoBinder;
 
         $bound = app()->bound(ExampleInterface::class);
         $this->assertTrue($bound);

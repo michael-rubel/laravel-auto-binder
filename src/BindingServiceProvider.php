@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MichaelRubel\AutoBinder;
 
-use MichaelRubel\AutoBinder\Core\BindingMapper;
+use MichaelRubel\AutoBinder\Core\AutoBinder;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -40,7 +40,7 @@ class BindingServiceProvider extends PackageServiceProvider
                 );
 
             if ($directoryExists) {
-                app(BindingMapper::class);
+                app(AutoBinder::class);
             }
         }
     }
