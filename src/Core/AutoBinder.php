@@ -41,7 +41,6 @@ class AutoBinder implements AutoBinderContract
                     $implementation = $this->getImplementation($folder, $filenameWithRelativePath);
 
                     $this->bind($interface, $implementation);
-                })
-            );
+                }));
     }
 }
