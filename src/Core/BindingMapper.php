@@ -16,48 +16,28 @@ class BindingMapper implements BindingMapperContract
     /**
      * @var string
      */
-    protected string $startNamespace;
+    public string $namespace;
 
     /**
-     * Auto-maps all the classes.
+     * Auto-binds all the stuff.
      */
     public function __construct()
     {
-        $namespace = config('auto-binder.start_namespace') ?? self::DEFAULT_NAMESPACE;
-
-        $this->startNamespace = Str::ucfirst(
-            $this->cleanupPath(
-                is_string($namespace)
-                    ? $namespace
-                    : self::DEFAULT_NAMESPACE
-            )
+        $this->namespace = $this->cleanupPath(
+            config('auto-binder.start_namespace', self::DEFAULT_NAMESPACE)
         );
 
-        collect(config('auto-binder.scan_folders') ?? self::DEFAULT_SCAN_FOLDERS)
+        collect(config('auto-binder.scan_folders', self::DEFAULT_SCAN_FOLDERS))
             ->each(fn (string $folder) => $this->getFolderFiles($folder)
                 ->each(function (SplFileInfo $file) use ($folder) {
                     $relativePath             = $file->getRelativePathname();
                     $filenameWithoutExtension = $file->getFilenameWithoutExtension();
                     $filenameWithRelativePath = $this->cleanupFilename($relativePath);
 
-                    $interface = $this->startNamespace
-                        . self::CLASS_SEPARATOR
-                        . $folder
-                        . self::CLASS_SEPARATOR
-                        . (config('auto-binder.interface_folder') ?? self::DEFAULT_INTERFACE_FOLDER)
-                        . self::CLASS_SEPARATOR
-                        . $filenameWithoutExtension
-                        . (config('auto-binder.interface_postfix') ?? self::DEFAULT_INTERFACE_POSTFIX);
+                    $interface      = $this->getInterface($folder, $filenameWithoutExtension);
+                    $implementation = $this->getImplementation($folder, $filenameWithRelativePath);
 
-                    $implementation = $this->startNamespace
-                        . self::CLASS_SEPARATOR
-                        . $folder
-                        . self::CLASS_SEPARATOR
-                        . $filenameWithRelativePath;
-
-                    app()->{
-                        config('auto-binder.binding_type') ?? self::DEFAULT_BINDING_TYPE
-                    }($interface, $implementation);
+                    $this->bind($interface, $implementation);
                 }));
     }
 
@@ -66,11 +46,9 @@ class BindingMapper implements BindingMapperContract
      *
      * @return Collection
      */
-    public function getFolderFiles(string $folder): Collection
+    protected function getFolderFiles(string $folder): Collection
     {
-        $directory = config('auto-binder.start_folder') ?? self::DEFAULT_FOLDER;
-
-        $path = base_path(is_string($directory) ? $directory : self::DEFAULT_FOLDER)
+        $path = base_path(config('auto-binder.start_folder', self::DEFAULT_FOLDER))
             . DIRECTORY_SEPARATOR
             . $folder;
 
@@ -81,13 +59,22 @@ class BindingMapper implements BindingMapperContract
             : [];
 
         return collect($files)->reject(
-            fn (SplFileInfo $file) => collect(
-                config('auto-binder.exclude_from_scan')
-                    ?? self::DEFAULT_SCAN_EXCLUDES
-            )->map(fn (string $folder) => str_contains(
-                $file->getRelativePath(),
-                $folder
-            ))->contains(true)
+            fn (SplFileInfo $file) => collect(config('auto-binder.exclude_from_scan', self::DEFAULT_SCAN_EXCLUDES))
+                ->map(fn (string $folder) => str_contains($file->getRelativePath(), $folder))
+                ->contains(true)
         );
+    }
+
+    /**
+     * @param string $interface
+     * @param string $implementation
+     *
+     * @return void
+     */
+    protected function bind(string $interface, string $implementation): void
+    {
+        app()->{
+            config('auto-binder.binding_type', self::DEFAULT_BINDING_TYPE)
+        }($interface, $implementation);
     }
 }
