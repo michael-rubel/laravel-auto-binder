@@ -9,17 +9,7 @@ parameters:
     level: max
 
     ignoreErrors:
-       - '#Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:each\(\) expects callable\(mixed, \(int\|string\)\)\: bool\|void, Closure\(string\)\: Illuminate\\Support\\Collection given\.#'
-       - '#Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:map\(\) expects callable\(mixed, \(int\|string\)\)\: bool, Closure\(string\)\: bool given\.#'
-       - '#(.*)in call to function collect(.*)#'
-       - '#Parameter \#1 \$value of function collect expects Illuminate\\Contracts\\Support\\Arrayable(.*)#'
-       - '#Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),Symfony\\Component\\Finder\\SplFileInfo\>\:\:reject\(\) expects bool\|\(callable\(\(int\|string\), TKey of \(int\|string\)\)\: bool\), Closure\(Symfony\\Component\\Finder\\SplFileInfo\)\: bool given\.#'
-       - '#Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:each\(\) expects callable\(mixed, \(int\|string\)\)\: bool\|void, Closure\(Symfony\\Component\\Finder\\SplFileInfo\)\: void given\.#'
-       - '#Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),Symfony\\Component\\Finder\\SplFileInfo\>\:\:reject\(\) expects bool\|\(callable\(\(int\|string\), \(int\|string\)\)\: bool\), Closure\(Symfony\\Component\\Finder\\SplFileInfo\)\: bool given\.#'
-       - '#Parameter \#1 \$path of method MichaelRubel\\AutoBinder\\Core\\BindingMapper\:\:cleanupPath\(\) expects string, mixed given\.#'
-       - '#Parameter \#1 \$path of function base_path expects string, mixed given\.#'
-       - '#Parameter \#1 \$path of method MichaelRubel\\AutoBinder\\Core\\AutoBinder\:\:cleanupPath\(\) expects string, mixed given\.#'
-       - '#Parameter \#1 \$str of function strtr expects string, mixed given\.#'
+       - '#Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<int\|string,mixed\>\:\:each\(\) expects callable\(mixed, int\|string\)\: bool\|void, Closure\(Symfony\\Component\\Finder\\SplFileInfo\)\: void given\.#'
 
     checkMissingIterableValueType: false
 

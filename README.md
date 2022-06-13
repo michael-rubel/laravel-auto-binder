@@ -8,12 +8,7 @@
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/michael-rubel/laravel-auto-binder/run-tests/main?style=flat-square&label=tests&logo=github)](https://github.com/michael-rubel/laravel-auto-binder/actions)
 [![PHPStan](https://img.shields.io/github/workflow/status/michael-rubel/laravel-auto-binder/phpstan/main?style=flat-square&label=larastan&logo=laravel)](https://github.com/michael-rubel/laravel-auto-binder/actions)
 
-This package automatically binds interfaces to implementations in the Service Container by scanning the specified project folders. This helps avoid manually registering container bindings when the project needs to bind a lot of interfaces to its implementations without any additional dependencies. One requirement you should follow to use this package:
-- The folder with interfaces always should be a child of the folder where it belongs.
-
-For example: `App\Services\YourService => App\Services\Interfaces\YourServiceInterface`
-
-You can customize folders to scan, type of bindings, and the naming convention of your interfaces in the config.
+This package automatically binds interfaces to implementations in the Service Container by scanning the specified project folder. This helps avoid manually registering container bindings when the project needs to bind a lot of interfaces to its implementations without any additional dependencies.
 
 ---
 
@@ -28,24 +23,24 @@ Install the package using composer:
 composer require michael-rubel/laravel-auto-binder
 ```
 
-Then publish and customize the configuration:
-```bash
-php artisan vendor:publish --tag="auto-binder-config"
-```
-
 ## Usage
 
-Edit the config and put your classes and interfaces to the proper folders with proper class naming. That's all.
+```php
+AutoBinder::from(folder: 'Services')
+    ->basePath('app')
+    ->classNamespace('App')
+    ->interfaceNamespace('Interfaces')
+    ->as('singleton')
+    ->bind()
+```
 
-So, this kind of bindings:
+This will automatically do the next job for you:
 ```php
 $this->app->singleton(AuthServiceInterface::class, AuthService::class);
 $this->app->singleton(UserServiceInterface::class, UserService::class);
 $this->app->singleton(CompanyServiceInterface::class, CompanyService::class);
 ...
 ```
-
-Will be registered automatically for you.
 
 ## Testing
 ```bash
