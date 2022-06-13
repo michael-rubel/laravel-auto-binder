@@ -41,7 +41,11 @@ class AutoBindingTest extends TestCase
         $this->assertTrue($bound);
         $hasCorrectImplementation = app(ExampleInterface::class);
         $this->assertInstanceOf(Example::class, $hasCorrectImplementation);
+    }
 
+    /** @test */
+    public function testCanGuessInterfacesBasedOnClass()
+    {
         collect([
             AutoBinder::from(folder: 'Services'),
             AutoBinder::from(folder: 'Models'),
