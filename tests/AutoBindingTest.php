@@ -27,19 +27,39 @@ class AutoBindingTest extends TestCase
             fn ($binder) => $binder
                 ->basePath('tests/Boilerplate')
                 ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
+                ->interfaceNamespace("MichaelRubel\\AutoBinder\\Tests\\Boilerplate\\$binder->classFolder\\Interfaces")
                 ->as('singleton')
                 ->bind()
         );
 
         $bound = app()->bound(ExampleServiceInterface::class);
         $this->assertTrue($bound);
-
         $hasCorrectImplementation = app(ExampleServiceInterface::class);
         $this->assertInstanceOf(ExampleService::class, $hasCorrectImplementation);
 
         $bound = app()->bound(ExampleInterface::class);
         $this->assertTrue($bound);
+        $hasCorrectImplementation = app(ExampleInterface::class);
+        $this->assertInstanceOf(Example::class, $hasCorrectImplementation);
 
+        collect([
+            AutoBinder::from(folder: 'Services'),
+            AutoBinder::from(folder: 'Models'),
+        ])->each(
+            fn ($binder) => $binder
+                ->basePath('tests/Boilerplate')
+                ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
+                ->as('singleton')
+                ->bind()
+        );
+
+        $bound = app()->bound(ExampleServiceInterface::class);
+        $this->assertTrue($bound);
+        $hasCorrectImplementation = app(ExampleServiceInterface::class);
+        $this->assertInstanceOf(ExampleService::class, $hasCorrectImplementation);
+
+        $bound = app()->bound(ExampleInterface::class);
+        $this->assertTrue($bound);
         $hasCorrectImplementation = app(ExampleInterface::class);
         $this->assertInstanceOf(Example::class, $hasCorrectImplementation);
     }
