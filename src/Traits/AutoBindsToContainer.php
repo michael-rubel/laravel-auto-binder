@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MichaelRubel\AutoBinder\Traits;
 
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Symfony\Component\Finder\SplFileInfo;
 
