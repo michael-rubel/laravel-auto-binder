@@ -27,10 +27,8 @@ class AutoBindingTest extends TestCase
             ->as('singleton')
             ->bind();
 
-        $bound = app()->bound(ExampleServiceInterface::class);
-        $this->assertTrue($bound);
-        $hasCorrectImplementation = app(ExampleServiceInterface::class);
-        $this->assertInstanceOf(ExampleService::class, $hasCorrectImplementation);
+        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
     }
 
     /** @test */
@@ -43,10 +41,8 @@ class AutoBindingTest extends TestCase
             ->as('singleton')
             ->bind();
 
-        $bound = app()->bound(ExampleInterface::class);
-        $this->assertTrue($bound);
-        $hasCorrectImplementation = app(ExampleInterface::class);
-        $this->assertInstanceOf(Example::class, $hasCorrectImplementation);
+        $this->assertTrue(app()->bound(ExampleInterface::class));
+        $this->assertInstanceOf(Example::class, app(ExampleInterface::class));
     }
 
     /** @test */
@@ -59,10 +55,8 @@ class AutoBindingTest extends TestCase
             ->as('singleton')
             ->bind();
 
-        $bound = app()->bound(ExampleServiceInterface::class);
-        $this->assertTrue($bound);
-        $hasCorrectImplementation = app(ExampleServiceInterface::class);
-        $this->assertInstanceOf(ExampleService::class, $hasCorrectImplementation);
+        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
     }
 
     /** @test */
@@ -80,15 +74,11 @@ class AutoBindingTest extends TestCase
                 ->bind()
         );
 
-        $bound = app()->bound(ExampleServiceInterface::class);
-        $this->assertTrue($bound);
-        $hasCorrectImplementation = app(ExampleServiceInterface::class);
-        $this->assertInstanceOf(ExampleService::class, $hasCorrectImplementation);
+        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
 
-        $bound = app()->bound(ExampleInterface::class);
-        $this->assertTrue($bound);
-        $hasCorrectImplementation = app(ExampleInterface::class);
-        $this->assertInstanceOf(Example::class, $hasCorrectImplementation);
+        $this->assertTrue(app()->bound(ExampleInterface::class));
+        $this->assertInstanceOf(Example::class, app(ExampleInterface::class));
     }
 
     /** @test */
@@ -102,15 +92,11 @@ class AutoBindingTest extends TestCase
                 ->bind()
         );
 
-        $bound = app()->bound(ExampleServiceInterface::class);
-        $this->assertTrue($bound);
-        $hasCorrectImplementation = app(ExampleServiceInterface::class);
-        $this->assertInstanceOf(ExampleService::class, $hasCorrectImplementation);
+        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
 
-        $bound = app()->bound(ExampleInterface::class);
-        $this->assertTrue($bound);
-        $hasCorrectImplementation = app(ExampleInterface::class);
-        $this->assertInstanceOf(Example::class, $hasCorrectImplementation);
+        $this->assertTrue(app()->bound(ExampleInterface::class));
+        $this->assertInstanceOf(Example::class, app(ExampleInterface::class));
     }
 
     /** @test */
@@ -123,15 +109,11 @@ class AutoBindingTest extends TestCase
                 ->bind()
         );
 
-        $bound = app()->bound(ExampleServiceInterface::class);
-        $this->assertTrue($bound);
-        $hasCorrectImplementation = app(ExampleServiceInterface::class);
-        $this->assertInstanceOf(ExampleService::class, $hasCorrectImplementation);
+        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
 
-        $bound = app()->bound(ExampleInterface::class);
-        $this->assertTrue($bound);
-        $hasCorrectImplementation = app(ExampleInterface::class);
-        $this->assertInstanceOf(Example::class, $hasCorrectImplementation);
+        $this->assertTrue(app()->bound(ExampleInterface::class));
+        $this->assertInstanceOf(Example::class, app(ExampleInterface::class));
     }
 
     /** @test */
