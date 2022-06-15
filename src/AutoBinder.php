@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MichaelRubel\AutoBinder;
 
+use Illuminate\Support\Collection;
 use MichaelRubel\AutoBinder\Traits\AutoBindsToContainer;
 
 class AutoBinder
@@ -65,13 +66,17 @@ class AutoBinder
     /**
      * Create the object with target folder assigned.
      *
-     * @param string $folder
+     * @param string|array $folder
      *
-     * @return static
+     * @return static|Collection
      */
-    public static function from(string $folder): static
+    public static function from(string|array $folder): static|Collection
     {
-        return new static($folder);
+        $folders = is_array($folder) ? $folder : func_get_args();
+
+        return count($folders) === 1 ? new static($folder) : collect($folders)->map(
+            fn ($folder) => new static($folder)
+        );
     }
 
     /**
