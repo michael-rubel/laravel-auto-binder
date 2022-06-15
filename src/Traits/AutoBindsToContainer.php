@@ -33,15 +33,17 @@ trait AutoBindsToContainer
     /**
      * Get the folder files.
      *
-     * @return Collection
+     * @return array
      */
-    protected function getFolderFiles(): Collection
+    protected function getFolderFiles(): array
     {
         $filesystem = app('files');
 
         $folder = base_path($this->basePath . DIRECTORY_SEPARATOR . $this->classFolder);
 
-        return collect($filesystem->isDirectory($folder) ? $filesystem->allFiles($folder) : []);
+        return $filesystem->isDirectory($folder)
+            ? $filesystem->allFiles($folder)
+            : [];
     }
 
     /**
