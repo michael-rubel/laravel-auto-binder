@@ -1,6 +1,6 @@
 {
     "name": "michael-rubel/laravel-auto-binder",
-    "description": "Bind interfaces to their implementations automatically.",
+    "description": "This package adds the possibility to bind interfaces to implementations in the Service Container by scanning the specified project folders. This helps avoid manually registering container bindings when the project needs to bind a lot of interfaces to its implementations without any additional dependencies.",
     "keywords": [
         "michael-rubel",
         "laravel",
