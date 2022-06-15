@@ -34,7 +34,7 @@ AutoBinder::from(folder: 'Services')
     ->bind()
 ```
 
-This will automatically do the next job for you:
+This will do the next job for you:
 ```php
 $this->app->singleton(AuthServiceInterface::class, AuthService::class);
 $this->app->singleton(UserServiceInterface::class, UserService::class);
