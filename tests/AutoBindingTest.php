@@ -114,7 +114,7 @@ class AutoBindingTest extends TestCase
     }
 
     /** @test */
-    public function testCnaPassMultipleFolders()
+    public function testCanPassMultipleFolders()
     {
         AutoBinder::from('Services', 'Models')->each(
             fn ($binder) => $binder->basePath('tests/Boilerplate')
@@ -132,5 +132,15 @@ class AutoBindingTest extends TestCase
         $this->assertTrue($bound);
         $hasCorrectImplementation = app(ExampleInterface::class);
         $this->assertInstanceOf(Example::class, $hasCorrectImplementation);
+    }
+
+    /** @test */
+    public function testFailsToBindWithInvalidBindingType()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        AutoBinder::from(folder: 'Services')
+            ->as('test')
+            ->bind();
     }
 }

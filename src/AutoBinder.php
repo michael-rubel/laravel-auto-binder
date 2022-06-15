@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MichaelRubel\AutoBinder;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use MichaelRubel\AutoBinder\Traits\AutoBindsToContainer;
 
 class AutoBinder
@@ -133,6 +134,10 @@ class AutoBinder
      */
     public function as(string $bindingType): static
     {
+        if (! Str::is(['bind', 'scoped', 'singleton'], $bindingType)) {
+            throw new \InvalidArgumentException('Invalid binding type.');
+        }
+
         $this->bindingType = $bindingType;
 
         return $this;
