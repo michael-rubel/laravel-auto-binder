@@ -56,11 +56,13 @@ class AutoBinder
     /**
      * Assign a new class folder.
      *
-     * @param string $classFolder
+     * @param string|null $classFolder
      */
-    final public function __construct(string $classFolder)
+    final public function __construct(?string $classFolder = null)
     {
-        $this->classFolder = $classFolder;
+        if ($classFolder) {
+            $this->classFolder = $classFolder;
+        }
     }
 
     /**
@@ -72,11 +74,12 @@ class AutoBinder
      */
     public static function from(string|array $folder): static|Collection
     {
-        $folders = is_array($folder) ? $folder : func_get_args();
+        $folder  = is_string($folder) ? $folder : current($folder);
+        $folders = collect(is_array($folder) ? $folder : func_get_args());
 
-        return count($folders) === 1 ? new static($folder) : collect($folders)->map(
-            fn ($folder) => new static($folder)
-        );
+        return func_num_args() > 1
+            ? $folders->map(fn ($folder) => new static($folder))
+            : new static($folder);
     }
 
     /**

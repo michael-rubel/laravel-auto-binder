@@ -50,6 +50,22 @@ class AutoBindingTest extends TestCase
     }
 
     /** @test */
+    public function testConfiguresServicesByDefault()
+    {
+        (new AutoBinder)
+            ->basePath('tests/Boilerplate')
+            ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
+            ->interfaceNamespace("MichaelRubel\\AutoBinder\\Tests\\Boilerplate\\Services\\Interfaces")
+            ->as('singleton')
+            ->bind();
+
+        $bound = app()->bound(ExampleServiceInterface::class);
+        $this->assertTrue($bound);
+        $hasCorrectImplementation = app(ExampleServiceInterface::class);
+        $this->assertInstanceOf(ExampleService::class, $hasCorrectImplementation);
+    }
+
+    /** @test */
     public function testCanConfigureServiceAndModelBindings()
     {
         collect([
