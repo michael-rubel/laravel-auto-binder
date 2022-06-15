@@ -19,7 +19,6 @@
     on the command line will ignore all file tags.
     -->
     <file>src</file>
-    <file>config</file>
     <file>tests</file>
 
     <!--
