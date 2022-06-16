@@ -25,7 +25,19 @@ trait AutoBindsToContainer
                 $interface = $this->interfaceFrom($filenameWithoutExtension);
                 $concrete  = $this->concreteFrom($filenameWithRelativePath);
 
-                app()->{$this->bindingType}($interface, $concrete);
+                if (! interface_exists($interface) || ! class_exists($concrete)) {
+                    return;
+                }
+
+                $dependencies = collect($this->dependencies);
+
+                if (! $dependencies->has($interface)) {
+                    app()->{$this->bindingType}($interface, $concrete);
+
+                    return;
+                }
+
+                app()->{$this->bindingType}($interface, $dependencies->get($interface));
             });
     }
 

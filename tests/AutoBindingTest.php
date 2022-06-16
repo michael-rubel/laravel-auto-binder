@@ -5,8 +5,10 @@ namespace MichaelRubel\AutoBinder\Tests;
 use MichaelRubel\AutoBinder\AutoBinder;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Models\Example;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Models\Interfaces\ExampleInterface;
+use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\AnotherService;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\Contracts\ExampleServiceContract;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\ExampleService;
+use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\Interfaces\AnotherServiceInterface;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\Interfaces\ExampleServiceInterface;
 
 class AutoBindingTest extends TestCase
@@ -140,5 +142,26 @@ class AutoBindingTest extends TestCase
 
         $this->assertTrue(app()->bound(ExampleServiceContract::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceContract::class));
+    }
+
+    /** @test */
+    public function testCanUseWhenToSetClassDependencies()
+    {
+        AutoBinder::from(folder: 'Services')
+            ->basePath('tests/Boilerplate')
+            ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
+            ->when(ExampleServiceInterface::class, function ($app, $service) {
+                return new ExampleService(true);
+            })
+            ->when(AnotherServiceInterface::class, function ($app, $service) {
+                return new AnotherService(true);
+            })
+            ->bind();
+
+        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
+        $this->assertTrue(app()->bound(AnotherServiceInterface::class));
+        $this->assertInstanceOf(AnotherService::class, app(AnotherServiceInterface::class));
+        $this->assertTrue(app(AnotherServiceInterface::class)->injected);
     }
 }

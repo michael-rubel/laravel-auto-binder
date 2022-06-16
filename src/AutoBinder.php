@@ -55,6 +55,13 @@ class AutoBinder
     public string $bindingType = 'singleton';
 
     /**
+     * When the class name is met, these dependencies are passed to the concrete.
+     *
+     * @var array
+     */
+    public array $dependencies = [];
+
+    /**
      * Assign a new class folder.
      *
      * @param string|null $classFolder
@@ -135,6 +142,21 @@ class AutoBinder
     public function interfaceName(string $name): static
     {
         $this->interfaceName = Str::ucfirst($name);
+
+        return $this;
+    }
+
+    /**
+     * Adds dependencies to the class when the class name is met.
+     *
+     * @param string   $abstract
+     * @param \Closure $callback
+     *
+     * @return static
+     */
+    public function when(string $abstract, \Closure $callback): static
+    {
+        $this->dependencies[$abstract] = $callback;
 
         return $this;
     }
