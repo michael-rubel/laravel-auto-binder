@@ -31,13 +31,13 @@ trait AutoBindsToContainer
 
                 $dependencies = collect($this->dependencies);
 
-                if (! $dependencies->has($interface)) {
-                    app()->{$this->bindingType}($interface, $concrete);
+                $concrete = match (true) {
+                    $dependencies->has($interface) => $dependencies->get($interface),
+                    $dependencies->has($concrete)  => $dependencies->get($concrete),
+                    default                        => $concrete,
+                };
 
-                    return;
-                }
-
-                app()->{$this->bindingType}($interface, $dependencies->get($interface));
+                app()->{$this->bindingType}($interface, $concrete);
             });
     }
 

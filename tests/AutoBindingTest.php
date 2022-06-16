@@ -145,7 +145,7 @@ class AutoBindingTest extends TestCase
     }
 
     /** @test */
-    public function testCanUseWhenToSetClassDependencies()
+    public function testCanUseWhenToSetClassDependenciesByInterface()
     {
         AutoBinder::from(folder: 'Services')
             ->basePath('tests/Boilerplate')
@@ -154,6 +154,27 @@ class AutoBindingTest extends TestCase
                 return new ExampleService(true);
             })
             ->when(AnotherServiceInterface::class, function ($app, $service) {
+                return new AnotherService(true);
+            })
+            ->bind();
+
+        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
+        $this->assertTrue(app()->bound(AnotherServiceInterface::class));
+        $this->assertInstanceOf(AnotherService::class, app(AnotherServiceInterface::class));
+        $this->assertTrue(app(AnotherServiceInterface::class)->injected);
+    }
+
+    /** @test */
+    public function testCanUseWhenToSetClassDependenciesByConcrete()
+    {
+        AutoBinder::from(folder: 'Services')
+            ->basePath('tests/Boilerplate')
+            ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
+            ->when(ExampleService::class, function ($app, $service) {
+                return new ExampleService(true);
+            })
+            ->when(AnotherService::class, function ($app, $service) {
                 return new AnotherService(true);
             })
             ->bind();
