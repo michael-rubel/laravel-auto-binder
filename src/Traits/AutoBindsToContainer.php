@@ -88,7 +88,7 @@ trait AutoBindsToContainer
             return $this->interfaceNamespace
                 . '\\'
                 . $filenameWithoutExtension
-                . ($this->interfacePostfix);
+                . ($this->interfaceName);
         }
 
         return $interface;
@@ -111,7 +111,7 @@ trait AutoBindsToContainer
                 . $this->interfaceNamespace
                 . '\\'
                 . $filenameWithoutExtension
-                . ($this->interfacePostfix);
+                . ($this->interfaceName);
         }
 
         return null;

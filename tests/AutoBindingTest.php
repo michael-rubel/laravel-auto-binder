@@ -5,6 +5,7 @@ namespace MichaelRubel\AutoBinder\Tests;
 use MichaelRubel\AutoBinder\AutoBinder;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Models\Example;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Models\Interfaces\ExampleInterface;
+use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\Contracts\ExampleServiceContract;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\ExampleService;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\Interfaces\ExampleServiceInterface;
 
@@ -124,5 +125,20 @@ class AutoBindingTest extends TestCase
         AutoBinder::from(folder: 'Services')
             ->as('test')
             ->bind();
+    }
+
+    /** @test */
+    public function testCanModifyinterfaceName()
+    {
+        AutoBinder::from(folder: 'Services')
+            ->basePath('tests/Boilerplate')
+            ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
+            ->interfaceNamespace('Contracts')
+            ->interfaceName('contract')
+            ->as('singleton')
+            ->bind();
+
+        $this->assertTrue(app()->bound(ExampleServiceContract::class));
+        $this->assertInstanceOf(ExampleService::class, app(ExampleServiceContract::class));
     }
 }
