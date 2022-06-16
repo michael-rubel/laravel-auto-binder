@@ -128,7 +128,7 @@ class AutoBindingTest extends TestCase
     }
 
     /** @test */
-    public function testCanModifyinterfaceName()
+    public function testCanModifyInterfaceName()
     {
         AutoBinder::from(folder: 'Services')
             ->basePath('tests/Boilerplate')
