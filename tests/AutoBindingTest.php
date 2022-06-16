@@ -26,7 +26,7 @@ class AutoBindingTest extends TestCase
         AutoBinder::from(folder: 'Services')
             ->basePath('tests/Boilerplate')
             ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-            ->interfaceNamespace("MichaelRubel\\AutoBinder\\Tests\\Boilerplate\\Services\\Interfaces")
+            ->interfaceNamingspace("MichaelRubel\\AutoBinder\\Tests\\Boilerplate\\Services\\Interfaces")
             ->as('singleton')
             ->bind();
 
@@ -40,7 +40,7 @@ class AutoBindingTest extends TestCase
         AutoBinder::from(folder: 'Models')
             ->basePath('tests/Boilerplate')
             ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-            ->interfaceNamespace("MichaelRubel\\AutoBinder\\Tests\\Boilerplate\\Models\\Interfaces")
+            ->interfaceNamingspace("MichaelRubel\\AutoBinder\\Tests\\Boilerplate\\Models\\Interfaces")
             ->as('singleton')
             ->bind();
 
@@ -54,7 +54,7 @@ class AutoBindingTest extends TestCase
         (new AutoBinder)
             ->basePath('tests/Boilerplate')
             ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-            ->interfaceNamespace("MichaelRubel\\AutoBinder\\Tests\\Boilerplate\\Services\\Interfaces")
+            ->interfaceNamingspace("MichaelRubel\\AutoBinder\\Tests\\Boilerplate\\Services\\Interfaces")
             ->as('singleton')
             ->bind();
 
@@ -72,7 +72,7 @@ class AutoBindingTest extends TestCase
             fn ($binder) => $binder
                 ->basePath('tests/Boilerplate')
                 ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-                ->interfaceNamespace("MichaelRubel\\AutoBinder\\Tests\\Boilerplate\\$binder->classFolder\\Interfaces")
+                ->interfaceNamingspace("MichaelRubel\\AutoBinder\\Tests\\Boilerplate\\$binder->classFolder\\Interfaces")
                 ->as('singleton')
                 ->bind()
         );
@@ -130,13 +130,13 @@ class AutoBindingTest extends TestCase
     }
 
     /** @test */
-    public function testCanModifyInterfaceName()
+    public function testCanModifyinterfaceNaming()
     {
         AutoBinder::from(folder: 'Services')
             ->basePath('tests/Boilerplate')
             ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-            ->interfaceNamespace('Contracts')
-            ->interfaceName('contract')
+            ->interfaceNamingspace('Contracts')
+            ->interfaceNaming('contract')
             ->as('singleton')
             ->bind();
 
