@@ -1,4 +1,4 @@
-![Laravel Auto Binder](https://user-images.githubusercontent.com/37669560/145568267-0498caf2-fb8a-4715-85ee-6374b8adadc5.png)
+![Laravel Auto Binder](https://user-images.githubusercontent.com/37669560/174097540-80607fb4-1610-444d-9e86-1012e2c05f5d.png)
 
 # Laravel Auto Binder
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/michael-rubel/laravel-auto-binder.svg?style=flat-square&logo=packagist)](https://packagist.org/packages/michael-rubel/laravel-auto-binder)
@@ -8,7 +8,7 @@
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/michael-rubel/laravel-auto-binder/run-tests/main?style=flat-square&label=tests&logo=github)](https://github.com/michael-rubel/laravel-auto-binder/actions)
 [![PHPStan](https://img.shields.io/github/workflow/status/michael-rubel/laravel-auto-binder/phpstan/main?style=flat-square&label=larastan&logo=laravel)](https://github.com/michael-rubel/laravel-auto-binder/actions)
 
-This package adds the possibility to bind interfaces to implementations in the Service Container by scanning the specified project folders. This helps avoid manually registering container bindings when the project needs to bind a lot of interfaces to its implementations without any additional dependencies.
+This package adds the possibility to bind interfaces to implementations in the Service Container by scanning the specified project folders. This helps avoid manually registering container bindings when the project needs to bind a lot of interfaces to its implementations.
 
 ---
 
