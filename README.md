@@ -1,4 +1,4 @@
-![Laravel Auto Binder](https://user-images.githubusercontent.com/37669560/174097540-80607fb4-1610-444d-9e86-1012e2c05f5d.png)
+![Laravel Auto Binder](https://user-images.githubusercontent.com/37669560/174098292-415011bd-cd9e-48c0-95e0-d6ca28aed125.png)
 
 # Laravel Auto Binder
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/michael-rubel/laravel-auto-binder.svg?style=flat-square&logo=packagist)](https://packagist.org/packages/michael-rubel/laravel-auto-binder)
