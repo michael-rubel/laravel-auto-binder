@@ -31,7 +31,7 @@ class AutoBinder
      *
      * @var string
      */
-    public string $interfaceNamingspace = 'Interfaces';
+    public string $interfaceNamespace = 'Interfaces';
 
     /**
      * Postfix convention for interfaces.
@@ -125,9 +125,9 @@ class AutoBinder
      *
      * @return $this
      */
-    public function interfaceNamingspace(string $path): static
+    public function interfaceNamespace(string $path): static
     {
-        $this->interfaceNamingspace = $this->namespaceFrom($path);
+        $this->interfaceNamespace = $this->namespaceFrom($path);
 
         return $this;
     }

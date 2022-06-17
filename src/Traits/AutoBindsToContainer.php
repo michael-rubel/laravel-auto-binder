@@ -97,7 +97,7 @@ trait AutoBindsToContainer
         $interface = $this->guessInterfaceWith($filenameWithoutExtension);
 
         if (is_null($interface)) {
-            return $this->interfaceNamingspace
+            return $this->interfaceNamespace
                 . '\\'
                 . $filenameWithoutExtension
                 . ($this->interfaceNaming);
@@ -115,12 +115,12 @@ trait AutoBindsToContainer
      */
     protected function guessInterfaceWith(string $filenameWithoutExtension): ?string
     {
-        if (! Str::contains($this->interfaceNamingspace, '\\')) {
+        if (! Str::contains($this->interfaceNamespace, '\\')) {
             return $this->classNamespace
                 . '\\'
                 . $this->classFolder
                 . '\\'
-                . $this->interfaceNamingspace
+                . $this->interfaceNamespace
                 . '\\'
                 . $filenameWithoutExtension
                 . ($this->interfaceNaming);
