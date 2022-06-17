@@ -90,11 +90,29 @@ class AutoBinder
     public static function from(string|array $folder): static|Collection
     {
         $folder  = is_string($folder) ? $folder : current($folder);
-        $folders = collect(is_array($folder) ? $folder : func_get_args());
+        $folders = is_array($folder) ? $folder : func_get_args();
 
         return func_num_args() > 1
-            ? $folders->map(fn ($folder) => new static($folder))
+            ? collect($folders)->map(fn ($folder) => new static($folder))
             : new static($folder);
+    }
+
+    /**
+     * Exclude specified subdirectory from scanning.
+     *
+     * @param string|array $folders
+     *
+     * @return static
+     */
+    public function excludeFolders(string|array $folders): static
+    {
+        $folders = is_array($folders) ? $folders : func_get_args();
+
+        func_num_args() > 1
+            ? collect($folders)->map(fn ($folder) => $this->excludesFolders[] = $folder)
+            : $this->excludesFolders[] = current($folders);
+
+        return $this;
     }
 
     /**
@@ -164,24 +182,6 @@ class AutoBinder
     public function when(string $abstract, \Closure $callback): static
     {
         $this->dependencies[$abstract] = $callback;
-
-        return $this;
-    }
-
-    /**
-     * Exclude specified subdirectory from scanning.
-     *
-     * @param string|array $folders
-     *
-     * @return static
-     */
-    public function excludeFolders(string|array $folders): static
-    {
-        $folders = is_array($folders) ? $folders : func_get_args();
-
-        func_num_args() > 1
-            ? collect($folders)->map(fn ($folder) => $this->excludesFolders[] = $folder)
-            : $this->excludesFolders[] = current($folders);
 
         return $this;
     }
