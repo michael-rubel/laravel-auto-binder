@@ -104,7 +104,7 @@ class AutoBinder
      *
      * @return static
      */
-    public function excludeFolders(string|array $folders): static
+    public function exclude(string|array $folders): static
     {
         $folders = is_array($folders) ? $folders : func_get_args();
 

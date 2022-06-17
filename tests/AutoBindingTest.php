@@ -214,7 +214,7 @@ class AutoBindingTest extends TestCase
         AutoBinder::from(folder: 'Services')
             ->basePath('tests/Boilerplate')
             ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-            ->excludeFolders('Contracts', 'Test')
+            ->exclude('Contracts', 'Test')
             ->bind();
 
         $this->assertTrue(app()->bound(ExampleServiceInterface::class));
