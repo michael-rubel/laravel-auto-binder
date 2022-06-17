@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MichaelRubel\AutoBinder\Traits;
 
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -16,45 +18,41 @@ trait AutoBindsToContainer
      */
     protected function run(): void
     {
-        collect($this->getFolderFiles())
-            ->each(function (SplFileInfo $file) {
-                $relativePath             = $file->getRelativePathname();
-                $filenameWithoutExtension = $file->getFilenameWithoutExtension();
-                $filenameWithRelativePath = $this->prepareFilename($relativePath);
+        $this->getFolderFiles()->each(function (SplFileInfo $file) {
+            $relativePath             = $file->getRelativePathname();
+            $filenameWithoutExtension = $file->getFilenameWithoutExtension();
+            $filenameWithRelativePath = $this->prepareFilename($relativePath);
 
-                $interface = $this->interfaceFrom($filenameWithoutExtension);
-                $concrete  = $this->concreteFrom($filenameWithRelativePath);
+            $interface = $this->interfaceFrom($filenameWithoutExtension);
+            $concrete  = $this->concreteFrom($filenameWithRelativePath);
 
-                if (! interface_exists($interface) || ! class_exists($concrete)) {
-                    return;
-                }
+            if (! interface_exists($interface) || ! class_exists($concrete)) {
+                return;
+            }
 
-                $dependencies = collect($this->dependencies);
+            $dependencies = collect($this->dependencies);
 
-                $concrete = match (true) {
-                    $dependencies->has($interface) => $dependencies->get($interface),
-                    $dependencies->has($concrete)  => $dependencies->get($concrete),
-                    default                        => $concrete,
-                };
+            $concrete = match (true) {
+                $dependencies->has($interface) => $dependencies->get($interface),
+                $dependencies->has($concrete)  => $dependencies->get($concrete),
+                default                        => $concrete,
+            };
 
-                app()->{$this->bindingType}($interface, $concrete);
-            });
+            app()->{$this->bindingType}($interface, $concrete);
+        });
     }
 
     /**
-     * Get the folder files.
+     * Get the folder files except for ignored ones.
      *
-     * @return array
+     * @return Collection
      */
-    protected function getFolderFiles(): array
+    protected function getFolderFiles(): Collection
     {
-        $filesystem = app('files');
-
-        $folder = base_path($this->basePath . DIRECTORY_SEPARATOR . $this->classFolder);
-
-        return $filesystem->isDirectory($folder)
-            ? $filesystem->allFiles($folder)
-            : [];
+        return collect(File::directories(base_path($this->basePath . DIRECTORY_SEPARATOR . $this->classFolder)))
+            ->reject(fn ($folder) => in_array(basename($folder), $this->excludesFolders))
+            ->map(fn ($folder) => File::allFiles($folder))
+            ->flatten();
     }
 
     /**
@@ -86,6 +84,20 @@ trait AutoBindsToContainer
     }
 
     /**
+     * Get the concrete from filename.
+     *
+     * @param string $filenameWithRelativePath
+     *
+     * @return string
+     */
+    protected function concreteFrom(string $filenameWithRelativePath): string
+    {
+        return $this->classNamespace . '\\'
+            . $this->classFolder . '\\'
+            . $this->prepareNamingFor($filenameWithRelativePath);
+    }
+
+    /**
      * Get the interface from filename.
      *
      * @param string $filenameWithoutExtension
@@ -94,16 +106,13 @@ trait AutoBindsToContainer
      */
     protected function interfaceFrom(string $filenameWithoutExtension): string
     {
-        $interface = $this->guessInterfaceWith($filenameWithoutExtension);
+        $guessedInterface = $this->guessInterfaceBy($filenameWithoutExtension);
 
-        if (is_null($interface)) {
-            return $this->interfaceNamespace
-                . '\\'
-                . $filenameWithoutExtension
-                . ($this->interfaceNaming);
+        if (is_null($guessedInterface)) {
+            return $this->buildInterfaceBy($filenameWithoutExtension);
         }
 
-        return $interface;
+        return $guessedInterface;
     }
 
     /**
@@ -113,31 +122,54 @@ trait AutoBindsToContainer
      *
      * @return string|null
      */
-    protected function guessInterfaceWith(string $filenameWithoutExtension): ?string
+    protected function guessInterfaceBy(string $filenameWithoutExtension): ?string
     {
         if (! Str::contains($this->interfaceNamespace, '\\')) {
-            return $this->classNamespace
-                . '\\'
-                . $this->classFolder
-                . '\\'
-                . $this->interfaceNamespace
-                . '\\'
-                . $filenameWithoutExtension
-                . ($this->interfaceNaming);
+            return $this->buildInterfaceFromClassBy($filenameWithoutExtension);
         }
 
         return null;
     }
 
     /**
-     * Get the concrete from filename.
+     * Build the interface class-string.
      *
-     * @param string $filenameWithRelativePath
+     * @param string $filename
      *
      * @return string
      */
-    protected function concreteFrom(string $filenameWithRelativePath): string
+    protected function buildInterfaceBy(string $filename): string
     {
-        return $this->classNamespace . '\\' . $this->classFolder . '\\' . $filenameWithRelativePath;
+        return $this->interfaceNamespace . '\\'
+            . $this->prepareNamingFor($filename)
+            . ($this->interfaceNaming);
+    }
+
+    /**
+     * Build the interface class-string based on the class folder.
+     *
+     * @param string $filename
+     *
+     * @return string
+     */
+    protected function buildInterfaceFromClassBy(string $filename): string
+    {
+        return $this->classNamespace . '\\'
+            . $this->classFolder . '\\'
+            . $this->interfaceNamespace . '\\'
+            . $this->prepareNamingFor($filename)
+            . ($this->interfaceNaming);
+    }
+
+    /**
+     * Cleans up filename to append the desired interface name.
+     *
+     * @param string $filename
+     *
+     * @return string
+     */
+    protected function prepareNamingFor(string $filename): string
+    {
+        return Str::replace($this->interfaceNaming, '', $filename);
     }
 }

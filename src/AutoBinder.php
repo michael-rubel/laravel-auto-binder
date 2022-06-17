@@ -62,6 +62,13 @@ class AutoBinder
     public array $dependencies = [];
 
     /**
+     * Subdirectories to ignore when scanning.
+     *
+     * @var array
+     */
+    public array $excludesFolders = [];
+
+    /**
      * Assign a new class folder.
      *
      * @param string|null $classFolder
@@ -157,6 +164,24 @@ class AutoBinder
     public function when(string $abstract, \Closure $callback): static
     {
         $this->dependencies[$abstract] = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Exclude specified subdirectory from scanning.
+     *
+     * @param string|array $folders
+     *
+     * @return static
+     */
+    public function excludeFolders(string|array $folders): static
+    {
+        $folders = is_array($folders) ? $folders : func_get_args();
+
+        func_num_args() > 1
+            ? collect($folders)->map(fn ($folder) => $this->excludesFolders[] = $folder)
+            : $this->excludesFolders[] = current($folders);
 
         return $this;
     }

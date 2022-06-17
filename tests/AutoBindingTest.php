@@ -10,6 +10,7 @@ use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\Contracts\ExampleServiceC
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\ExampleService;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\Interfaces\AnotherServiceInterface;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\Interfaces\ExampleServiceInterface;
+use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 
 class AutoBindingTest extends TestCase
 {
@@ -130,7 +131,7 @@ class AutoBindingTest extends TestCase
     }
 
     /** @test */
-    public function testCanModifyinterfaceNaming()
+    public function testCanModifyInterfaceNaming()
     {
         AutoBinder::from(folder: 'Services')
             ->basePath('tests/Boilerplate')
@@ -205,5 +206,27 @@ class AutoBindingTest extends TestCase
         $this->assertTrue(app()->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
         $this->assertTrue(app(ExampleServiceInterface::class)->injected);
+    }
+
+    /** @test */
+    public function testCanExcludeSubFolders()
+    {
+        AutoBinder::from(folder: 'Services')
+            ->basePath('tests/Boilerplate')
+            ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
+            ->excludeFolders('Contracts', 'Test')
+            ->bind();
+
+        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
+        $this->assertFalse(app()->bound(ExampleServiceContract::class));
+    }
+
+    /** @test */
+    public function testThrowsExceptionIfDirectoryNotFound()
+    {
+        $this->expectException(DirectoryNotFoundException::class);
+
+        AutoBinder::from(folder: 'SomeFolder')->bind();
     }
 }
