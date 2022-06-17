@@ -160,6 +160,7 @@ class AutoBindingTest extends TestCase
 
         $this->assertTrue(app()->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
+        $this->assertTrue(app(ExampleServiceInterface::class)->injected);
         $this->assertTrue(app()->bound(AnotherServiceInterface::class));
         $this->assertInstanceOf(AnotherService::class, app(AnotherServiceInterface::class));
         $this->assertTrue(app(AnotherServiceInterface::class)->injected);
@@ -181,8 +182,28 @@ class AutoBindingTest extends TestCase
 
         $this->assertTrue(app()->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
+        $this->assertTrue(app(ExampleServiceInterface::class)->injected);
         $this->assertTrue(app()->bound(AnotherServiceInterface::class));
         $this->assertInstanceOf(AnotherService::class, app(AnotherServiceInterface::class));
         $this->assertTrue(app(AnotherServiceInterface::class)->injected);
+    }
+
+    /** @test */
+    public function testInterfaceTakenFirstInWhen()
+    {
+        AutoBinder::from(folder: 'Services')
+            ->basePath('tests/Boilerplate')
+            ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
+            ->when(ExampleService::class, function ($app, $service) {
+                return new ExampleService(false);
+            })
+            ->when(ExampleServiceInterface::class, function ($app, $service) {
+                return new ExampleService(true);
+            })
+            ->bind();
+
+        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
+        $this->assertTrue(app(ExampleServiceInterface::class)->injected);
     }
 }
