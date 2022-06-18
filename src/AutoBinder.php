@@ -6,11 +6,11 @@ namespace MichaelRubel\AutoBinder;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use MichaelRubel\AutoBinder\Traits\AutoBindsToContainer;
+use MichaelRubel\AutoBinder\Traits\BindsToContainer;
 
 class AutoBinder
 {
-    use AutoBindsToContainer;
+    use BindsToContainer;
 
     /**
      * Base class namespace.

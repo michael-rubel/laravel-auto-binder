@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Symfony\Component\Finder\SplFileInfo;
 
-trait AutoBindsToContainer
+trait BindsToContainer
 {
     /**
      * Run the folders scanning & bind the results.
