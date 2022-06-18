@@ -196,28 +196,28 @@ class AutoBinder
     /**
      * Bind the result as a specific type of binding.
      *
-     * @param string $bindingType
+     * @param string $type
      *
      * @return $this
      */
-    public function as(string $bindingType): static
+    public function as(string $type): static
     {
-        if (! Str::is(['bind', 'scoped', 'singleton'], $bindingType)) {
+        if (! Str::is(['bind', 'scoped', 'singleton'], $type)) {
             throw new \InvalidArgumentException('Invalid binding type.');
         }
 
-        $this->bindingType = $bindingType;
+        $this->bindingType = $type;
 
         return $this;
     }
 
     /**
-     * Perform the bindings.
+     * Perform the scan & binding.
      *
      * @return void
      */
     public function bind(): void
     {
-        $this->run();
+        $this->scan();
     }
 }

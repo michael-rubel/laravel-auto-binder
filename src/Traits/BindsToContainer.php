@@ -16,7 +16,7 @@ trait BindsToContainer
      *
      * @return void
      */
-    protected function run(): void
+    protected function scan(): void
     {
         $this->getFolderFiles()->each(function (SplFileInfo $file) {
             $relativePath             = $file->getRelativePathname();

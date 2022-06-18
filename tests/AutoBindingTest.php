@@ -137,7 +137,7 @@ class AutoBindingTest extends TestCase
             ->basePath('tests/Boilerplate')
             ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
             ->interfaceNaming('contract')
-            ->as('singleton')
+            ->as(type: 'bind')
             ->bind();
 
         $this->assertTrue(app()->bound(ExampleServiceContract::class));
