@@ -52,7 +52,7 @@ class AutoBinder
      *
      * @var string
      */
-    public string $bindingType = 'singleton';
+    public string $bindingType = 'bind';
 
     /**
      * When the class name is met, these dependencies are passed to the concrete.
