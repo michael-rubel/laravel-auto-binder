@@ -27,20 +27,50 @@ composer require michael-rubel/laravel-auto-binder
 
 ```php
 AutoBinder::from(folder: 'Services')
-    ->basePath('app')
-    ->classNamespace('App')
-    ->interfaceNamespace('Interfaces')
     ->as('singleton')
     ->bind()
 ```
 
-This will do the next job for you:
+Assuming you have your services in the `App\Services` and its interfaces in the `App\Services\Interfaces`, the package will register binding for each pair of class and interface:
 ```php
 $this->app->singleton(AuthServiceInterface::class, AuthService::class);
 $this->app->singleton(UserServiceInterface::class, UserService::class);
 $this->app->singleton(CompanyServiceInterface::class, CompanyService::class);
 ...
 ```
+
+If you need to customize the base path or namespace, you can use following methods:
+```php
+AutoBinder::from(folder: 'Services')
+    ->basePath('app/Domain')
+    ->classNamespace('App\\Domain')
+    ->interfaceNamespace('App\\Domain\\Interfaces')
+    ->bind()
+```
+
+If you need to change the naming convention of your interfaces (the default is `ClassNameInterface`), you can specify the namespace and name you prefer:
+```php
+AutoBinder::from(folder: 'Services')
+    ->interfaceNaming('Contract')
+    ->bind()
+```
+
+You can as well exclude subdirectories from the scan:
+```php
+AutoBinder::from(folder: 'Services')
+    ->exclude('Traits', 'Components')
+    ->bind();
+```
+
+If want to inject dependencies to your services while scanning, you can use `when` method:
+```php
+AutoBinder::from(folder: 'Services')
+    ->when(ExampleServiceInterface::class, function ($app, $service) {
+        return new ExampleService($app);
+    })
+    ->bind();
+```
+You can pass here a concrete class as well as an interface but keep in mind interfaces have a higher priority when applying the dependencies.
 
 ## Testing
 ```bash
