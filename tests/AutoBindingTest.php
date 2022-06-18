@@ -136,7 +136,6 @@ class AutoBindingTest extends TestCase
         AutoBinder::from(folder: 'Services')
             ->basePath('tests/Boilerplate')
             ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-            ->interfaceNamespace('Contracts')
             ->interfaceNaming('contract')
             ->as('singleton')
             ->bind();

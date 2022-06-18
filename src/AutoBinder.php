@@ -168,6 +168,10 @@ class AutoBinder
     {
         $this->interfaceNaming = Str::ucfirst($name);
 
+        if (! Str::contains($this->interfaceNamespace, '\\')) {
+            $this->interfaceNamespace(Str::plural($this->interfaceNaming));
+        }
+
         return $this;
     }
 
