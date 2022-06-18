@@ -12,7 +12,7 @@ use Symfony\Component\Finder\SplFileInfo;
 trait BindsToContainer
 {
     /**
-     * Run the folders scanning & bind the results.
+     * Run the directory scanning & bind the results.
      *
      * @return void
      */
