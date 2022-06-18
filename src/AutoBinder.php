@@ -89,12 +89,15 @@ class AutoBinder
      */
     public static function from(string|array $folder): static|Collection
     {
-        $folder  = is_string($folder) ? $folder : current($folder);
-        $folders = is_array($folder) ? $folder : func_get_args();
+        if (func_num_args() > 1) {
+            $folders = is_array($folder) ? $folder : func_get_args();
 
-        return func_num_args() > 1
-            ? collect($folders)->map(fn ($folder) => new static($folder))
-            : new static($folder);
+            return collect($folders)->map(fn ($folder) => new static($folder));
+        }
+
+        $folder = is_string($folder) ? $folder : current($folder);
+
+        return new static($folder);
     }
 
     /**
