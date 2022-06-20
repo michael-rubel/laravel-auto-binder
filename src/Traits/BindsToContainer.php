@@ -109,9 +109,9 @@ trait BindsToContainer
     {
         $guessedInterface = $this->guessInterfaceBy($filenameWithoutExtension);
 
-        return is_null($guessedInterface)
-            ? $this->buildInterfaceBy($filenameWithoutExtension)
-            : $guessedInterface;
+        return ! is_null($guessedInterface)
+            ? $guessedInterface
+            : $this->buildInterfaceBy($filenameWithoutExtension);
     }
 
     /**
