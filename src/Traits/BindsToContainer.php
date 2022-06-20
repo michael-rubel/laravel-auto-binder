@@ -125,11 +125,9 @@ trait BindsToContainer
      */
     protected function guessInterfaceBy(string $filenameWithoutExtension): ?string
     {
-        if (! Str::contains($this->interfaceNamespace, '\\')) {
-            return $this->buildInterfaceFromClassBy($filenameWithoutExtension);
-        }
-
-        return null;
+        return ! Str::contains($this->interfaceNamespace, '\\')
+            ? $this->buildInterfaceFromClassBy($filenameWithoutExtension)
+            : null;
     }
 
     /**
