@@ -6,6 +6,7 @@ namespace MichaelRubel\AutoBinder\Traits;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Str;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -45,11 +46,11 @@ trait BindsToContainer
     /**
      * Get the folder files except for ignored ones.
      *
-     * @return Collection
+     * @return LazyCollection
      */
-    protected function getFolderFiles(): Collection
+    protected function getFolderFiles(): LazyCollection
     {
-        return collect(File::directories(base_path($this->basePath . DIRECTORY_SEPARATOR . $this->classFolder)))
+        return LazyCollection::make(File::directories(base_path($this->basePath . DIRECTORY_SEPARATOR . $this->classFolder)))
             ->reject(fn ($folder) => in_array(basename($folder), $this->excludesFolders))
             ->map(fn ($folder) => File::allFiles($folder))
             ->flatten();
