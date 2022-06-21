@@ -65,7 +65,7 @@ trait BindsToContainer
      */
     protected function prepareFilename(string $filename): string
     {
-        return (string) Str::of($filename)
+        return (string) str($filename)
             ->replace('/', '\\')
             ->substr(0, (int) strrpos($filename, '.'));
     }
@@ -79,7 +79,7 @@ trait BindsToContainer
      */
     protected function namespaceFrom(string $path): string
     {
-        return (string) Str::of($path)
+        return (string) str($path)
             ->replace('/', '\\')
             ->ucfirst();
     }
