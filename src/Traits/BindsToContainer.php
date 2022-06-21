@@ -155,7 +155,7 @@ trait BindsToContainer
             . $this->classFolder . '\\'
             . $this->interfaceNamespace . '\\'
             . $this->prepareNamingFor($filename)
-            . ($this->interfaceNaming);
+            . $this->interfaceNaming;
     }
 
     /**
