@@ -39,6 +39,8 @@ $this->app->singleton(CompanyServiceInterface::class, CompanyService::class);
 ...
 ```
 
+### Customization
+
 If you need to customize the base path or namespace, you can use following methods:
 ```php
 AutoBinder::from(folder: 'Services')
@@ -55,14 +57,18 @@ AutoBinder::from(folder: 'Services')
     ->bind()
 ```
 
-You can as well exclude subdirectories from the scan:
+### Excluding subfolders from scan
+
+You might as well exclude subdirectories from the scan of the root directory:
 ```php
 AutoBinder::from(folder: 'Services')
     ->exclude('Traits', 'Components')
     ->bind();
 ```
 
-If want to inject dependencies to your services while scanning, you can use `when` method:
+### Dependency injection
+
+If you want to inject dependencies to your services while scanning, you can use `when` method:
 ```php
 AutoBinder::from(folder: 'Services')
     ->when(ExampleServiceInterface::class, function ($app, $service) {
@@ -70,7 +76,22 @@ AutoBinder::from(folder: 'Services')
     })
     ->bind();
 ```
-You can pass here a concrete class as well as an interface but keep in mind interfaces have a higher priority when applying the dependencies.
+Passing a concrete class as well as an interface is possible, but keep in mind interfaces have a higher priority when applying the dependencies.
+
+### Scanning multiple folders at once
+
+If you pass multiple folders, the `from` method will return an instance of `Illuminate/Support/Collection`. Assuming that, you can loop over your `AutoBinder` class instances with access to internal properties.
+
+For example:
+```php
+AutoBinder::from('Services', 'Models')->each(
+    fn ($binder) => $binder->basePath('app')
+        ->classNamespace('App\\Domain')
+        ->interfaceNamespace("App\\Domain\\$binder->classFolder\\Interfaces")
+        ->as('singleton')
+        ->bind()
+);
+```
 
 ## Testing
 ```bash
