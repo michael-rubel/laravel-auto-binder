@@ -10,6 +10,7 @@ parameters:
 
     ignoreErrors:
        - '#Parameter \#1 \$callback of method Illuminate\\Support\\LazyCollection\<\(int\|string\),mixed\>\:\:each\(\) expects callable\(\(int\|string\), \(int\|string\)\)\: mixed, Closure\(Symfony\\Component\\Finder\\SplFileInfo\)\: void given\.#'
+       - '#Cannot call method (.*) on mixed\.#'
 
     checkMissingIterableValueType: false
 
