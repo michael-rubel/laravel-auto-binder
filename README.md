@@ -1,4 +1,4 @@
-![Laravel Auto Binder](https://user-images.githubusercontent.com/37669560/145568267-0498caf2-fb8a-4715-85ee-6374b8adadc5.png)
+![Laravel Auto Binder](https://user-images.githubusercontent.com/37669560/174098292-415011bd-cd9e-48c0-95e0-d6ca28aed125.png)
 
 # Laravel Auto Binder
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/michael-rubel/laravel-auto-binder.svg?style=flat-square&logo=packagist)](https://packagist.org/packages/michael-rubel/laravel-auto-binder)
@@ -8,16 +8,11 @@
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/michael-rubel/laravel-auto-binder/run-tests/main?style=flat-square&label=tests&logo=github)](https://github.com/michael-rubel/laravel-auto-binder/actions)
 [![PHPStan](https://img.shields.io/github/workflow/status/michael-rubel/laravel-auto-binder/phpstan/main?style=flat-square&label=larastan&logo=laravel)](https://github.com/michael-rubel/laravel-auto-binder/actions)
 
-This package automatically binds interfaces to implementations in the Service Container by scanning the specified project folders. This helps avoid manually registering container bindings when the project needs to bind a lot of interfaces to its implementations without any additional dependencies. One requirement you should follow to use this package:
-- The folder with interfaces always should be a child of the folder where it belongs.
-
-For example: `App\Services\YourService => App\Services\Interfaces\YourServiceInterface`
-
-You can customize folders to scan, type of bindings, and the naming convention of your interfaces in the config.
+This package adds the possibility to bind interfaces to implementations in the Service Container by scanning the specified project folders. This helps avoid manually registering container bindings when the project needs to bind a lot of interfaces to its implementations.
 
 ---
 
-The package requires PHP `^8.x` and Laravel `^8.71` or `^9.0`.
+The package requires PHP `^8.x` and Laravel `^9.0`.
 
 ## #StandWithUkraine
 [![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://github.com/vshymanskyy/StandWithUkraine/blob/main/docs/README.md)
@@ -28,16 +23,15 @@ Install the package using composer:
 composer require michael-rubel/laravel-auto-binder
 ```
 
-Then publish and customize the configuration:
-```bash
-php artisan vendor:publish --tag="auto-binder-config"
-```
-
 ## Usage
 
-Edit the config and put your classes and interfaces to the proper folders with proper class naming. That's all.
+```php
+AutoBinder::from(folder: 'Services')
+    ->as('singleton')
+    ->bind()
+```
 
-So, this kind of bindings:
+Assuming you have your services in the `App\Services` and its interfaces in the `App\Services\Interfaces`, the package will register binding for each pair of class and interface:
 ```php
 $this->app->singleton(AuthServiceInterface::class, AuthService::class);
 $this->app->singleton(UserServiceInterface::class, UserService::class);
@@ -45,7 +39,59 @@ $this->app->singleton(CompanyServiceInterface::class, CompanyService::class);
 ...
 ```
 
-Will be registered automatically for you.
+### Customization
+
+If you need to customize the base path or namespace, you can use following methods:
+```php
+AutoBinder::from(folder: 'Services')
+    ->basePath('app/Domain')
+    ->classNamespace('App\\Domain')
+    ->interfaceNamespace('App\\Domain\\Interfaces')
+    ->bind()
+```
+
+If you need to change the naming convention of your interfaces (the default is `ClassNameInterface`), you can specify the namespace and name you prefer:
+```php
+AutoBinder::from(folder: 'Services')
+    ->interfaceNaming('Contract')
+    ->bind()
+```
+
+### Excluding subfolders from scan
+
+You might as well exclude subdirectories from the scan of the root directory:
+```php
+AutoBinder::from(folder: 'Services')
+    ->exclude('Traits', 'Components')
+    ->bind();
+```
+
+### Dependency injection
+
+If you want to inject dependencies to your services while scanning, you can use `when` method:
+```php
+AutoBinder::from(folder: 'Services')
+    ->when(ExampleServiceInterface::class, function ($app, $service) {
+        return new ExampleService($app);
+    })
+    ->bind();
+```
+Passing a concrete class as well as an interface is possible, but keep in mind interfaces have a higher priority when applying the dependencies.
+
+### Scanning multiple folders at once
+
+If you pass multiple folders, the `from` method will return an instance of `Illuminate/Support/Collection`. Assuming that, you can loop over your `AutoBinder` class instances with access to internal properties.
+
+For example:
+```php
+AutoBinder::from('Services', 'Models')->each(
+    fn ($binder) => $binder->basePath('app')
+        ->classNamespace('App\\Domain')
+        ->interfaceNamespace("App\\Domain\\$binder->classFolder\\Interfaces")
+        ->as('singleton')
+        ->bind()
+);
+```
 
 ## Testing
 ```bash

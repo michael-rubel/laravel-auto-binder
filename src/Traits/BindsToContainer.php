@@ -1,0 +1,171 @@
+<?php
+
+declare(strict_types=1);
+
+namespace MichaelRubel\AutoBinder\Traits;
+
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\LazyCollection;
+use Illuminate\Support\Str;
+use Symfony\Component\Finder\SplFileInfo;
+
+trait BindsToContainer
+{
+    /**
+     * Run the directory scanning & bind the results.
+     *
+     * @return void
+     */
+    protected function scan(): void
+    {
+        $this->getFolderFiles()->each(function (SplFileInfo $file) {
+            $relativePath             = $file->getRelativePathname();
+            $filenameWithoutExtension = $file->getFilenameWithoutExtension();
+            $filenameWithRelativePath = $this->prepareFilename($relativePath);
+
+            $interface = $this->interfaceFrom($filenameWithoutExtension);
+            $concrete  = $this->concreteFrom($filenameWithRelativePath);
+
+            if (! interface_exists($interface) || ! class_exists($concrete)) {
+                return;
+            }
+
+            $dependencies = collect($this->dependencies);
+
+            $concrete = match (true) {
+                $dependencies->has($interface) => $dependencies->get($interface),
+                $dependencies->has($concrete)  => $dependencies->get($concrete),
+                default                        => $concrete,
+            };
+
+            app()->{$this->bindingType}($interface, $concrete);
+        });
+    }
+
+    /**
+     * Get the folder files except for ignored ones.
+     *
+     * @return LazyCollection
+     */
+    protected function getFolderFiles(): LazyCollection
+    {
+        return LazyCollection::make(File::directories(base_path($this->basePath . DIRECTORY_SEPARATOR . $this->classFolder)))
+            ->reject(fn ($folder) => in_array(basename($folder), $this->excludesFolders))
+            ->map(fn ($folder) => File::allFiles($folder))
+            ->flatten();
+    }
+
+    /**
+     * Prepare the filename.
+     *
+     * @param string $filename
+     *
+     * @return string
+     */
+    protected function prepareFilename(string $filename): string
+    {
+        return (string) str($filename)
+            ->replace('/', '\\')
+            ->substr(0, (int) strrpos($filename, '.'));
+    }
+
+    /**
+     * Get the namespace from a given path.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    protected function namespaceFrom(string $path): string
+    {
+        return (string) str($path)
+            ->replace('/', '\\')
+            ->ucfirst();
+    }
+
+    /**
+     * Get the concrete from filename.
+     *
+     * @param string $filenameWithRelativePath
+     *
+     * @return string
+     */
+    protected function concreteFrom(string $filenameWithRelativePath): string
+    {
+        return $this->classNamespace . '\\'
+            . $this->classFolder . '\\'
+            . $this->prepareNamingFor($filenameWithRelativePath);
+    }
+
+    /**
+     * Get the interface from filename.
+     *
+     * @param string $filenameWithoutExtension
+     *
+     * @return string
+     */
+    protected function interfaceFrom(string $filenameWithoutExtension): string
+    {
+        $guessedInterface = $this->guessInterfaceBy($filenameWithoutExtension);
+
+        return ! is_null($guessedInterface)
+            ? $guessedInterface
+            : $this->buildInterfaceBy($filenameWithoutExtension);
+    }
+
+    /**
+     * Guess the interface with a given filename.
+     *
+     * @param string $filenameWithoutExtension
+     *
+     * @return string|null
+     */
+    protected function guessInterfaceBy(string $filenameWithoutExtension): ?string
+    {
+        return ! Str::contains($this->interfaceNamespace, '\\')
+            ? $this->buildInterfaceFromClassBy($filenameWithoutExtension)
+            : null;
+    }
+
+    /**
+     * Build the interface class-string.
+     *
+     * @param string $filename
+     *
+     * @return string
+     */
+    protected function buildInterfaceBy(string $filename): string
+    {
+        return $this->interfaceNamespace . '\\'
+            . $this->prepareNamingFor($filename)
+            . ($this->interfaceNaming);
+    }
+
+    /**
+     * Build the interface class-string based on the class folder.
+     *
+     * @param string $filename
+     *
+     * @return string
+     */
+    protected function buildInterfaceFromClassBy(string $filename): string
+    {
+        return $this->classNamespace . '\\'
+            . $this->classFolder . '\\'
+            . $this->interfaceNamespace . '\\'
+            . $this->prepareNamingFor($filename)
+            . $this->interfaceNaming;
+    }
+
+    /**
+     * Cleans up filename to append the desired interface name.
+     *
+     * @param string $filename
+     *
+     * @return string
+     */
+    protected function prepareNamingFor(string $filename): string
+    {
+        return Str::replace($this->interfaceNaming, '', $filename);
+    }
+}
