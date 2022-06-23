@@ -1,6 +1,6 @@
-![Laravel Auto Binder](https://user-images.githubusercontent.com/37669560/174098292-415011bd-cd9e-48c0-95e0-d6ca28aed125.png)
+![Laravel Auto-Binder](https://user-images.githubusercontent.com/37669560/174098292-415011bd-cd9e-48c0-95e0-d6ca28aed125.png)
 
-# Laravel Auto Binder
+# Laravel Auto-Binder
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/michael-rubel/laravel-auto-binder.svg?style=flat-square&logo=packagist)](https://packagist.org/packages/michael-rubel/laravel-auto-binder)
 [![Total Downloads](https://img.shields.io/packagist/dt/michael-rubel/laravel-auto-binder.svg?style=flat-square&logo=packagist)](https://packagist.org/packages/michael-rubel/laravel-auto-binder)
 [![Code Quality](https://img.shields.io/scrutinizer/quality/g/michael-rubel/laravel-auto-binder.svg?style=flat-square&logo=scrutinizer)](https://scrutinizer-ci.com/g/michael-rubel/laravel-auto-binder/?branch=main)
