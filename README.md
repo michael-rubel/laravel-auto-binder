@@ -77,7 +77,7 @@ AutoBinder::from(folder: 'Services')
     })
     ->bind();
 ```
-Passing a concrete class as well as an interface is possible, but keep in mind interfaces have a higher priority when applying the dependencies.
+Passing a concrete class as well as an interface is possible, but keep in mind interfaces have a higher priority when applying dependencies.
 
 ### Scanning multiple folders at once
 
