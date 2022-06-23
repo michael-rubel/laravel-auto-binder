@@ -222,6 +222,20 @@ class AutoBindingTest extends TestCase
     }
 
     /** @test */
+    public function testCanExcludeSubFoldersUsingArray()
+    {
+        AutoBinder::from(folder: 'Services')
+            ->basePath('tests/Boilerplate')
+            ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
+            ->exclude(['Contracts', 'Test'])
+            ->bind();
+
+        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
+        $this->assertFalse(app()->bound(ExampleServiceContract::class));
+    }
+
+    /** @test */
     public function testThrowsExceptionIfDirectoryNotFound()
     {
         $this->expectException(DirectoryNotFoundException::class);
