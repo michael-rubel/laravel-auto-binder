@@ -89,16 +89,16 @@ trait BindsToContainer
     /**
      * Get the concrete from filename.
      *
-     * @param string $actualFolder
+     * @param string $folder
      * @param string $filenameWithRelativePath
      *
      * @return string
      */
-    protected function concreteFrom(string $actualFolder, string $filenameWithRelativePath): string
+    protected function concreteFrom(string $folder, string $filenameWithRelativePath): string
     {
         return $this->classNamespace . '\\'
             . $this->classFolder . '\\'
-            . $this->prepareActual($actualFolder . '\\')
+            . $this->prepareActual($folder . '\\')
             . $this->prepareNamingFor($filenameWithRelativePath);
     }
 
