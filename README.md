@@ -12,7 +12,7 @@ This package adds the possibility to bind interfaces to implementations in the S
 
 ---
 
-The package requires PHP `8.x` and Laravel `9.x`.
+The package requires PHP `8.x` and Laravel `9.x`
 
 ## #StandWithUkraine
 [![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://github.com/vshymanskyy/StandWithUkraine/blob/main/docs/README.md)
