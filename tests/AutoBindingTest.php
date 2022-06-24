@@ -10,6 +10,8 @@ use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\Contracts\ExampleServiceC
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\ExampleService;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\Interfaces\AnotherServiceInterface;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\Interfaces\ExampleServiceInterface;
+use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\Interfaces\TestServiceInterface;
+use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\Test\TestService;
 use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 
 class AutoBindingTest extends TestCase
@@ -233,6 +235,20 @@ class AutoBindingTest extends TestCase
         $this->assertTrue(app()->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
         $this->assertFalse(app()->bound(ExampleServiceContract::class));
+    }
+
+    /** @test */
+    public function testBindsFromSubdirectories()
+    {
+        AutoBinder::from(folder: 'Services')
+            ->basePath('tests/Boilerplate')
+            ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
+            ->interfaceNamespace("MichaelRubel\\AutoBinder\\Tests\\Boilerplate\\Services\\Interfaces")
+            ->as('singleton')
+            ->bind();
+
+        $this->assertTrue(app()->bound(TestServiceInterface::class));
+        $this->assertInstanceOf(TestService::class, app(TestServiceInterface::class));
     }
 
     /** @test */
