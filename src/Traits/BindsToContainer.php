@@ -18,28 +18,32 @@ trait BindsToContainer
      */
     protected function scan(): void
     {
-        $this->getFolderFiles()->each(function (SplFileInfo $file) {
-            $relativePath             = $file->getRelativePathname();
-            $filenameWithoutExtension = $file->getFilenameWithoutExtension();
-            $filenameWithRelativePath = $this->prepareFilename($relativePath);
+        $this->getFolderFiles()->each(
+            fn (array $files, string $actualFolder) => LazyCollection::make($files)->each(
+                function (SplFileInfo $file) use ($actualFolder) {
+                    $relativePath             = $file->getRelativePathname();
+                    $filenameWithoutExtension = $file->getFilenameWithoutExtension();
+                    $filenameWithRelativePath = $this->prepareFilename($relativePath);
 
-            $interface = $this->interfaceFrom($filenameWithoutExtension);
-            $concrete  = $this->concreteFrom($filenameWithRelativePath);
+                    $interface = $this->interfaceFrom($filenameWithoutExtension);
+                    $concrete  = $this->concreteFrom($actualFolder, $filenameWithRelativePath);
 
-            if (! interface_exists($interface) || ! class_exists($concrete)) {
-                return;
-            }
+                    if (! interface_exists($interface) || ! class_exists($concrete)) {
+                        return;
+                    }
 
-            $dependencies = collect($this->dependencies);
+                    $dependencies = collect($this->dependencies);
 
-            $concrete = match (true) {
-                $dependencies->has($interface) => $dependencies->get($interface),
-                $dependencies->has($concrete)  => $dependencies->get($concrete),
-                default                        => $concrete,
-            };
+                    $concrete = match (true) {
+                        $dependencies->has($interface) => $dependencies->get($interface),
+                        $dependencies->has($concrete)  => $dependencies->get($concrete),
+                        default                        => $concrete,
+                    };
 
-            app()->{$this->bindingType}($interface, $concrete);
-        });
+                    app()->{$this->bindingType}($interface, $concrete);
+                }
+            )
+        );
     }
 
     /**
@@ -51,8 +55,7 @@ trait BindsToContainer
     {
         return LazyCollection::make(File::directories(base_path($this->basePath . DIRECTORY_SEPARATOR . $this->classFolder)))
             ->reject(fn ($folder) => in_array(basename($folder), $this->excludesFolders))
-            ->map(fn ($folder) => File::allFiles($folder))
-            ->flatten();
+            ->mapWithKeys(fn (string $folder) => [basename($folder) => File::allFiles($folder)]);
     }
 
     /**
@@ -86,14 +89,16 @@ trait BindsToContainer
     /**
      * Get the concrete from filename.
      *
+     * @param string $actualFolder
      * @param string $filenameWithRelativePath
      *
      * @return string
      */
-    protected function concreteFrom(string $filenameWithRelativePath): string
+    protected function concreteFrom(string $actualFolder, string $filenameWithRelativePath): string
     {
         return $this->classNamespace . '\\'
             . $this->classFolder . '\\'
+            . $this->prepareActual($actualFolder . '\\')
             . $this->prepareNamingFor($filenameWithRelativePath);
     }
 
@@ -138,7 +143,7 @@ trait BindsToContainer
     {
         return $this->interfaceNamespace . '\\'
             . $this->prepareNamingFor($filename)
-            . ($this->interfaceNaming);
+            . $this->interfaceNaming;
     }
 
     /**
@@ -167,5 +172,17 @@ trait BindsToContainer
     protected function prepareNamingFor(string $filename): string
     {
         return Str::replace($this->interfaceNaming, '', $filename);
+    }
+
+    /**
+     * prepares an actual folder.
+     *
+     * @param string $folder
+     *
+     * @return string
+     */
+    protected function prepareActual(string $folder): string
+    {
+        return Str::replace(Str::plural($this->interfaceNaming) . '\\', '', $folder);
     }
 }
