@@ -1,17 +1,13 @@
-name: php-code-sniffer
-
+name: "Laravel Pint"
 on:
-  push:
-    branches:
-      - main
   pull_request:
-    branches:
-      - main
+    types: [opened, synchronize, reopened, ready_for_review]
 
 jobs:
-  psalm:
-    name: phpcs
+  phpcs:
+    name: "Running Laravel Pint check"
     runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
     steps:
       - uses: actions/checkout@v2
 
@@ -19,7 +15,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, bcmath, intl, pdo, sqlite, pdo_sqlite
           coverage: none
 
       - name: Cache composer dependencies
@@ -28,8 +24,11 @@ jobs:
           path: vendor
           key: composer-${{ hashFiles('composer.lock') }}
 
+      - name: Copy .env.example to .env
+        run: cp .env.example .env
+
       - name: Run composer install
         run: composer install -n --prefer-dist
 
-      - name: Run phpcs
-        run: ./vendor/bin/phpcs
+      - name: Run Laravel Pint
+        run: ./vendor/bin/pint --test
