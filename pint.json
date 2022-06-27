@@ -2,18 +2,6 @@
   "preset": "laravel",
   "rules": {
     "Laravel/laravel_phpdoc_separation": false,
-    "class_attributes_separation": {
-      "elements": {
-        "const": "only_if_meta",
-        "method": "one",
-        "property": "only_if_meta",
-        "trait_import": "none"
-      }
-    },
-    "binary_operator_spaces": {
-      "default": "single_space",
-      "operators": {"=>": null, "=": "align_single_space_minimal"}
-    },
     "concat_space": {
       "spacing": "one"
     }
