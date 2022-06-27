@@ -111,7 +111,7 @@ class AutoBinder
 
         func_num_args() > 1
             ? collect($folders)->map(fn ($folder) => $this->excludesFolders[] = $folder)
-            : $this->excludesFolders[] = current($folders);
+            : $this->excludesFolders[]                                        = current($folders);
 
         return $this;
     }

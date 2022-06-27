@@ -20,7 +20,7 @@ class AutoBindingTest extends TestCase
     {
         parent::setUp();
 
-        app()->setBasePath(__DIR__.'/../');
+        app()->setBasePath(__DIR__ . '/../');
     }
 
     /** @test */

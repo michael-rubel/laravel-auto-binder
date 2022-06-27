@@ -21,12 +21,12 @@ trait BindsToContainer
         $this->getFolderFiles()->each(
             fn (array $files, string $actualFolder) => LazyCollection::make($files)->each(
                 function (SplFileInfo $file) use ($actualFolder) {
-                    $relativePath = $file->getRelativePathname();
+                    $relativePath             = $file->getRelativePathname();
                     $filenameWithoutExtension = $file->getFilenameWithoutExtension();
                     $filenameWithRelativePath = $this->prepareFilename($relativePath);
 
                     $interface = $this->interfaceFrom($filenameWithoutExtension);
-                    $concrete = $this->concreteFrom($actualFolder, $filenameWithRelativePath);
+                    $concrete  = $this->concreteFrom($actualFolder, $filenameWithRelativePath);
 
                     if (! interface_exists($interface) || ! class_exists($concrete)) {
                         return;
@@ -53,7 +53,7 @@ trait BindsToContainer
      */
     protected function getFolderFiles(): LazyCollection
     {
-        return LazyCollection::make(File::directories(base_path($this->basePath.DIRECTORY_SEPARATOR.$this->classFolder)))
+        return LazyCollection::make(File::directories(base_path($this->basePath . DIRECTORY_SEPARATOR . $this->classFolder)))
             ->reject(fn ($folder) => in_array(basename($folder), $this->excludesFolders))
             ->mapWithKeys(fn (string $folder) => [basename($folder) => File::allFiles($folder)]);
     }
@@ -93,10 +93,10 @@ trait BindsToContainer
      */
     protected function concreteFrom(string $folder, string $filenameWithRelativePath): string
     {
-        return $this->classNamespace.'\\'
-            .$this->classFolder.'\\'
-            .$this->prepareActual($folder.'\\')
-            .$this->prepareNamingFor($filenameWithRelativePath);
+        return $this->classNamespace . '\\'
+            . $this->classFolder . '\\'
+            . $this->prepareActual($folder . '\\')
+            . $this->prepareNamingFor($filenameWithRelativePath);
     }
 
     /**
@@ -135,9 +135,9 @@ trait BindsToContainer
      */
     protected function buildInterfaceBy(string $filename): string
     {
-        return $this->interfaceNamespace.'\\'
-            .$this->prepareNamingFor($filename)
-            .$this->interfaceNaming;
+        return $this->interfaceNamespace . '\\'
+            . $this->prepareNamingFor($filename)
+            . $this->interfaceNaming;
     }
 
     /**
@@ -148,11 +148,11 @@ trait BindsToContainer
      */
     protected function buildInterfaceFromClassBy(string $filename): string
     {
-        return $this->classNamespace.'\\'
-            .$this->classFolder.'\\'
-            .$this->interfaceNamespace.'\\'
-            .$this->prepareNamingFor($filename)
-            .$this->interfaceNaming;
+        return $this->classNamespace . '\\'
+            . $this->classFolder . '\\'
+            . $this->interfaceNamespace . '\\'
+            . $this->prepareNamingFor($filename)
+            . $this->interfaceNaming;
     }
 
     /**
@@ -174,6 +174,6 @@ trait BindsToContainer
      */
     protected function prepareActual(string $folder): string
     {
-        return Str::replace(Str::plural($this->interfaceNaming).'\\', '', $folder);
+        return Str::replace(Str::plural($this->interfaceNaming) . '\\', '', $folder);
     }
 }
