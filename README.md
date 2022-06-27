@@ -50,13 +50,16 @@ AutoBinder::from(folder: 'Services')
     ->interfaceNamespace('App\\Domain\\Interfaces')
     ->bind();
 ```
+This configuration would look for classes in the `app/Domain/Services` folder, use `App\\Domain` namespace and apply interfaces from `App\\Domain\\Interfaces` namespace with `ClassNameInterface` naming convention.
 
-If you need to change the naming convention of your interfaces (the default is `ClassNameInterface`), you can specify the namespace and name you prefer:
+
+If you need to change the naming convention of your interfaces, you can specify the namespace and name you prefer:
 ```php
 AutoBinder::from(folder: 'Services')
     ->interfaceNaming('Contract')
     ->bind();
 ```
+This configuration scans the `app/Services` folder with `App\\Services` namespace, `App\\Services\\Contracts` interface namespace and `ClassNameContract` interface naming convention.
 
 ### Excluding subfolders from scan
 
