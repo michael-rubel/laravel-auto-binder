@@ -29,7 +29,7 @@ Define in your ServiceProvider:
 ```php
 AutoBinder::from(folder: 'Services')
     ->as('singleton')
-    ->bind()
+    ->bind();
 ```
 
 Assuming you have your services in the `App\Services` and its interfaces in the `App\Services\Interfaces`, the package will register binding for each pair of class and interface:
@@ -48,14 +48,14 @@ AutoBinder::from(folder: 'Services')
     ->basePath('app/Domain')
     ->classNamespace('App\\Domain')
     ->interfaceNamespace('App\\Domain\\Interfaces')
-    ->bind()
+    ->bind();
 ```
 
 If you need to change the naming convention of your interfaces (the default is `ClassNameInterface`), you can specify the namespace and name you prefer:
 ```php
 AutoBinder::from(folder: 'Services')
     ->interfaceNaming('Contract')
-    ->bind()
+    ->bind();
 ```
 
 ### Excluding subfolders from scan
