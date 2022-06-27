@@ -24,9 +24,6 @@ jobs:
           path: vendor
           key: composer-${{ hashFiles('composer.lock') }}
 
-      - name: Copy .env.example to .env
-        run: cp .env.example .env
-
       - name: Run composer install
         run: composer install -n --prefer-dist
 
