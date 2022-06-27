@@ -21,12 +21,12 @@ trait BindsToContainer
         $this->getFolderFiles()->each(
             fn (array $files, string $actualFolder) => LazyCollection::make($files)->each(
                 function (SplFileInfo $file) use ($actualFolder) {
-                    $relativePath             = $file->getRelativePathname();
+                    $relativePath = $file->getRelativePathname();
                     $filenameWithoutExtension = $file->getFilenameWithoutExtension();
                     $filenameWithRelativePath = $this->prepareFilename($relativePath);
 
                     $interface = $this->interfaceFrom($filenameWithoutExtension);
-                    $concrete  = $this->concreteFrom($actualFolder, $filenameWithRelativePath);
+                    $concrete = $this->concreteFrom($actualFolder, $filenameWithRelativePath);
 
                     if (! interface_exists($interface) || ! class_exists($concrete)) {
                         return;
@@ -36,8 +36,8 @@ trait BindsToContainer
 
                     $concrete = match (true) {
                         $dependencies->has($interface) => $dependencies->get($interface),
-                        $dependencies->has($concrete)  => $dependencies->get($concrete),
-                        default                        => $concrete,
+                        $dependencies->has($concrete) => $dependencies->get($concrete),
+                        default => $concrete,
                     };
 
                     app()->{$this->bindingType}($interface, $concrete);
@@ -61,7 +61,7 @@ trait BindsToContainer
     /**
      * Prepare the filename.
      *
-     * @param string $filename
+     * @param  string  $filename
      *
      * @return string
      */
@@ -75,7 +75,7 @@ trait BindsToContainer
     /**
      * Get the namespace from a given path.
      *
-     * @param string $path
+     * @param  string  $path
      *
      * @return string
      */
@@ -89,8 +89,8 @@ trait BindsToContainer
     /**
      * Get the concrete from filename.
      *
-     * @param string $folder
-     * @param string $filenameWithRelativePath
+     * @param  string  $folder
+     * @param  string  $filenameWithRelativePath
      *
      * @return string
      */
@@ -105,7 +105,7 @@ trait BindsToContainer
     /**
      * Get the interface from filename.
      *
-     * @param string $filenameWithoutExtension
+     * @param  string  $filenameWithoutExtension
      *
      * @return string
      */
@@ -121,7 +121,7 @@ trait BindsToContainer
     /**
      * Guess the interface with a given filename.
      *
-     * @param string $filenameWithoutExtension
+     * @param  string  $filenameWithoutExtension
      *
      * @return string|null
      */
@@ -135,7 +135,7 @@ trait BindsToContainer
     /**
      * Build the interface class-string.
      *
-     * @param string $filename
+     * @param  string  $filename
      *
      * @return string
      */
@@ -149,7 +149,7 @@ trait BindsToContainer
     /**
      * Build the interface class-string based on the class folder.
      *
-     * @param string $filename
+     * @param  string  $filename
      *
      * @return string
      */
@@ -165,7 +165,7 @@ trait BindsToContainer
     /**
      * Cleans up filename to append the desired interface name.
      *
-     * @param string $filename
+     * @param  string  $filename
      *
      * @return string
      */
@@ -177,7 +177,7 @@ trait BindsToContainer
     /**
      * prepares an actual folder.
      *
-     * @param string $folder
+     * @param  string  $folder
      *
      * @return string
      */
