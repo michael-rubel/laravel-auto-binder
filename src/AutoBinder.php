@@ -84,6 +84,7 @@ class AutoBinder
      * Create the object with target folder assigned.
      *
      * @param  string|array  $folder
+     *
      * @return static|Collection
      */
     public static function from(string|array $folder): static|Collection
@@ -103,6 +104,7 @@ class AutoBinder
      * Exclude specified subdirectory from scanning.
      *
      * @param  string|array  $folders
+     *
      * @return static
      */
     public function exclude(string|array $folders): static
@@ -120,6 +122,7 @@ class AutoBinder
      * Set the class base path.
      *
      * @param  string  $basePath
+     *
      * @return $this
      */
     public function basePath(string $basePath): static
@@ -133,6 +136,7 @@ class AutoBinder
      * Define the class namespace.
      *
      * @param  string  $path
+     *
      * @return $this
      */
     public function classNamespace(string $path): static
@@ -146,6 +150,7 @@ class AutoBinder
      * Define the interface namespace.
      *
      * @param  string  $path
+     *
      * @return $this
      */
     public function interfaceNamespace(string $path): static
@@ -159,6 +164,7 @@ class AutoBinder
      * Define the interface postfix.
      *
      * @param  string  $name
+     *
      * @return $this
      */
     public function interfaceNaming(string $name): static
@@ -177,6 +183,7 @@ class AutoBinder
      *
      * @param  string  $abstract
      * @param  \Closure  $callback
+     *
      * @return static
      */
     public function when(string $abstract, \Closure $callback): static
@@ -190,6 +197,7 @@ class AutoBinder
      * Bind the result as a specific type of binding.
      *
      * @param  string  $type
+     *
      * @return $this
      */
     public function as(string $type): static
