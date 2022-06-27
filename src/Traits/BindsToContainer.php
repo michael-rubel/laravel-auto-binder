@@ -21,12 +21,12 @@ trait BindsToContainer
         $this->getFolderFiles()->each(
             fn (array $files, string $actualFolder) => LazyCollection::make($files)->each(
                 function (SplFileInfo $file) use ($actualFolder) {
-                    $relativePath             = $file->getRelativePathname();
+                    $relativePath = $file->getRelativePathname();
                     $filenameWithoutExtension = $file->getFilenameWithoutExtension();
                     $filenameWithRelativePath = $this->prepareFilename($relativePath);
 
                     $interface = $this->interfaceFrom($filenameWithoutExtension);
-                    $concrete  = $this->concreteFrom($actualFolder, $filenameWithRelativePath);
+                    $concrete = $this->concreteFrom($actualFolder, $filenameWithRelativePath);
 
                     if (! interface_exists($interface) || ! class_exists($concrete)) {
                         return;
@@ -36,8 +36,8 @@ trait BindsToContainer
 
                     $concrete = match (true) {
                         $dependencies->has($interface) => $dependencies->get($interface),
-                        $dependencies->has($concrete)  => $dependencies->get($concrete),
-                        default                        => $concrete,
+                        $dependencies->has($concrete) => $dependencies->get($concrete),
+                        default => $concrete,
                     };
 
                     app()->{$this->bindingType}($interface, $concrete);
