@@ -21,12 +21,12 @@ trait BindsToContainer
         $this->getFolderFiles()->each(
             fn (array $files, string $actualFolder) => LazyCollection::make($files)->each(
                 function (SplFileInfo $file) use ($actualFolder) {
-                    $relativePath             = $file->getRelativePathname();
+                    $relativePath = $file->getRelativePathname();
                     $filenameWithoutExtension = $file->getFilenameWithoutExtension();
                     $filenameWithRelativePath = $this->prepareFilename($relativePath);
 
                     $interface = $this->interfaceFrom($filenameWithoutExtension);
-                    $concrete  = $this->concreteFrom($actualFolder, $filenameWithRelativePath);
+                    $concrete = $this->concreteFrom($actualFolder, $filenameWithRelativePath);
 
                     if (! interface_exists($interface) || ! class_exists($concrete)) {
                         return;
@@ -53,7 +53,7 @@ trait BindsToContainer
      */
     protected function getFolderFiles(): LazyCollection
     {
-        return LazyCollection::make(File::directories(base_path($this->basePath . DIRECTORY_SEPARATOR . $this->classFolder)))
+        return LazyCollection::make(File::directories(base_path($this->basePath.DIRECTORY_SEPARATOR.$this->classFolder)))
             ->reject(fn ($folder) => in_array(basename($folder), $this->excludesFolders))
             ->mapWithKeys(fn (string $folder) => [basename($folder) => File::allFiles($folder)]);
     }
@@ -61,8 +61,7 @@ trait BindsToContainer
     /**
      * Prepare the filename.
      *
-     * @param string $filename
-     *
+     * @param  string  $filename
      * @return string
      */
     protected function prepareFilename(string $filename): string
@@ -75,8 +74,7 @@ trait BindsToContainer
     /**
      * Get the namespace from a given path.
      *
-     * @param string $path
-     *
+     * @param  string  $path
      * @return string
      */
     protected function namespaceFrom(string $path): string
@@ -89,24 +87,22 @@ trait BindsToContainer
     /**
      * Get the concrete from filename.
      *
-     * @param string $folder
-     * @param string $filenameWithRelativePath
-     *
+     * @param  string  $folder
+     * @param  string  $filenameWithRelativePath
      * @return string
      */
     protected function concreteFrom(string $folder, string $filenameWithRelativePath): string
     {
-        return $this->classNamespace . '\\'
-            . $this->classFolder . '\\'
-            . $this->prepareActual($folder . '\\')
-            . $this->prepareNamingFor($filenameWithRelativePath);
+        return $this->classNamespace.'\\'
+            .$this->classFolder.'\\'
+            .$this->prepareActual($folder.'\\')
+            .$this->prepareNamingFor($filenameWithRelativePath);
     }
 
     /**
      * Get the interface from filename.
      *
-     * @param string $filenameWithoutExtension
-     *
+     * @param  string  $filenameWithoutExtension
      * @return string
      */
     protected function interfaceFrom(string $filenameWithoutExtension): string
@@ -121,8 +117,7 @@ trait BindsToContainer
     /**
      * Guess the interface with a given filename.
      *
-     * @param string $filenameWithoutExtension
-     *
+     * @param  string  $filenameWithoutExtension
      * @return string|null
      */
     protected function guessInterfaceBy(string $filenameWithoutExtension): ?string
@@ -135,38 +130,35 @@ trait BindsToContainer
     /**
      * Build the interface class-string.
      *
-     * @param string $filename
-     *
+     * @param  string  $filename
      * @return string
      */
     protected function buildInterfaceBy(string $filename): string
     {
-        return $this->interfaceNamespace . '\\'
-            . $this->prepareNamingFor($filename)
-            . $this->interfaceNaming;
+        return $this->interfaceNamespace.'\\'
+            .$this->prepareNamingFor($filename)
+            .$this->interfaceNaming;
     }
 
     /**
      * Build the interface class-string based on the class folder.
      *
-     * @param string $filename
-     *
+     * @param  string  $filename
      * @return string
      */
     protected function buildInterfaceFromClassBy(string $filename): string
     {
-        return $this->classNamespace . '\\'
-            . $this->classFolder . '\\'
-            . $this->interfaceNamespace . '\\'
-            . $this->prepareNamingFor($filename)
-            . $this->interfaceNaming;
+        return $this->classNamespace.'\\'
+            .$this->classFolder.'\\'
+            .$this->interfaceNamespace.'\\'
+            .$this->prepareNamingFor($filename)
+            .$this->interfaceNaming;
     }
 
     /**
      * Cleans up filename to append the desired interface name.
      *
-     * @param string $filename
-     *
+     * @param  string  $filename
      * @return string
      */
     protected function prepareNamingFor(string $filename): string
@@ -177,12 +169,11 @@ trait BindsToContainer
     /**
      * prepares an actual folder.
      *
-     * @param string $folder
-     *
+     * @param  string  $folder
      * @return string
      */
     protected function prepareActual(string $folder): string
     {
-        return Str::replace(Str::plural($this->interfaceNaming) . '\\', '', $folder);
+        return Str::replace(Str::plural($this->interfaceNaming).'\\', '', $folder);
     }
 }

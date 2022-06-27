@@ -20,7 +20,7 @@ class AutoBindingTest extends TestCase
     {
         parent::setUp();
 
-        app()->setBasePath(__DIR__ . '/../');
+        app()->setBasePath(__DIR__.'/../');
     }
 
     /** @test */
@@ -29,7 +29,7 @@ class AutoBindingTest extends TestCase
         AutoBinder::from(folder: 'Services')
             ->basePath('tests/Boilerplate')
             ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-            ->interfaceNamespace("MichaelRubel\\AutoBinder\\Tests\\Boilerplate\\Services\\Interfaces")
+            ->interfaceNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate\\Services\\Interfaces')
             ->as('singleton')
             ->bind();
 
@@ -43,7 +43,7 @@ class AutoBindingTest extends TestCase
         AutoBinder::from(folder: 'Models')
             ->basePath('tests/Boilerplate')
             ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-            ->interfaceNamespace("MichaelRubel\\AutoBinder\\Tests\\Boilerplate\\Models\\Interfaces")
+            ->interfaceNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate\\Models\\Interfaces')
             ->as('singleton')
             ->bind();
 
@@ -57,7 +57,7 @@ class AutoBindingTest extends TestCase
         (new AutoBinder)
             ->basePath('tests/Boilerplate')
             ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-            ->interfaceNamespace("MichaelRubel\\AutoBinder\\Tests\\Boilerplate\\Services\\Interfaces")
+            ->interfaceNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate\\Services\\Interfaces')
             ->as('singleton')
             ->bind();
 
@@ -243,7 +243,7 @@ class AutoBindingTest extends TestCase
         AutoBinder::from(folder: 'Services')
             ->basePath('tests/Boilerplate')
             ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-            ->interfaceNamespace("MichaelRubel\\AutoBinder\\Tests\\Boilerplate\\Services\\Interfaces")
+            ->interfaceNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate\\Services\\Interfaces')
             ->as('singleton')
             ->bind();
 
