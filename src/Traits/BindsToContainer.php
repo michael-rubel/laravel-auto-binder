@@ -76,7 +76,7 @@ trait BindsToContainer
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    protected function cacheBindingFor(string $interface, string $concrete): void
+    protected function cacheBindingFor(string $interface, \Closure|string $concrete): void
     {
         $clue = 'binder_' . $this->classFolder;
 
