@@ -20,6 +20,20 @@ trait CachesBindings
     }
 
     /**
+     * Use the bindings from the cache.
+     *
+     * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    protected function fromCache(): void
+    {
+        collect(cache()->get($this->cacheClue()))->each(
+            fn ($concrete, $interface) => app()->{$this->bindingType}($interface, $concrete)
+        );
+    }
+
+    /**
      * Cache the binding.
      *
      * @param  string  $interface
@@ -38,19 +52,5 @@ trait CachesBindings
         $cache[$interface] = $concrete;
 
         cache()->put($clue, $cache);
-    }
-
-    /**
-     * Apply the caching.
-     *
-     * @return void
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    protected function applyCache(): void
-    {
-        collect(cache()->get($this->cacheClue()))->each(
-            fn ($concrete, $interface) => app()->{$this->bindingType}($interface, $concrete)
-        );
     }
 }

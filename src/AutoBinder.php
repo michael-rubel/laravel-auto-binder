@@ -245,7 +245,7 @@ class AutoBinder
     public function bind(): void
     {
         $this->caching && cache()->has($this->cacheClue())
-            ? $this->applyCache()
+            ? $this->fromCache()
             : $this->scan();
     }
 }
