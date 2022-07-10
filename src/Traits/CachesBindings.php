@@ -39,7 +39,7 @@ trait CachesBindings
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    protected function applyCachingBy(string $clue): void
+    protected function applyCacheBy(string $clue): void
     {
         collect(cache()->get($clue))->each(
             fn ($concrete, $interface) => app()->{$this->bindingType}($interface, $concrete)
