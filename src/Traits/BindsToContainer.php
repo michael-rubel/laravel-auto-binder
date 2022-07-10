@@ -88,6 +88,22 @@ trait BindsToContainer
     }
 
     /**
+     * Apply the caching.
+     *
+     * @param  string  $clue
+     *
+     * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    protected function applyCachingFor(string $clue): void
+    {
+        collect(cache()->get($clue))->each(
+            fn ($concrete, $interface) => app()->{$this->bindingType}($interface, $concrete)
+        );
+    }
+
+    /**
      * Prepare the filename.
      *
      * @param  string  $filename

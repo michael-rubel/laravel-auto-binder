@@ -237,16 +237,10 @@ class AutoBinder
      */
     public function bind(): void
     {
-        if ($this->caching && cache()->has('binder_' . $this->classFolder)) {
-            $cache = cache()->get('binder_' . $this->classFolder);
+        $clue = 'binder_' . $this->classFolder;
 
-            collect($cache)->each(function ($concrete, $interface) {
-                app()->{$this->bindingType}($interface, $concrete);
-            });
-
-            return;
-        }
-
-        $this->scan();
+        $this->caching && cache()->has($clue)
+            ? $this->applyCachingFor($clue)
+            : $this->scan();
     }
 }
