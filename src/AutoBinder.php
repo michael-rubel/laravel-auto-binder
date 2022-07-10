@@ -244,10 +244,8 @@ class AutoBinder
      */
     public function bind(): void
     {
-        $clue = static::CACHE_KEY . $this->classFolder;
-
-        $this->caching && cache()->has($clue)
-            ? $this->applyCacheBy($clue)
+        $this->caching && cache()->has($this->cacheClue())
+            ? $this->applyCache()
             : $this->scan();
     }
 }

@@ -10,6 +10,16 @@ use Psr\Container\NotFoundExceptionInterface;
 trait CachesBindings
 {
     /**
+     * Get the clue to access the cache.
+     *
+     * @return string
+     */
+    protected function cacheClue(): string
+    {
+        return static::CACHE_KEY . $this->classFolder;
+    }
+
+    /**
      * Cache the binding.
      *
      * @param  string  $interface
@@ -21,7 +31,7 @@ trait CachesBindings
      */
     protected function cacheBindingFor(string $interface, \Closure|string $concrete): void
     {
-        $clue = static::CACHE_KEY . $this->classFolder;
+        $clue = $this->cacheClue();
 
         $cache = cache()->get($clue);
 
@@ -33,15 +43,13 @@ trait CachesBindings
     /**
      * Apply the caching.
      *
-     * @param  string  $clue
-     *
      * @return void
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    protected function applyCacheBy(string $clue): void
+    protected function applyCache(): void
     {
-        collect(cache()->get($clue))->each(
+        collect(cache()->get($this->cacheClue()))->each(
             fn ($concrete, $interface) => app()->{$this->bindingType}($interface, $concrete)
         );
     }
