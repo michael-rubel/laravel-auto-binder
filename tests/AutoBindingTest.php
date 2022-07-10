@@ -273,7 +273,7 @@ class AutoBindingTest extends TestCase
         $services = [
             AnotherServiceInterface::class => AnotherService::class,
             ExampleServiceInterface::class => ExampleService::class,
-            TestServiceInterface::class    => TestService::class,
+            TestServiceInterface::class => TestService::class,
         ];
         $this->assertSame($services, cache()->get(AutoBinder::CACHE_KEY . 'Services'));
 
