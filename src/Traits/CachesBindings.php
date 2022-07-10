@@ -10,16 +10,6 @@ use Psr\Container\NotFoundExceptionInterface;
 trait CachesBindings
 {
     /**
-     * Get the clue to access the cache.
-     *
-     * @return string
-     */
-    public function cacheClue(): string
-    {
-        return static::CACHE_KEY . $this->classFolder;
-    }
-
-    /**
      * Use the bindings from the cache.
      *
      * @return void

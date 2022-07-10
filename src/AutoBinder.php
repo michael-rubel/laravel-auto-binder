@@ -145,6 +145,16 @@ class AutoBinder
     }
 
     /**
+     * Get the clue to access the cache.
+     *
+     * @return string
+     */
+    public function cacheClue(): string
+    {
+        return static::CACHE_KEY . $this->classFolder;
+    }
+
+    /**
      * Set the class base path.
      *
      * @param  string  $basePath
