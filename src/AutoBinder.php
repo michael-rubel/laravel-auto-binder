@@ -135,7 +135,7 @@ class AutoBinder
     /**
      * Disables the caching.
      *
-     * @return $this
+     * @return static
      */
     public function withoutCaching(): static
     {
@@ -149,7 +149,7 @@ class AutoBinder
      *
      * @param  string  $basePath
      *
-     * @return $this
+     * @return static
      */
     public function basePath(string $basePath): static
     {
@@ -163,7 +163,7 @@ class AutoBinder
      *
      * @param  string  $path
      *
-     * @return $this
+     * @return static
      */
     public function classNamespace(string $path): static
     {
@@ -177,7 +177,7 @@ class AutoBinder
      *
      * @param  string  $path
      *
-     * @return $this
+     * @return static
      */
     public function interfaceNamespace(string $path): static
     {
@@ -191,7 +191,7 @@ class AutoBinder
      *
      * @param  string  $name
      *
-     * @return $this
+     * @return static
      */
     public function interfaceNaming(string $name): static
     {
@@ -224,7 +224,7 @@ class AutoBinder
      *
      * @param  string  $type
      *
-     * @return $this
+     * @return static
      */
     public function as(string $type): static
     {
