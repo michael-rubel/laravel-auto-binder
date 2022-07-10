@@ -69,6 +69,13 @@ class AutoBinder
     public array $excludesFolders = [];
 
     /**
+     * Determines if the caching is enabled.
+     *
+     * @var bool
+     */
+    public bool $caching = true;
+
+    /**
      * Assign a new class folder.
      *
      * @param  string|null  $classFolder
@@ -114,6 +121,18 @@ class AutoBinder
         func_num_args() > 1
             ? collect($folders)->map(fn ($folder) => $this->excludesFolders[] = $folder)
             : $this->excludesFolders[] = current($folders);
+
+        return $this;
+    }
+
+    /**
+     * Disables the caching.
+     *
+     * @return $this
+     */
+    public function withoutCaching(): static
+    {
+        $this->caching = false;
 
         return $this;
     }
@@ -218,6 +237,16 @@ class AutoBinder
      */
     public function bind(): void
     {
+        if ($this->caching && cache()->has('binder_' . $this->classFolder)) {
+            $cache = cache()->get('binder_' . $this->classFolder);
+
+            collect($cache)->each(function ($concrete, $interface) {
+                app()->{$this->bindingType}($interface, $concrete);
+            });
+
+            return;
+        }
+
         $this->scan();
     }
 }

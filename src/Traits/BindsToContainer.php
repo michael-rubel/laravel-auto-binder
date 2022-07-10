@@ -40,6 +40,16 @@ trait BindsToContainer
                         default => $concrete,
                     };
 
+                    if ($this->caching) {
+                        $clue = 'binder_' . $this->classFolder;
+
+                        $cache = cache()->get($clue);
+
+                        $cache[$interface] = $concrete;
+
+                        cache()->put($clue, $cache);
+                    }
+
                     app()->{$this->bindingType}($interface, $concrete);
                 }
             )
