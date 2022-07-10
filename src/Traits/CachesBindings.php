@@ -14,7 +14,7 @@ trait CachesBindings
      *
      * @return string
      */
-    protected function cacheClue(): string
+    public function cacheClue(): string
     {
         return static::CACHE_KEY . $this->classFolder;
     }
