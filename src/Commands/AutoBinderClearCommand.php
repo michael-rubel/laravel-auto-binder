@@ -26,7 +26,7 @@ class AutoBinderClearCommand extends Command
     public function handle(Repository $cache): void
     {
         $folder = $this->argument('folder');
-        $clue   = (new AutoBinder($folder))->cacheClue();
+        $clue = (new AutoBinder($folder))->cacheClue();
 
         collect($cache->get($clue))->each(
             fn ($concrete, $interface) => app()->offsetUnset($interface)
