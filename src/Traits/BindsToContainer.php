@@ -54,7 +54,7 @@ trait BindsToContainer
     protected function getFolderFiles(): LazyCollection
     {
         return LazyCollection::make(File::directories(base_path($this->basePath . DIRECTORY_SEPARATOR . $this->classFolder)))
-            ->reject(fn ($folder) => in_array(basename($folder), $this->excludesFolders))
+            ->reject(fn (string $folder) => in_array(basename($folder), $this->excludesFolders))
             ->mapWithKeys(fn (string $folder) => [basename($folder) => File::allFiles($folder)]);
     }
 
