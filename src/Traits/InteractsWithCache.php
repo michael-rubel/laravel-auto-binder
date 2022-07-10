@@ -6,9 +6,31 @@ namespace MichaelRubel\AutoBinder\Traits;
 
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Psr\SimpleCache\InvalidArgumentException;
 
 trait InteractsWithCache
 {
+    /**
+     * Get the clue to access the cache.
+     *
+     * @return string
+     */
+    public function cacheClue(): string
+    {
+        return static::CACHE_KEY . $this->classFolder;
+    }
+
+    /**
+     * Check if the caching is enabled.
+     *
+     * @return bool
+     * @throws InvalidArgumentException
+     */
+    protected function isCachingEnabled(): bool
+    {
+        return $this->caching && cache()->has($this->cacheClue());
+    }
+
     /**
      * Use the bindings from the cache.
      *

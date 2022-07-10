@@ -6,9 +6,10 @@ namespace MichaelRubel\AutoBinder;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use MichaelRubel\AutoBinder\Contracts\ShouldCache;
 use MichaelRubel\AutoBinder\Traits\BindsToContainer;
 
-class AutoBinder
+class AutoBinder implements ShouldCache
 {
     use BindsToContainer;
 
@@ -76,13 +77,6 @@ class AutoBinder
     public bool $caching = true;
 
     /**
-     * Identifies the bindings in the cache.
-     *
-     * @const string
-     */
-    public const CACHE_KEY = 'binder_';
-
-    /**
      * Assign a new class folder.
      *
      * @param  string|null  $classFolder
@@ -142,16 +136,6 @@ class AutoBinder
         $this->caching = false;
 
         return $this;
-    }
-
-    /**
-     * Get the clue to access the cache.
-     *
-     * @return string
-     */
-    public function cacheClue(): string
-    {
-        return static::CACHE_KEY . $this->classFolder;
     }
 
     /**
@@ -254,7 +238,7 @@ class AutoBinder
      */
     public function bind(): void
     {
-        $this->caching && cache()->has($this->cacheClue())
+        $this->isCachingEnabled()
             ? $this->fromCache()
             : $this->scan();
     }
