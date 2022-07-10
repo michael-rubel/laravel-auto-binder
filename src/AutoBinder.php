@@ -220,8 +220,6 @@ class AutoBinder implements ShouldCache
      */
     public function bind(): void
     {
-        $this->hasCache()
-            ? $this->fromCache()
-            : $this->scan();
+        $this->hasCache() ? $this->fromCache() : $this->scan();
     }
 }
