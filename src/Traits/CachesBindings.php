@@ -21,7 +21,7 @@ trait CachesBindings
      */
     protected function cacheBindingFor(string $interface, \Closure|string $concrete): void
     {
-        $clue = 'binder_' . $this->classFolder;
+        $clue = static::CACHE_KEY . $this->classFolder;
 
         $cache = cache()->get($clue);
 

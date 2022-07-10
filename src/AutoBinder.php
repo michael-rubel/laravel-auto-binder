@@ -76,6 +76,13 @@ class AutoBinder
     public bool $caching = true;
 
     /**
+     * Identifies the bindings in the cache.
+     *
+     * @const string
+     */
+    public const CACHE_KEY = 'binder_';
+
+    /**
      * Assign a new class folder.
      *
      * @param  string|null  $classFolder
@@ -237,7 +244,7 @@ class AutoBinder
      */
     public function bind(): void
     {
-        $clue = 'binder_' . $this->classFolder;
+        $clue = static::CACHE_KEY . $this->classFolder;
 
         $this->caching && cache()->has($clue)
             ? $this->applyCachingBy($clue)
