@@ -7,7 +7,7 @@ namespace MichaelRubel\AutoBinder\Traits;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-trait CachesBindings
+trait InteractsWithCache
 {
     /**
      * Use the bindings from the cache.

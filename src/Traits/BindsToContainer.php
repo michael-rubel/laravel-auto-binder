@@ -13,7 +13,7 @@ use Symfony\Component\Finder\SplFileInfo;
 
 trait BindsToContainer
 {
-    use CachesBindings;
+    use InteractsWithCache;
 
     /**
      * Run the directory scanning & bind the results.
