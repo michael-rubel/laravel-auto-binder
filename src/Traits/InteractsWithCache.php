@@ -11,6 +11,25 @@ use Psr\SimpleCache\InvalidArgumentException;
 trait InteractsWithCache
 {
     /**
+     * Determines if the caching is enabled.
+     *
+     * @var bool
+     */
+    public bool $caching = true;
+
+    /**
+     * Disables the caching.
+     *
+     * @return static
+     */
+    public function withoutCaching(): static
+    {
+        $this->caching = false;
+
+        return $this;
+    }
+
+    /**
      * Get the clue to access the cache.
      *
      * @return string
@@ -26,7 +45,7 @@ trait InteractsWithCache
      * @return bool
      * @throws InvalidArgumentException
      */
-    protected function isCachingEnabled(): bool
+    protected function hasCache(): bool
     {
         return $this->caching && cache()->has($this->cacheClue());
     }

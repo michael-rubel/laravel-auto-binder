@@ -8,10 +8,11 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use MichaelRubel\AutoBinder\Contracts\ShouldCache;
 use MichaelRubel\AutoBinder\Traits\BindsToContainer;
+use MichaelRubel\AutoBinder\Traits\InteractsWithCache;
 
 class AutoBinder implements ShouldCache
 {
-    use BindsToContainer;
+    use BindsToContainer, InteractsWithCache;
 
     /**
      * Base class namespace.
@@ -70,13 +71,6 @@ class AutoBinder implements ShouldCache
     public array $excludesFolders = [];
 
     /**
-     * Determines if the caching is enabled.
-     *
-     * @var bool
-     */
-    public bool $caching = true;
-
-    /**
      * Assign a new class folder.
      *
      * @param  string|null  $classFolder
@@ -122,18 +116,6 @@ class AutoBinder implements ShouldCache
         func_num_args() > 1
             ? collect($folders)->map(fn ($folder) => $this->excludesFolders[] = $folder)
             : $this->excludesFolders[] = current($folders);
-
-        return $this;
-    }
-
-    /**
-     * Disables the caching.
-     *
-     * @return static
-     */
-    public function withoutCaching(): static
-    {
-        $this->caching = false;
 
         return $this;
     }
@@ -238,7 +220,7 @@ class AutoBinder implements ShouldCache
      */
     public function bind(): void
     {
-        $this->isCachingEnabled()
+        $this->hasCache()
             ? $this->fromCache()
             : $this->scan();
     }
