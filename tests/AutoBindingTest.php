@@ -3,6 +3,7 @@
 namespace MichaelRubel\AutoBinder\Tests;
 
 use MichaelRubel\AutoBinder\AutoBinder;
+use MichaelRubel\AutoBinder\Commands\AutoBinderClearCommand;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Models\Example;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Models\Interfaces\ExampleInterface;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\AnotherService;
@@ -295,5 +296,32 @@ class AutoBindingTest extends TestCase
 
         $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
         $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
+    }
+
+    /** @test */
+    public function testCanClearCache()
+    {
+        AutoBinder::from('Services')
+            ->basePath('tests/Boilerplate')
+            ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
+            ->bind();
+
+        $services = [
+            AnotherServiceInterface::class => AnotherService::class,
+            ExampleServiceInterface::class => ExampleService::class,
+            TestServiceInterface::class => TestService::class,
+        ];
+
+        collect($services)->each(
+            fn ($service, $interface) => $this->assertTrue(app()->bound($interface))
+        );
+
+        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
+        $this->artisan(AutoBinderClearCommand::class, ['folder' => 'Services']);
+        $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
+
+        collect($services)->each(
+            fn ($service, $interface) => $this->assertFalse(app()->bound($interface))
+        );
     }
 }
