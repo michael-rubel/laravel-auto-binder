@@ -8,7 +8,7 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 
-trait InteractsWithCache
+trait HandlesCaching
 {
     /**
      * Determines if the caching is enabled.

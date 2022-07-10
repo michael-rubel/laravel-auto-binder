@@ -8,11 +8,11 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use MichaelRubel\AutoBinder\Contracts\ShouldCache;
 use MichaelRubel\AutoBinder\Traits\BindsToContainer;
-use MichaelRubel\AutoBinder\Traits\InteractsWithCache;
+use MichaelRubel\AutoBinder\Traits\HandlesCaching;
 
 class AutoBinder implements ShouldCache
 {
-    use BindsToContainer, InteractsWithCache;
+    use BindsToContainer, HandlesCaching;
 
     /**
      * Base class namespace.
