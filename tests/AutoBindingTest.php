@@ -258,4 +258,27 @@ class AutoBindingTest extends TestCase
 
         AutoBinder::from(folder: 'SomeFolder')->bind();
     }
+
+    /** @test */
+    public function testCachesBindings()
+    {
+        AutoBinder::from('Services', 'Models')->each(
+            fn ($binder) => $binder->basePath('tests/Boilerplate')
+                ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
+                ->as('singleton')
+                ->bind()
+        );
+
+        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
+        $services = [
+            AnotherServiceInterface::class => AnotherService::class,
+            ExampleServiceInterface::class => ExampleService::class,
+            TestServiceInterface::class    => TestService::class,
+        ];
+        $this->assertSame($services, cache()->get(AutoBinder::CACHE_KEY . 'Services'));
+
+        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
+        $models = [ExampleInterface::class => Example::class];
+        $this->assertSame($models, cache()->get(AutoBinder::CACHE_KEY . 'Models'));
+    }
 }
