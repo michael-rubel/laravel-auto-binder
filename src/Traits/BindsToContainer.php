@@ -7,6 +7,8 @@ namespace MichaelRubel\AutoBinder\Traits;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Str;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\Finder\SplFileInfo;
 
 trait BindsToContainer
@@ -15,6 +17,8 @@ trait BindsToContainer
      * Run the directory scanning & bind the results.
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     protected function scan(): void
     {
@@ -41,13 +45,7 @@ trait BindsToContainer
                     };
 
                     if ($this->caching) {
-                        $clue = 'binder_' . $this->classFolder;
-
-                        $cache = cache()->get($clue);
-
-                        $cache[$interface] = $concrete;
-
-                        cache()->put($clue, $cache);
+                        $this->cacheBindingFor($interface, $concrete);
                     }
 
                     app()->{$this->bindingType}($interface, $concrete);
@@ -66,6 +64,27 @@ trait BindsToContainer
         return LazyCollection::make(File::directories(base_path($this->basePath . DIRECTORY_SEPARATOR . $this->classFolder)))
             ->reject(fn (string $folder) => in_array(basename($folder), $this->excludesFolders))
             ->mapWithKeys(fn (string $folder) => [basename($folder) => File::allFiles($folder)]);
+    }
+
+    /**
+     * Cache the binding.
+     *
+     * @param  string  $interface
+     * @param  string  $concrete
+     *
+     * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    protected function cacheBindingFor(string $interface, string $concrete): void
+    {
+        $clue = 'binder_' . $this->classFolder;
+
+        $cache = cache()->get($clue);
+
+        $cache[$interface] = $concrete;
+
+        cache()->put($clue, $cache);
     }
 
     /**
