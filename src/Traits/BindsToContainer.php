@@ -13,6 +13,8 @@ use Symfony\Component\Finder\SplFileInfo;
 
 trait BindsToContainer
 {
+    use CachesBindings;
+
     /**
      * Run the directory scanning & bind the results.
      *
@@ -64,43 +66,6 @@ trait BindsToContainer
         return LazyCollection::make(File::directories(base_path($this->basePath . DIRECTORY_SEPARATOR . $this->classFolder)))
             ->reject(fn (string $folder) => in_array(basename($folder), $this->excludesFolders))
             ->mapWithKeys(fn (string $folder) => [basename($folder) => File::allFiles($folder)]);
-    }
-
-    /**
-     * Cache the binding.
-     *
-     * @param  string  $interface
-     * @param  string  $concrete
-     *
-     * @return void
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    protected function cacheBindingFor(string $interface, \Closure|string $concrete): void
-    {
-        $clue = 'binder_' . $this->classFolder;
-
-        $cache = cache()->get($clue);
-
-        $cache[$interface] = $concrete;
-
-        cache()->put($clue, $cache);
-    }
-
-    /**
-     * Apply the caching.
-     *
-     * @param  string  $clue
-     *
-     * @return void
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    protected function applyCachingBy(string $clue): void
-    {
-        collect(cache()->get($clue))->each(
-            fn ($concrete, $interface) => app()->{$this->bindingType}($interface, $concrete)
-        );
     }
 
     /**
