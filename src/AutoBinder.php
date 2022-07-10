@@ -240,7 +240,7 @@ class AutoBinder
         $clue = 'binder_' . $this->classFolder;
 
         $this->caching && cache()->has($clue)
-            ? $this->applyCachingFor($clue)
+            ? $this->applyCachingBy($clue)
             : $this->scan();
     }
 }
