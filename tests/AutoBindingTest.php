@@ -324,4 +324,22 @@ class AutoBindingTest extends TestCase
             fn ($service, $interface) => $this->assertFalse(app()->bound($interface))
         );
     }
+
+    /** @test */
+    public function testFetchesFromCache()
+    {
+        AutoBinder::from('Services')
+            ->basePath('tests/Boilerplate')
+            ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
+            ->bind();
+
+        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
+
+        AutoBinder::from('Services')
+            ->basePath('tests/Boilerplate')
+            ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
+            ->bind();
+
+        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
+    }
 }
