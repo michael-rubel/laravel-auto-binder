@@ -25,7 +25,7 @@ composer require michael-rubel/laravel-auto-binder
 
 ## Usage
 
-Define in your ServiceProvider:
+Define in your ServiceProvider's `boot` method:
 ```php
 AutoBinder::from(folder: 'Services')
     ->as('singleton')
