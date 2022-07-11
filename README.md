@@ -97,6 +97,23 @@ AutoBinder::from('Services', 'Models')->each(
 );
 ```
 
+### Caching
+Starting from `v5.0.0` package will cache your bindings to avoid redundant folder scans during the application bootstrapping process. It's now required to use a binder inside the `boot` method of your ServiceProvider (`register` was allowed previously) to make sure internal `cache` container binding is available.
+
+If you want cache to be disabled, you may use `withoutCaching` method on the AutoBinder instance, e.g.:
+```php
+AutoBinder::from(folder: 'Services')
+    ->withoutCaching()
+    ->as('singleton')
+    ->bind();
+```
+
+You can as well clear the cache for specific folder by using an Artisan command:
+```shell
+php artisan binder:clear Services
+```
+Note that for the command to work you should use the folder name you passed to the AutoBinder instance in the `from` method.
+
 ## Testing
 ```bash
 composer test
