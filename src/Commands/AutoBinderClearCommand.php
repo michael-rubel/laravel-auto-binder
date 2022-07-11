@@ -34,5 +34,7 @@ class AutoBinderClearCommand extends Command
         );
 
         $cache->forget($clue);
+
+        $this->info('Container bindings and cache were cleared successfully!');
     }
 }
