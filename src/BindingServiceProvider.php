@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MichaelRubel\AutoBinder;
 
+use MichaelRubel\AutoBinder\Commands\AutoBinderClearCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -18,6 +19,8 @@ class BindingServiceProvider extends PackageServiceProvider
      */
     public function configurePackage(Package $package): void
     {
-        $package->name('laravel-auto-binder');
+        $package
+            ->name('laravel-auto-binder')
+            ->hasCommand(AutoBinderClearCommand::class);
     }
 }

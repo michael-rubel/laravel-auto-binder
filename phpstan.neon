@@ -11,6 +11,9 @@ parameters:
     ignoreErrors:
        - '#Parameter \#1 \$callback of method Illuminate\\Support\\LazyCollection\<\(int\|string\),mixed\>\:\:each\(\) expects callable\(\(int\|string\), \(int\|string\)\)\: mixed, Closure\(Symfony\\Component\\Finder\\SplFileInfo\)\: void given\.#'
        - '#Parameter \#1 \$callback of method Illuminate\\Support\\LazyCollection\<\(int\|string\),mixed\>\:\:each\(\) expects callable\(\(int\|string\), \(int\|string\)\)\: mixed, Closure\(array, string\)\: Illuminate\\Support\\LazyCollection\<\(int\|string\), mixed\> given\.#'
+       - '#Parameter \#1 \$classFolder of class MichaelRubel\\AutoBinder\\AutoBinder constructor expects string\|null, array\|bool\|string\|null given\.#'
+       - '#Parameter \#1 \$value of function collect expects Illuminate\\Contracts\\Support\\Arrayable\<\(int\|string\), mixed\>\|iterable\<\(int\|string\), mixed\>\|null, mixed given\.#'
+       - '#Unable to resolve the template type (.*) in call to function collect#'
        - '#Cannot call method (.*) on mixed\.#'
 
     checkMissingIterableValueType: false

@@ -7,6 +7,8 @@ namespace MichaelRubel\AutoBinder\Traits;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Str;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\Finder\SplFileInfo;
 
 trait BindsToContainer
@@ -15,6 +17,8 @@ trait BindsToContainer
      * Run the directory scanning & bind the results.
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     protected function scan(): void
     {
@@ -39,6 +43,10 @@ trait BindsToContainer
                         $dependencies->has($concrete) => $dependencies->get($concrete),
                         default => $concrete,
                     };
+
+                    if (isset($this->caching) && $this->caching) {
+                        $this->cacheBindingFor($interface, $concrete);
+                    }
 
                     app()->{$this->bindingType}($interface, $concrete);
                 }

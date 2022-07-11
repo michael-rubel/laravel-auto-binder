@@ -6,11 +6,13 @@ namespace MichaelRubel\AutoBinder;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use MichaelRubel\AutoBinder\Contracts\ShouldCache;
 use MichaelRubel\AutoBinder\Traits\BindsToContainer;
+use MichaelRubel\AutoBinder\Traits\CachesBindings;
 
-class AutoBinder
+class AutoBinder implements ShouldCache
 {
-    use BindsToContainer;
+    use BindsToContainer, CachesBindings;
 
     /**
      * Base class namespace.
@@ -123,7 +125,7 @@ class AutoBinder
      *
      * @param  string  $basePath
      *
-     * @return $this
+     * @return static
      */
     public function basePath(string $basePath): static
     {
@@ -137,7 +139,7 @@ class AutoBinder
      *
      * @param  string  $path
      *
-     * @return $this
+     * @return static
      */
     public function classNamespace(string $path): static
     {
@@ -151,7 +153,7 @@ class AutoBinder
      *
      * @param  string  $path
      *
-     * @return $this
+     * @return static
      */
     public function interfaceNamespace(string $path): static
     {
@@ -165,7 +167,7 @@ class AutoBinder
      *
      * @param  string  $name
      *
-     * @return $this
+     * @return static
      */
     public function interfaceNaming(string $name): static
     {
@@ -198,7 +200,7 @@ class AutoBinder
      *
      * @param  string  $type
      *
-     * @return $this
+     * @return static
      */
     public function as(string $type): static
     {
@@ -218,6 +220,6 @@ class AutoBinder
      */
     public function bind(): void
     {
-        $this->scan();
+        $this->hasCache() ? $this->fromCache() : $this->scan();
     }
 }
