@@ -24,7 +24,7 @@
     },
     "require-dev": {
         "brianium/paratest": "^6.3",
-        "laravel/pint": "^0.2.1",
+        "laravel/pint": "^1.1",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^6.0",
         "nunomaduro/larastan": "^1.0",
