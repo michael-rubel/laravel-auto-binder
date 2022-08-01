@@ -47,8 +47,8 @@ trait CachesBindings
      */
     protected function hasCache(): bool
     {
-        return ! app()->isLocal()
-            && $this->caching
+        return $this->caching
+            && ! app()->isLocal()
             && cache()->has($this->cacheClue());
     }
 
