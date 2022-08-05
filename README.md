@@ -8,7 +8,7 @@
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/michael-rubel/laravel-auto-binder/run-tests/main?style=flat-square&label=tests&logo=github)](https://github.com/michael-rubel/laravel-auto-binder/actions)
 [![PHPStan](https://img.shields.io/github/workflow/status/michael-rubel/laravel-auto-binder/phpstan/main?style=flat-square&label=larastan&logo=laravel)](https://github.com/michael-rubel/laravel-auto-binder/actions)
 
-This package adds the possibility to bind interfaces to implementations in the Service Container by scanning the specified project folders. This helps avoid manually registering container bindings when the project needs to bind a lot of interfaces to its implementations.
+This package adds the possibility to bind interfaces to concrete classes in the Service Container by scanning the specified project folders. This helps avoid manually registering container bindings when the project needs to bind a lot of interfaces to its implementations.
 
 ---
 
@@ -112,7 +112,7 @@ You can as well clear the cache for specific folder by using an Artisan command:
 ```shell
 php artisan binder:clear Services
 ```
-Note that for the command to work you should use the folder name you passed to the AutoBinder instance in the `from` method.
+Note that for the command to work you should use the folder name you passed to the AutoBinder instance in the `from` method. The cache will be ignored on local environment starting from `v5.0.2`
 
 ## Testing
 ```bash
