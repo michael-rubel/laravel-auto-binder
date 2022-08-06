@@ -30,8 +30,8 @@ class BindingServiceProvider extends PackageServiceProvider
      */
     public function registeringPackage(): void
     {
-        if (! app()->bound('cache')) {
-            app()->register(CacheServiceProvider::class, true);
+        if (! $this->app->bound('cache')) {
+            $this->app->register(CacheServiceProvider::class, true);
         }
     }
 }
