@@ -3,9 +3,12 @@
 namespace MichaelRubel\AutoBinder\Tests;
 
 use MichaelRubel\AutoBinder\AutoBinder;
+use MichaelRubel\AutoBinder\BindingServiceProvider;
 use MichaelRubel\AutoBinder\Commands\AutoBinderClearCommand;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Models\Example;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Models\Interfaces\ExampleInterface;
+use MichaelRubel\AutoBinder\Tests\Boilerplate\Providers\BootServiceProvider;
+use MichaelRubel\AutoBinder\Tests\Boilerplate\Providers\RegisterServiceProvider;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\AnotherService;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\Contracts\ExampleServiceContract;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\ExampleService;
@@ -341,5 +344,27 @@ class AutoBindingTest extends TestCase
             ->bind();
 
         $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
+    }
+
+    /** @test */
+    public function testCanUseAutoBinderInRegisterProvidersMethod()
+    {
+        app()->offsetUnset('cache');
+        app()->register(BindingServiceProvider::class, true);
+        app()->register(RegisterServiceProvider::class);
+
+        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
+    }
+
+    /** @test */
+    public function testCanUseAutoBinderInBootProvidersMethod()
+    {
+        app()->offsetUnset('cache');
+        app()->register(BindingServiceProvider::class, true);
+        app()->register(BootServiceProvider::class);
+
+        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
     }
 }
