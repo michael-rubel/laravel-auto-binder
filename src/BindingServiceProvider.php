@@ -28,7 +28,7 @@ class BindingServiceProvider extends PackageServiceProvider
     /**
      * @return void
      */
-    public function packageRegistered(): void
+    public function registeringPackage(): void
     {
         if (! app()->bound('cache')) {
             app()->register(CacheServiceProvider::class, true);
