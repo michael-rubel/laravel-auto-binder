@@ -25,7 +25,7 @@ composer require michael-rubel/laravel-auto-binder
 
 ## Usage
 
-Define in your ServiceProvider's `boot` method:
+Define in your ServiceProvider:
 ```php
 AutoBinder::from(folder: 'Services')
     ->as('singleton')
@@ -98,7 +98,7 @@ AutoBinder::from('Services', 'Models')->each(
 ```
 
 ### Caching
-Starting from `v5.0.0` package will cache your bindings to avoid redundant folder scans during the application bootstrapping process. It's now required to use a binder inside the `boot` method of your ServiceProvider (`register` was allowed previously) to make sure internal `cache` container binding is available.
+The package will cache your bindings to avoid redundant folder scans during the application bootstrapping process.
 
 If you want cache to be disabled, you may use `withoutCaching` method on the AutoBinder instance, e.g.:
 ```php
