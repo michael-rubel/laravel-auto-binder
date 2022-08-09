@@ -31,11 +31,11 @@ class BindingServiceProvider extends PackageServiceProvider
      */
     public function registeringPackage(): void
     {
-        if (! app()->bound('cache')) {
+        if (! $this->app->bound('cache')) {
             $this->app->register(CacheServiceProvider::class, true);
         }
 
-        if (! app()->bound('redis')) {
+        if (! $this->app->bound('redis')) {
             $this->app->register(RedisServiceProvider::class);
         }
     }
