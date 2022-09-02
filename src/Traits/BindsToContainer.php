@@ -78,7 +78,7 @@ trait BindsToContainer
         return str($filename)
             ->replace('/', '\\')
             ->substr(0, (int) strrpos($filename, '.'))
-            ->toString();
+            ->value();
     }
 
     /**
@@ -93,7 +93,7 @@ trait BindsToContainer
         return str($path)
             ->replace('/', '\\')
             ->ucfirst()
-            ->toString();
+            ->value();
     }
 
     /**
