@@ -7,14 +7,14 @@ namespace MichaelRubel\AutoBinder\Contracts;
 interface ShouldCache
 {
     /**
-     * Identifies the bindings in the cache.
+     * Container binding prefix used for caching purposes.
      *
      * @const string
      */
     public const CACHE_KEY = 'binder_';
 
     /**
-     * Get the clue to access the cache.
+     * Cache access key.
      *
      * @return string
      */
