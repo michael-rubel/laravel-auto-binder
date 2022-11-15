@@ -20,13 +20,6 @@ use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 
 class AutoBindingTest extends TestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        app()->setBasePath(__DIR__ . '/../');
-    }
-
     /** @test */
     public function testCanConfigureServiceBindings()
     {
