@@ -18,7 +18,7 @@ use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\Interfaces\TestServiceInt
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\Test\TestService;
 use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 
-class AutoBindingTest extends TestCase
+class BindingTest extends TestCase
 {
     /** @test */
     public function testCanConfigureServiceBindings()
@@ -254,111 +254,5 @@ class AutoBindingTest extends TestCase
         $this->expectException(DirectoryNotFoundException::class);
 
         AutoBinder::from(folder: 'SomeFolder')->bind();
-    }
-
-    /** @test */
-    public function testCachesBindings()
-    {
-        AutoBinder::from('Services', 'Models')->each(
-            fn ($binder) => $binder->basePath('tests/Boilerplate')
-                ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-                ->as('singleton')
-                ->bind()
-        );
-
-        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
-        $services = [
-            AnotherServiceInterface::class => AnotherService::class,
-            ExampleServiceInterface::class => ExampleService::class,
-            TestServiceInterface::class => TestService::class,
-        ];
-        $this->assertSame($services, cache()->get(AutoBinder::CACHE_KEY . 'Services'));
-
-        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
-        $models = [ExampleInterface::class => Example::class];
-        $this->assertSame($models, cache()->get(AutoBinder::CACHE_KEY . 'Models'));
-    }
-
-    /** @test */
-    public function testAvoidsCaching()
-    {
-        AutoBinder::from('Services', 'Models')->each(
-            fn ($binder) => $binder->basePath('tests/Boilerplate')
-                ->withoutCaching()
-                ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-                ->as('singleton')
-                ->bind()
-        );
-
-        $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
-        $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
-    }
-
-    /** @test */
-    public function testCanClearCache()
-    {
-        AutoBinder::from('Services')
-            ->basePath('tests/Boilerplate')
-            ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-            ->bind();
-
-        $services = [
-            AnotherServiceInterface::class => AnotherService::class,
-            ExampleServiceInterface::class => ExampleService::class,
-            TestServiceInterface::class => TestService::class,
-        ];
-
-        collect($services)->each(
-            fn ($service, $interface) => $this->assertTrue(app()->bound($interface))
-        );
-
-        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
-        $this->artisan(AutoBinderClearCommand::class, ['folder' => 'Services'])
-            ->expectsOutputToContain('Container bindings and cache were cleared successfully!');
-        $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
-
-        collect($services)->each(
-            fn ($service, $interface) => $this->assertFalse(app()->bound($interface))
-        );
-    }
-
-    /** @test */
-    public function testFetchesFromCache()
-    {
-        AutoBinder::from('Services')
-            ->basePath('tests/Boilerplate')
-            ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-            ->bind();
-
-        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
-
-        AutoBinder::from('Services')
-            ->basePath('tests/Boilerplate')
-            ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-            ->bind();
-
-        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
-    }
-
-    /** @test */
-    public function testCanUseAutoBinderInRegisterProvidersMethod()
-    {
-        app()->offsetUnset('cache');
-        app()->register(BindingServiceProvider::class, true);
-        app()->register(RegisterServiceProvider::class);
-
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
-        $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
-    }
-
-    /** @test */
-    public function testCanUseAutoBinderInBootProvidersMethod()
-    {
-        app()->offsetUnset('cache');
-        app()->register(BindingServiceProvider::class, true);
-        app()->register(BootServiceProvider::class);
-
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
-        $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
     }
 }
