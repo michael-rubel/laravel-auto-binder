@@ -3,12 +3,8 @@
 namespace MichaelRubel\AutoBinder\Tests;
 
 use MichaelRubel\AutoBinder\AutoBinder;
-use MichaelRubel\AutoBinder\BindingServiceProvider;
-use MichaelRubel\AutoBinder\Commands\AutoBinderClearCommand;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Models\Example;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Models\Interfaces\ExampleInterface;
-use MichaelRubel\AutoBinder\Tests\Boilerplate\Providers\BootServiceProvider;
-use MichaelRubel\AutoBinder\Tests\Boilerplate\Providers\RegisterServiceProvider;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\AnotherService;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\Contracts\ExampleServiceContract;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\ExampleService;
