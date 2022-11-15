@@ -9,10 +9,20 @@
         "text": "php://stderr",
         "github": true
     },
-    // "logs": {
-    //     "text": "infection.log"
-    // },
+//     "logs": {
+//         "text": "infection.log"
+//     },
     "mutators": {
-        "@default": true
+        "@default": true,
+        "LogicalNot": {
+            "ignore": [
+                "MichaelRubel\\AutoBinder\\BindingServiceProvider::registeringPackage"
+            ]
+        },
+        "MethodCallRemoval": {
+            "ignore": [
+                "MichaelRubel\\AutoBinder\\BindingServiceProvider::registeringPackage"
+            ]
+        }
     }
 }
