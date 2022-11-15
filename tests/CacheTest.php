@@ -73,7 +73,7 @@ class CacheTest extends TestCase
         ];
 
         collect($services)->each(
-            fn ($service, $interface) => $this->assertTrue(app()->bound($interface))
+            fn ($service, $interface) => $this->assertTrue($this->app->bound($interface))
         );
 
         $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
@@ -82,7 +82,7 @@ class CacheTest extends TestCase
         $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
 
         collect($services)->each(
-            fn ($service, $interface) => $this->assertFalse(app()->bound($interface))
+            fn ($service, $interface) => $this->assertFalse($this->app->bound($interface))
         );
     }
 

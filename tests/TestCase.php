@@ -13,7 +13,7 @@ class TestCase extends Orchestra
 
         $this->app['config']['cache.default'] = 'array';
 
-        app()->setBasePath(__DIR__ . '/../');
+        $this->app->setBasePath(__DIR__ . '/../');
     }
 
     protected function getPackageProviders($app): array

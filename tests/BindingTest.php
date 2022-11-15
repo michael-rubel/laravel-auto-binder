@@ -30,7 +30,7 @@ class BindingTest extends TestCase
             ->as('singleton')
             ->bind();
 
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
     }
 
@@ -44,7 +44,7 @@ class BindingTest extends TestCase
             ->as('singleton')
             ->bind();
 
-        $this->assertTrue(app()->bound(ExampleInterface::class));
+        $this->assertTrue($this->app->bound(ExampleInterface::class));
         $this->assertInstanceOf(Example::class, app(ExampleInterface::class));
     }
 
@@ -58,7 +58,7 @@ class BindingTest extends TestCase
             ->as('singleton')
             ->bind();
 
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
     }
 
@@ -77,10 +77,10 @@ class BindingTest extends TestCase
                 ->bind()
         );
 
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
 
-        $this->assertTrue(app()->bound(ExampleInterface::class));
+        $this->assertTrue($this->app->bound(ExampleInterface::class));
         $this->assertInstanceOf(Example::class, app(ExampleInterface::class));
     }
 
@@ -95,10 +95,10 @@ class BindingTest extends TestCase
                 ->bind()
         );
 
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
 
-        $this->assertTrue(app()->bound(ExampleInterface::class));
+        $this->assertTrue($this->app->bound(ExampleInterface::class));
         $this->assertInstanceOf(Example::class, app(ExampleInterface::class));
     }
 
@@ -112,10 +112,10 @@ class BindingTest extends TestCase
                 ->bind()
         );
 
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
 
-        $this->assertTrue(app()->bound(ExampleInterface::class));
+        $this->assertTrue($this->app->bound(ExampleInterface::class));
         $this->assertInstanceOf(Example::class, app(ExampleInterface::class));
     }
 
@@ -139,7 +139,7 @@ class BindingTest extends TestCase
             ->as(type: 'bind')
             ->bind();
 
-        $this->assertTrue(app()->bound(ExampleServiceContract::class));
+        $this->assertTrue($this->app->bound(ExampleServiceContract::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceContract::class));
     }
 
@@ -157,10 +157,10 @@ class BindingTest extends TestCase
             })
             ->bind();
 
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
         $this->assertTrue(app(ExampleServiceInterface::class)->injected);
-        $this->assertTrue(app()->bound(AnotherServiceInterface::class));
+        $this->assertTrue($this->app->bound(AnotherServiceInterface::class));
         $this->assertInstanceOf(AnotherService::class, app(AnotherServiceInterface::class));
         $this->assertTrue(app(AnotherServiceInterface::class)->injected);
     }
@@ -179,10 +179,10 @@ class BindingTest extends TestCase
             })
             ->bind();
 
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
         $this->assertTrue(app(ExampleServiceInterface::class)->injected);
-        $this->assertTrue(app()->bound(AnotherServiceInterface::class));
+        $this->assertTrue($this->app->bound(AnotherServiceInterface::class));
         $this->assertInstanceOf(AnotherService::class, app(AnotherServiceInterface::class));
         $this->assertTrue(app(AnotherServiceInterface::class)->injected);
     }
@@ -201,7 +201,7 @@ class BindingTest extends TestCase
             })
             ->bind();
 
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
         $this->assertTrue(app(ExampleServiceInterface::class)->injected);
     }
@@ -215,9 +215,9 @@ class BindingTest extends TestCase
             ->exclude('Contracts', 'Test')
             ->bind();
 
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
-        $this->assertFalse(app()->bound(ExampleServiceContract::class));
+        $this->assertFalse($this->app->bound(ExampleServiceContract::class));
     }
 
     /** @test */
@@ -229,9 +229,9 @@ class BindingTest extends TestCase
             ->exclude(['Contracts', 'Test'])
             ->bind();
 
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
-        $this->assertFalse(app()->bound(ExampleServiceContract::class));
+        $this->assertFalse($this->app->bound(ExampleServiceContract::class));
     }
 
     /** @test */
@@ -244,7 +244,7 @@ class BindingTest extends TestCase
             ->as('singleton')
             ->bind();
 
-        $this->assertTrue(app()->bound(TestServiceInterface::class));
+        $this->assertTrue($this->app->bound(TestServiceInterface::class));
         $this->assertInstanceOf(TestService::class, app(TestServiceInterface::class));
     }
 

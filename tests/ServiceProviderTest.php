@@ -23,22 +23,22 @@ class ServiceProviderTest extends TestCase
     /** @test */
     public function testCanUseAutoBinderInRegisterProvidersMethod()
     {
-        app()->offsetUnset('cache');
-        app()->register(BindingServiceProvider::class, true);
-        app()->register(RegisterServiceProvider::class);
+        $this->app->offsetUnset('cache');
+        $this->app->register(BindingServiceProvider::class, true);
+        $this->app->register(RegisterServiceProvider::class);
 
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
     }
 
     /** @test */
     public function testCanUseAutoBinderInBootProvidersMethod()
     {
-        app()->offsetUnset('cache');
-        app()->register(BindingServiceProvider::class, true);
-        app()->register(BootServiceProvider::class);
+        $this->app->offsetUnset('cache');
+        $this->app->register(BindingServiceProvider::class, true);
+        $this->app->register(BootServiceProvider::class);
 
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
     }
 }
