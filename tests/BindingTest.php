@@ -2,6 +2,7 @@
 
 namespace MichaelRubel\AutoBinder\Tests;
 
+use InvalidArgumentException;
 use MichaelRubel\AutoBinder\AutoBinder;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Models\Example;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Models\Interfaces\ExampleInterface;
@@ -203,13 +204,31 @@ class BindingTest extends TestCase
     }
 
     /** @test */
-    public function testCanExcludeSubFolders()
+    public function testCanExcludeFolder()
     {
-        AutoBinder::from(folder: 'Services')
+        $binder = AutoBinder::from(folder: 'Services')
             ->basePath('tests/Boilerplate')
             ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-            ->exclude('Contracts', 'Test')
-            ->bind();
+            ->exclude('Contracts');
+
+        $this->assertSame(['Contracts'], $binder->excludesFolders);
+
+        $binder->bind();
+
+        $this->assertFalse($this->app->bound(ExampleServiceContract::class));
+    }
+
+    /** @test */
+    public function testCanExcludeSubFolders()
+    {
+        $binder = AutoBinder::from(folder: 'Services')
+            ->basePath('tests/Boilerplate')
+            ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
+            ->exclude('Contracts', 'Test');
+
+        $this->assertSame(['Contracts', 'Test'], $binder->excludesFolders);
+
+        $binder->bind();
 
         $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
@@ -219,11 +238,14 @@ class BindingTest extends TestCase
     /** @test */
     public function testCanExcludeSubFoldersUsingArray()
     {
-        AutoBinder::from(folder: 'Services')
+        $binder = AutoBinder::from(folder: 'Services')
             ->basePath('tests/Boilerplate')
             ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-            ->exclude(['Contracts', 'Test'])
-            ->bind();
+            ->exclude(['Contracts', 'Test']);
+
+        $this->assertSame(['Contracts', 'Test'], $binder->excludesFolders);
+
+        $binder->bind();
 
         $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
@@ -250,5 +272,17 @@ class BindingTest extends TestCase
         $this->expectException(DirectoryNotFoundException::class);
 
         AutoBinder::from(folder: 'SomeFolder')->bind();
+    }
+
+    /** @test */
+    public function testThrowsExceptionWhenInvalidBindingType()
+    {
+        try {
+            AutoBinder::from(folder: 'SomeFolder')
+                ->as('invalid')
+                ->bind();
+        } catch (InvalidArgumentException $e) {
+            $this->assertSame('Invalid binding type.', $e->getMessage());
+        }
     }
 }

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace MichaelRubel\AutoBinder;
 
+use Closure;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use InvalidArgumentException;
 use MichaelRubel\AutoBinder\Contracts\ShouldCache;
 use MichaelRubel\AutoBinder\Traits\BindsToContainer;
 use MichaelRubel\AutoBinder\Traits\CachesBindings;
@@ -113,9 +115,9 @@ class AutoBinder implements ShouldCache
     {
         $folders = is_array($folders) ? $folders : func_get_args();
 
-        func_num_args() > 1
-            ? collect($folders)->map(fn ($folder) => $this->excludesFolders[] = $folder)
-            : $this->excludesFolders[] = current($folders);
+        collect($folders)->each(
+            fn ($folder) => $this->excludesFolders[] = $folder
+        );
 
         return $this;
     }
@@ -184,11 +186,11 @@ class AutoBinder implements ShouldCache
      * Adds dependencies to the class when the class name is met.
      *
      * @param  string  $abstract
-     * @param  \Closure  $callback
+     * @param  Closure  $callback
      *
      * @return static
      */
-    public function when(string $abstract, \Closure $callback): static
+    public function when(string $abstract, Closure $callback): static
     {
         $this->dependencies[$abstract] = $callback;
 
@@ -205,7 +207,7 @@ class AutoBinder implements ShouldCache
     public function as(string $type): static
     {
         if (! Str::is(['bind', 'scoped', 'singleton'], $type)) {
-            throw new \InvalidArgumentException('Invalid binding type.');
+            throw new InvalidArgumentException('Invalid binding type.');
         }
 
         $this->bindingType = $type;

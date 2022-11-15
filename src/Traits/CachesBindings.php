@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MichaelRubel\AutoBinder\Traits;
 
+use Closure;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\SimpleCache\InvalidArgumentException;
@@ -70,13 +71,13 @@ trait CachesBindings
      * Cache the binding.
      *
      * @param  string  $interface
-     * @param  \Closure|string  $concrete
+     * @param  Closure|string  $concrete
      *
      * @return void
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    protected function cacheBindingFor(string $interface, \Closure|string $concrete): void
+    protected function cacheBindingFor(string $interface, Closure|string $concrete): void
     {
         $clue = $this->cacheClue();
 
