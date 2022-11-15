@@ -313,7 +313,8 @@ class AutoBindingTest extends TestCase
         );
 
         $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
-        $this->artisan(AutoBinderClearCommand::class, ['folder' => 'Services']);
+        $this->artisan(AutoBinderClearCommand::class, ['folder' => 'Services'])
+            ->expectsOutputToContain('Container bindings and cache were cleared successfully!');
         $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
 
         collect($services)->each(
