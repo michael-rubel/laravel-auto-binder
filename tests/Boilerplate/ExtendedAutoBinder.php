@@ -39,7 +39,7 @@ class ExtendedAutoBinder extends AutoBinder
                         default => $concrete,
                     };
 
-                    if (parent::cacheEnabled()) {
+                    if (parent::providesCache() && parent::cacheEnabled()) {
                         parent::cacheBindingFor($interface, $concrete);
                     }
 

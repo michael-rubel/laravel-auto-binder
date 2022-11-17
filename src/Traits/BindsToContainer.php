@@ -14,6 +14,11 @@ use Symfony\Component\Finder\SplFileInfo;
 trait BindsToContainer
 {
     /**
+     * @var bool|null
+     */
+    private ?bool $providesCache = null;
+
+    /**
      * Run the directory scanning & bind the results.
      *
      * @return void
@@ -44,7 +49,7 @@ trait BindsToContainer
                         default => $concrete,
                     };
 
-                    if ($this->cacheEnabled()) {
+                    if ($this->providesCache() && $this->cacheEnabled()) {
                         $this->cacheBindingFor($interface, $concrete);
                     }
 
@@ -194,5 +199,21 @@ trait BindsToContainer
     protected function prepareActual(string $folder): string
     {
         return Str::replace(Str::plural($this->interfaceNaming) . '\\', '', $folder);
+    }
+
+    /**
+     * Check if the class use `CachesBindings` trait.
+     *
+     * @return bool
+     */
+    protected function providesCache(): bool
+    {
+        if ($this->providesCache) {
+            return true;
+        }
+
+        $uses = class_uses_recursive(static::class);
+
+        return $this->providesCache = in_array(CachesBindings::class, $uses);
     }
 }
