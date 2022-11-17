@@ -68,6 +68,22 @@ class CacheTest extends TestCase
     }
 
     /** @test */
+    public function testAvoidsCachingInLocalEnv()
+    {
+        $this->app['env'] = 'local';
+
+        AutoBinder::from('Services', 'Models')->each(
+            fn ($binder) => $binder->basePath('tests/Boilerplate')
+                ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
+                ->as('singleton')
+                ->bind()
+        );
+
+        $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
+        $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
+    }
+
+    /** @test */
     public function testCanClearCache()
     {
         AutoBinder::from('Services')

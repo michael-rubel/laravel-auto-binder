@@ -44,7 +44,7 @@ trait BindsToContainer
                         default => $concrete,
                     };
 
-                    if (isset($this->caching) && $this->caching) {
+                    if ($this->cacheEnabled()) {
                         $this->cacheBindingFor($interface, $concrete);
                     }
 

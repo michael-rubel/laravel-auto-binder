@@ -44,13 +44,21 @@ trait CachesBindings
      * Check if the caching is enabled.
      *
      * @return bool
+     */
+    protected function cacheEnabled(): bool
+    {
+        return isset($this->caching) && $this->caching && ! app()->isLocal();
+    }
+
+    /**
+     * Check if the caching is enabled.
+     *
+     * @return bool
      * @throws InvalidArgumentException
      */
     protected function hasCache(): bool
     {
-        return $this->caching
-            && ! app()->isLocal()
-            && cache()->has($this->cacheClue());
+        return $this->cacheEnabled() && cache()->has($this->cacheClue());
     }
 
     /**

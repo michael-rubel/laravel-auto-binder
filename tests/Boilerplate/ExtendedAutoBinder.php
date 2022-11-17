@@ -26,11 +26,8 @@ class ExtendedAutoBinder extends AutoBinder
                 function (SplFileInfo $file) use ($actualFolder) {
                     $relativePath = $file->getRelativePathname();
                     $filenameWithoutExtension = $file->getFilenameWithoutExtension();
-                    $filenameWithRelativePath = $this->prepareFilename($relativePath);
                     $filenameWithRelativePath = parent::prepareFilename($relativePath);
 
-                    $interface = $this->interfaceFrom($filenameWithoutExtension);
-                    $concrete = $this->concreteFrom($actualFolder, $filenameWithRelativePath);
                     $interface = parent::interfaceFrom($filenameWithoutExtension);
                     $concrete = parent::concreteFrom($actualFolder, $filenameWithRelativePath);
 
@@ -42,8 +39,9 @@ class ExtendedAutoBinder extends AutoBinder
                         default => $concrete,
                     };
 
-                    $this->cacheBindingFor($interface, $concrete);
-                    parent::cacheBindingFor($interface, $concrete);
+                    if (parent::cacheEnabled()) {
+                        parent::cacheBindingFor($interface, $concrete);
+                    }
 
                     if (! interface_exists($interface)) {
                         return;
