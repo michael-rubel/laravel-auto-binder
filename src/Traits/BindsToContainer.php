@@ -57,7 +57,7 @@ trait BindsToContainer
     /**
      * Get the folder files except for ignored ones.
      *
-     * @return LazyCollection
+     * @return LazyCollection<string, array<SplFileInfo>>
      */
     protected function getFolderFiles(): LazyCollection
     {

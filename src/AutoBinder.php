@@ -89,7 +89,7 @@ class AutoBinder implements ShouldCache
      *
      * @param  string|array  $folder
      *
-     * @return static|Collection
+     * @return static|Collection<int, static>
      */
     public static function from(string|array $folder): static|Collection
     {
