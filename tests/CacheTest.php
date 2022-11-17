@@ -25,6 +25,8 @@ class CacheTest extends TestCase
                 ->bind()
         );
 
+        $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
+
         $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
         $services = [
             AnotherServiceInterface::class => AnotherService::class,
@@ -36,6 +38,18 @@ class CacheTest extends TestCase
         $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
         $models = [ExampleInterface::class => Example::class];
         $this->assertSame($models, cache()->get(AutoBinder::CACHE_KEY . 'Models'));
+
+        $this->app->offsetUnset(ExampleServiceInterface::class);
+        $this->assertFalse($this->app->bound(ExampleServiceInterface::class));
+
+        AutoBinder::from('Services', 'Models')->each(
+            fn ($binder) => $binder->basePath('tests/Boilerplate')
+                ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
+                ->as('singleton')
+                ->bind()
+        );
+
+        $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
     }
 
     /** @test */
