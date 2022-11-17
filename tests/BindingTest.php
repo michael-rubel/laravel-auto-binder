@@ -2,13 +2,10 @@
 
 namespace MichaelRubel\AutoBinder\Tests;
 
+use InvalidArgumentException;
 use MichaelRubel\AutoBinder\AutoBinder;
-use MichaelRubel\AutoBinder\BindingServiceProvider;
-use MichaelRubel\AutoBinder\Commands\AutoBinderClearCommand;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Models\Example;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Models\Interfaces\ExampleInterface;
-use MichaelRubel\AutoBinder\Tests\Boilerplate\Providers\BootServiceProvider;
-use MichaelRubel\AutoBinder\Tests\Boilerplate\Providers\RegisterServiceProvider;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\AnotherService;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\Contracts\ExampleServiceContract;
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\ExampleService;
@@ -18,15 +15,8 @@ use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\Interfaces\TestServiceInt
 use MichaelRubel\AutoBinder\Tests\Boilerplate\Services\Test\TestService;
 use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 
-class AutoBindingTest extends TestCase
+class BindingTest extends TestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        app()->setBasePath(__DIR__ . '/../');
-    }
-
     /** @test */
     public function testCanConfigureServiceBindings()
     {
@@ -37,7 +27,7 @@ class AutoBindingTest extends TestCase
             ->as('singleton')
             ->bind();
 
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
     }
 
@@ -51,7 +41,7 @@ class AutoBindingTest extends TestCase
             ->as('singleton')
             ->bind();
 
-        $this->assertTrue(app()->bound(ExampleInterface::class));
+        $this->assertTrue($this->app->bound(ExampleInterface::class));
         $this->assertInstanceOf(Example::class, app(ExampleInterface::class));
     }
 
@@ -65,7 +55,7 @@ class AutoBindingTest extends TestCase
             ->as('singleton')
             ->bind();
 
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
     }
 
@@ -84,10 +74,10 @@ class AutoBindingTest extends TestCase
                 ->bind()
         );
 
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
 
-        $this->assertTrue(app()->bound(ExampleInterface::class));
+        $this->assertTrue($this->app->bound(ExampleInterface::class));
         $this->assertInstanceOf(Example::class, app(ExampleInterface::class));
     }
 
@@ -102,10 +92,10 @@ class AutoBindingTest extends TestCase
                 ->bind()
         );
 
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
 
-        $this->assertTrue(app()->bound(ExampleInterface::class));
+        $this->assertTrue($this->app->bound(ExampleInterface::class));
         $this->assertInstanceOf(Example::class, app(ExampleInterface::class));
     }
 
@@ -119,10 +109,10 @@ class AutoBindingTest extends TestCase
                 ->bind()
         );
 
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
 
-        $this->assertTrue(app()->bound(ExampleInterface::class));
+        $this->assertTrue($this->app->bound(ExampleInterface::class));
         $this->assertInstanceOf(Example::class, app(ExampleInterface::class));
     }
 
@@ -146,7 +136,7 @@ class AutoBindingTest extends TestCase
             ->as(type: 'bind')
             ->bind();
 
-        $this->assertTrue(app()->bound(ExampleServiceContract::class));
+        $this->assertTrue($this->app->bound(ExampleServiceContract::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceContract::class));
     }
 
@@ -164,10 +154,10 @@ class AutoBindingTest extends TestCase
             })
             ->bind();
 
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
         $this->assertTrue(app(ExampleServiceInterface::class)->injected);
-        $this->assertTrue(app()->bound(AnotherServiceInterface::class));
+        $this->assertTrue($this->app->bound(AnotherServiceInterface::class));
         $this->assertInstanceOf(AnotherService::class, app(AnotherServiceInterface::class));
         $this->assertTrue(app(AnotherServiceInterface::class)->injected);
     }
@@ -186,10 +176,10 @@ class AutoBindingTest extends TestCase
             })
             ->bind();
 
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
         $this->assertTrue(app(ExampleServiceInterface::class)->injected);
-        $this->assertTrue(app()->bound(AnotherServiceInterface::class));
+        $this->assertTrue($this->app->bound(AnotherServiceInterface::class));
         $this->assertInstanceOf(AnotherService::class, app(AnotherServiceInterface::class));
         $this->assertTrue(app(AnotherServiceInterface::class)->injected);
     }
@@ -208,37 +198,58 @@ class AutoBindingTest extends TestCase
             })
             ->bind();
 
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
         $this->assertTrue(app(ExampleServiceInterface::class)->injected);
     }
 
     /** @test */
-    public function testCanExcludeSubFolders()
+    public function testCanExcludeFolder()
     {
-        AutoBinder::from(folder: 'Services')
+        $binder = AutoBinder::from(folder: 'Services')
             ->basePath('tests/Boilerplate')
             ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-            ->exclude('Contracts', 'Test')
-            ->bind();
+            ->exclude('Contracts');
 
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertSame(['Contracts'], $binder->excludesFolders);
+
+        $binder->bind();
+
+        $this->assertFalse($this->app->bound(ExampleServiceContract::class));
+    }
+
+    /** @test */
+    public function testCanExcludeSubFolders()
+    {
+        $binder = AutoBinder::from(folder: 'Services')
+            ->basePath('tests/Boilerplate')
+            ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
+            ->exclude('Contracts', 'Test');
+
+        $this->assertSame(['Contracts', 'Test'], $binder->excludesFolders);
+
+        $binder->bind();
+
+        $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
-        $this->assertFalse(app()->bound(ExampleServiceContract::class));
+        $this->assertFalse($this->app->bound(ExampleServiceContract::class));
     }
 
     /** @test */
     public function testCanExcludeSubFoldersUsingArray()
     {
-        AutoBinder::from(folder: 'Services')
+        $binder = AutoBinder::from(folder: 'Services')
             ->basePath('tests/Boilerplate')
             ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-            ->exclude(['Contracts', 'Test'])
-            ->bind();
+            ->exclude(['Contracts', 'Test']);
 
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
+        $this->assertSame(['Contracts', 'Test'], $binder->excludesFolders);
+
+        $binder->bind();
+
+        $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
         $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
-        $this->assertFalse(app()->bound(ExampleServiceContract::class));
+        $this->assertFalse($this->app->bound(ExampleServiceContract::class));
     }
 
     /** @test */
@@ -251,7 +262,7 @@ class AutoBindingTest extends TestCase
             ->as('singleton')
             ->bind();
 
-        $this->assertTrue(app()->bound(TestServiceInterface::class));
+        $this->assertTrue($this->app->bound(TestServiceInterface::class));
         $this->assertInstanceOf(TestService::class, app(TestServiceInterface::class));
     }
 
@@ -264,107 +275,14 @@ class AutoBindingTest extends TestCase
     }
 
     /** @test */
-    public function testCachesBindings()
+    public function testThrowsExceptionWhenInvalidBindingType()
     {
-        AutoBinder::from('Services', 'Models')->each(
-            fn ($binder) => $binder->basePath('tests/Boilerplate')
-                ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-                ->as('singleton')
-                ->bind()
-        );
-
-        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
-        $services = [
-            AnotherServiceInterface::class => AnotherService::class,
-            ExampleServiceInterface::class => ExampleService::class,
-            TestServiceInterface::class => TestService::class,
-        ];
-        $this->assertSame($services, cache()->get(AutoBinder::CACHE_KEY . 'Services'));
-
-        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
-        $models = [ExampleInterface::class => Example::class];
-        $this->assertSame($models, cache()->get(AutoBinder::CACHE_KEY . 'Models'));
-    }
-
-    /** @test */
-    public function testAvoidsCaching()
-    {
-        AutoBinder::from('Services', 'Models')->each(
-            fn ($binder) => $binder->basePath('tests/Boilerplate')
-                ->withoutCaching()
-                ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-                ->as('singleton')
-                ->bind()
-        );
-
-        $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
-        $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
-    }
-
-    /** @test */
-    public function testCanClearCache()
-    {
-        AutoBinder::from('Services')
-            ->basePath('tests/Boilerplate')
-            ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-            ->bind();
-
-        $services = [
-            AnotherServiceInterface::class => AnotherService::class,
-            ExampleServiceInterface::class => ExampleService::class,
-            TestServiceInterface::class => TestService::class,
-        ];
-
-        collect($services)->each(
-            fn ($service, $interface) => $this->assertTrue(app()->bound($interface))
-        );
-
-        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
-        $this->artisan(AutoBinderClearCommand::class, ['folder' => 'Services']);
-        $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
-
-        collect($services)->each(
-            fn ($service, $interface) => $this->assertFalse(app()->bound($interface))
-        );
-    }
-
-    /** @test */
-    public function testFetchesFromCache()
-    {
-        AutoBinder::from('Services')
-            ->basePath('tests/Boilerplate')
-            ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-            ->bind();
-
-        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
-
-        AutoBinder::from('Services')
-            ->basePath('tests/Boilerplate')
-            ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-            ->bind();
-
-        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
-    }
-
-    /** @test */
-    public function testCanUseAutoBinderInRegisterProvidersMethod()
-    {
-        app()->offsetUnset('cache');
-        app()->register(BindingServiceProvider::class, true);
-        app()->register(RegisterServiceProvider::class);
-
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
-        $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
-    }
-
-    /** @test */
-    public function testCanUseAutoBinderInBootProvidersMethod()
-    {
-        app()->offsetUnset('cache');
-        app()->register(BindingServiceProvider::class, true);
-        app()->register(BootServiceProvider::class);
-
-        $this->assertTrue(app()->bound(ExampleServiceInterface::class));
-        $this->assertInstanceOf(ExampleService::class, app(ExampleServiceInterface::class));
+        try {
+            AutoBinder::from(folder: 'SomeFolder')
+                ->as('invalid')
+                ->bind();
+        } catch (InvalidArgumentException $e) {
+            $this->assertSame('Invalid binding type.', $e->getMessage());
+        }
     }
 }

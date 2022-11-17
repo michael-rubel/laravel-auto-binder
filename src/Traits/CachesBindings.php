@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MichaelRubel\AutoBinder\Traits;
 
+use Closure;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\SimpleCache\InvalidArgumentException;
@@ -43,13 +44,21 @@ trait CachesBindings
      * Check if the caching is enabled.
      *
      * @return bool
+     */
+    protected function cacheEnabled(): bool
+    {
+        return isset($this->caching) && $this->caching && ! app()->isLocal();
+    }
+
+    /**
+     * Check if the caching is enabled.
+     *
+     * @return bool
      * @throws InvalidArgumentException
      */
     protected function hasCache(): bool
     {
-        return $this->caching
-            && ! app()->isLocal()
-            && cache()->has($this->cacheClue());
+        return $this->cacheEnabled() && cache()->has($this->cacheClue());
     }
 
     /**
@@ -70,13 +79,13 @@ trait CachesBindings
      * Cache the binding.
      *
      * @param  string  $interface
-     * @param  \Closure|string  $concrete
+     * @param  Closure|string  $concrete
      *
      * @return void
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    protected function cacheBindingFor(string $interface, \Closure|string $concrete): void
+    protected function cacheBindingFor(string $interface, Closure|string $concrete): void
     {
         $clue = $this->cacheClue();
 

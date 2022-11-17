@@ -44,7 +44,7 @@ trait BindsToContainer
                         default => $concrete,
                     };
 
-                    if (isset($this->caching) && $this->caching) {
+                    if ($this->cacheEnabled()) {
                         $this->cacheBindingFor($interface, $concrete);
                     }
 
@@ -57,7 +57,7 @@ trait BindsToContainer
     /**
      * Get the folder files except for ignored ones.
      *
-     * @return LazyCollection
+     * @return LazyCollection<string, array<SplFileInfo>>
      */
     protected function getFolderFiles(): LazyCollection
     {
@@ -77,7 +77,7 @@ trait BindsToContainer
     {
         return str($filename)
             ->replace('/', '\\')
-            ->substr(0, (int) strrpos($filename, '.'))
+            ->substr(0, strrpos($filename, '.'))
             ->value();
     }
 

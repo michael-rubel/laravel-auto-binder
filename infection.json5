@@ -1,0 +1,28 @@
+{
+    "$schema": "vendor/infection/infection/resources/schema.json",
+    "source": {
+        "directories": [
+            "src"
+        ]
+    },
+    "logs": {
+        "text": "php://stderr",
+        "github": true
+    },
+//     "logs": {
+//         "text": "infection.log"
+//     },
+    "mutators": {
+        "@default": true,
+        "LogicalNot": {
+            "ignore": [
+                "MichaelRubel\\AutoBinder\\BindingServiceProvider::registeringPackage"
+            ]
+        },
+        "MethodCallRemoval": {
+            "ignore": [
+                "MichaelRubel\\AutoBinder\\BindingServiceProvider::registeringPackage"
+            ]
+        }
+    }
+}

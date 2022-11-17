@@ -10,6 +10,10 @@ class TestCase extends Orchestra
     public function setUp(): void
     {
         parent::setUp();
+
+        $this->app['config']['cache.default'] = 'array';
+
+        $this->app->setBasePath(__DIR__ . '/../');
     }
 
     protected function getPackageProviders($app): array
