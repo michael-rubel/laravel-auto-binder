@@ -27,7 +27,7 @@
         "nunomaduro/collision": "^6.0",
         "nunomaduro/larastan": "^2.0",
         "orchestra/testbench": "^7.0",
-        "phpunit/phpunit": "^9.5",
+        "phpunit/phpunit": "^9.5.27",
         "roave/backward-compatibility-check": "^7.0|^8.0",
         "roave/infection-static-analysis-plugin": "^1.25"
     },
