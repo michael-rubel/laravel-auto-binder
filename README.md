@@ -110,9 +110,11 @@ AutoBinder::from(folder: 'Services')
 
 You can as well clear the cache for specific folder by using an Artisan command:
 ```shell
-php artisan binder:clear Services
+php artisan binder:clear Services,Models
 ```
-Note that for the command to work you should use the folder name you passed to the AutoBinder instance in the `from` method. The cache will be ignored on local environment starting from `v5.0.2`
+
+Note that for the command to work you should use the folder name you passed to the AutoBinder instance in the `from` method.
+Also, the cache will be ignored in the `local` environment.
 
 ## Testing
 ```bash
