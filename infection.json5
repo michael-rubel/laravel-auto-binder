@@ -23,16 +23,6 @@
             "ignore": [
                 "MichaelRubel\\AutoBinder\\BindingServiceProvider::registeringPackage"
             ]
-        },
-        "ConcatOperandRemoval": {
-            "ignore": [
-                "MichaelRubel\\AutoBinder\\Commands\\AutoBinderClearCommand::handle::33"
-            ]
-        },
-        "Concat": {
-            "ignore": [
-                "MichaelRubel\\AutoBinder\\Commands\\AutoBinderClearCommand::handle::33"
-            ]
         }
     }
 }
