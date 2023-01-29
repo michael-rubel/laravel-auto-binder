@@ -110,7 +110,7 @@ class CacheTest extends TestCase
         );
 
         $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
-        $this->artisan(AutoBinderClearCommand::class, ['folders' => 'Services'])
+        $this->artisan(AutoBinderClearCommand::class, ['folder' => 'Services'])
             ->expectsOutputToContain('Container binding cache cleared successfully!');
         $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
         collect($services)->each(
@@ -118,7 +118,7 @@ class CacheTest extends TestCase
         );
 
         $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
-        $this->artisan(AutoBinderClearCommand::class, ['folders' => 'Models'])
+        $this->artisan(AutoBinderClearCommand::class, ['folder' => 'Models'])
             ->expectsOutputToContain('Container binding cache cleared successfully!');
         $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
         collect($models)->each(
@@ -132,7 +132,7 @@ class CacheTest extends TestCase
         });
         $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
         $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
-        $this->artisan(AutoBinderClearCommand::class, ['folders' => 'Services,Models'])
+        $this->artisan(AutoBinderClearCommand::class, ['folder' => 'Services,Models'])
             ->expectsOutputToContain('Container binding cache cleared successfully!');
         $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
         $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
@@ -142,7 +142,7 @@ class CacheTest extends TestCase
     public function testCannotClearCacheForNonExistingFolders()
     {
         try {
-            $this->artisan(AutoBinderClearCommand::class, ['folders' => 'Test']);
+            $this->artisan(AutoBinderClearCommand::class, ['folder' => 'Test']);
         } catch (\InvalidArgumentException $e) {
             $this->assertSame('Cached folder Test not found.', $e->getMessage());
         }
