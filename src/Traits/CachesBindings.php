@@ -82,6 +82,7 @@ trait CachesBindings
      *
      * @param  string  $interface
      * @param  Closure|string  $concrete
+     *
      * @return void
      *
      * @throws ContainerExceptionInterface
