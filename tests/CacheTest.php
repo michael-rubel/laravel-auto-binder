@@ -86,29 +86,59 @@ class CacheTest extends TestCase
     /** @test */
     public function testCanClearCache()
     {
-        AutoBinder::from('Services')
-            ->basePath('tests/Boilerplate')
-            ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-            ->bind();
-
         $services = [
             AnotherServiceInterface::class => AnotherService::class,
             ExampleServiceInterface::class => ExampleService::class,
-            TestServiceInterface::class => TestService::class,
+            TestServiceInterface::class    => TestService::class,
         ];
+
+        $models = [
+            ExampleInterface::class => Example::class,
+        ];
+
+        AutoBinder::from('Services', 'Models')->each(function ($binder) {
+            $binder->basePath('tests/Boilerplate')
+                ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
+                ->bind();
+        });
 
         collect($services)->each(
             fn ($service, $interface) => $this->assertTrue($this->app->bound($interface))
         );
+        collect($models)->each(
+            fn ($service, $interface) => $this->assertTrue($this->app->bound($interface))
+        );
 
         $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
-        $this->artisan(AutoBinderClearCommand::class, ['folder' => 'Services'])
-            ->expectsOutput('Container bindings and cache were cleared successfully!');
+        $this->artisan(AutoBinderClearCommand::class, ['folders' => 'Services'])
+            ->expectsOutputToContain('Container binding cache cleared successfully!');
         $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
-
         collect($services)->each(
             fn ($service, $interface) => $this->assertFalse($this->app->bound($interface))
         );
+
+        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
+        $this->artisan(AutoBinderClearCommand::class, ['folders' => 'Models'])
+            ->expectsOutputToContain('Container binding cache cleared successfully!');
+        $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
+        collect($models)->each(
+            fn ($model, $interface) => $this->assertFalse($this->app->bound($interface))
+        );
+
+        AutoBinder::from('Services', 'Models')->each(function ($binder) {
+            $binder->basePath('tests/Boilerplate')
+                ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
+                ->bind();
+        });
+        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
+        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
+        $this->artisan(AutoBinderClearCommand::class, ['folders' => 'Services,Models'])
+            ->expectsOutputToContain('Container binding cache cleared successfully!');
+        $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
+        $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
+
+        $this->artisan(AutoBinderClearCommand::class, ['folders' => 'Test'])
+            ->expectsOutputToContain('Cached folder Test not found.');
     }
 
     /** @test */
