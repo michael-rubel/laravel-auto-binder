@@ -54,6 +54,7 @@ trait CachesBindings
      * Check if the caching is enabled.
      *
      * @return bool
+     *
      * @throws InvalidArgumentException
      */
     protected function hasCache(): bool
@@ -65,6 +66,7 @@ trait CachesBindings
      * Use the bindings from the cache.
      *
      * @return void
+     *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
@@ -80,8 +82,8 @@ trait CachesBindings
      *
      * @param  string  $interface
      * @param  Closure|string  $concrete
-     *
      * @return void
+     *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
