@@ -13,7 +13,7 @@ class AutoBinderClearCommand extends Command
     /**
      * @var string
      */
-    protected $signature = 'binder:clear {folder : Folders to clear the cache from}';
+    protected $signature = 'binder:clear {folder : Folder to clear the cache from}';
 
     /**
      * @var string
