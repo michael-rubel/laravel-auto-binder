@@ -5,6 +5,7 @@ namespace MichaelRubel\AutoBinder\Commands;
 use Illuminate\Cache\Repository;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use InvalidArgumentException;
 use MichaelRubel\AutoBinder\AutoBinder;
 
 class AutoBinderClearCommand extends Command
@@ -29,11 +30,7 @@ class AutoBinderClearCommand extends Command
             $clue = $this->getClueFor($folder);
 
             if (! $cache->has($clue)) {
-                $this->components->info(
-                    'Cached folder ' . $folder . ' not found.'
-                );
-
-                return;
+                throw new InvalidArgumentException('Cached folder ' . $folder . ' not found.');
             }
 
             $this->flushContainerBindings($cache, $clue);
