@@ -21,7 +21,6 @@ class AutoBinderClearCommand extends Command
 
     /**
      * @param  Repository  $cache
-     *
      * @return int
      */
     public function handle(Repository $cache): int
@@ -52,7 +51,7 @@ class AutoBinderClearCommand extends Command
     /**
      * Retrieves folders to flush from the command input.
      *
-     * @return Collection
+     * @return Collection<int, string>
      */
     private function getFolders(): Collection
     {
@@ -65,7 +64,6 @@ class AutoBinderClearCommand extends Command
      * Retrieves the cache clue for the specified folder.
      *
      * @param  string  $folder
-     *
      * @return string
      */
     private function getClueFor(string $folder): string
@@ -78,7 +76,6 @@ class AutoBinderClearCommand extends Command
      *
      * @param  Repository  $cache
      * @param  string  $clue
-     *
      * @return void
      */
     private function flushContainerBindings(Repository $cache, string $clue): void

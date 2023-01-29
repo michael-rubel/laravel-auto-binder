@@ -88,7 +88,6 @@ class AutoBinder implements ShouldCache
      * Create the object with target folder assigned.
      *
      * @param  string|array  $folder
-     *
      * @return static|Collection<int, static>
      */
     public static function from(string|array $folder): static|Collection
@@ -108,7 +107,6 @@ class AutoBinder implements ShouldCache
      * Exclude specified subdirectory from scanning.
      *
      * @param  string|array  $folders
-     *
      * @return static
      */
     public function exclude(string|array $folders): static
@@ -126,7 +124,6 @@ class AutoBinder implements ShouldCache
      * Set the class base path.
      *
      * @param  string  $basePath
-     *
      * @return static
      */
     public function basePath(string $basePath): static
@@ -140,7 +137,6 @@ class AutoBinder implements ShouldCache
      * Define the class namespace.
      *
      * @param  string  $path
-     *
      * @return static
      */
     public function classNamespace(string $path): static
@@ -154,7 +150,6 @@ class AutoBinder implements ShouldCache
      * Define the interface namespace.
      *
      * @param  string  $path
-     *
      * @return static
      */
     public function interfaceNamespace(string $path): static
@@ -168,7 +163,6 @@ class AutoBinder implements ShouldCache
      * Define the interface postfix.
      *
      * @param  string  $name
-     *
      * @return static
      */
     public function interfaceNaming(string $name): static
@@ -187,7 +181,6 @@ class AutoBinder implements ShouldCache
      *
      * @param  string  $abstract
      * @param  Closure  $callback
-     *
      * @return static
      */
     public function when(string $abstract, Closure $callback): static
@@ -201,7 +194,6 @@ class AutoBinder implements ShouldCache
      * Bind the result as a specific type of binding.
      *
      * @param  string  $type
-     *
      * @return static
      */
     public function as(string $type): static

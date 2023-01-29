@@ -89,7 +89,7 @@ class CacheTest extends TestCase
         $services = [
             AnotherServiceInterface::class => AnotherService::class,
             ExampleServiceInterface::class => ExampleService::class,
-            TestServiceInterface::class    => TestService::class,
+            TestServiceInterface::class => TestService::class,
         ];
 
         $models = [
@@ -136,9 +136,14 @@ class CacheTest extends TestCase
             ->expectsOutputToContain('Container binding cache cleared successfully!');
         $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
         $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
+    }
 
-        $this->artisan(AutoBinderClearCommand::class, ['folders' => 'Test'])
-            ->expectsOutputToContain('Cached folder Test not found.');
+    /** @test */
+    public function testCannotClearCacheForNonExistingFolders()
+    {
+        $this->artisan(AutoBinderClearCommand::class, ['folders' => 'Test,Test2'])
+            ->expectsOutputToContain('Cached folder Test not found.')
+            ->expectsOutputToContain('Cached folder Test2 not found.');
     }
 
     /** @test */
