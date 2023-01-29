@@ -1,4 +1,4 @@
-name: "Laravel Pint"
+name: pint
 
 on:
   push:
