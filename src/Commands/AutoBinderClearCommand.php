@@ -13,7 +13,7 @@ class AutoBinderClearCommand extends Command
     /**
      * @var string
      */
-    protected $signature = 'binder:clear {folders : Folders to clear the cache from}';
+    protected $signature = 'binder:clear {folder : Folders to clear the cache from}';
 
     /**
      * @var string
@@ -23,9 +23,9 @@ class AutoBinderClearCommand extends Command
     /**
      * @param  Repository  $cache
      *
-     * @return int
+     * @return void
      */
-    public function handle(Repository $cache): int
+    public function handle(Repository $cache): void
     {
         $this->getFolders()->each(function ($folder) use ($cache) {
             $clue = $this->getClueFor($folder);
@@ -39,11 +39,7 @@ class AutoBinderClearCommand extends Command
             $cache->forget($clue);
         });
 
-        $this->components->info(
-            'Container binding cache cleared successfully!'
-        );
-
-        return Command::SUCCESS;
+        $this->components->info('Container binding cache cleared successfully!');
     }
 
     /**
@@ -53,7 +49,7 @@ class AutoBinderClearCommand extends Command
      */
     private function getFolders(): Collection
     {
-        $folders = explode(',', $this->argument('folders'));
+        $folders = explode(',', $this->argument('folder'));
 
         return collect($folders);
     }
