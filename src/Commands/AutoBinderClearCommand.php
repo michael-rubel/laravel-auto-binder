@@ -39,7 +39,7 @@ class AutoBinderClearCommand extends Command
             $cache->forget($clue);
         });
 
-        $this->components->info('Container binding cache cleared successfully!');
+        $this->info('Container binding cache cleared successfully!');
     }
 
     /**

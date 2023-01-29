@@ -111,7 +111,7 @@ class CacheTest extends TestCase
 
         $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
         $this->artisan(AutoBinderClearCommand::class, ['folder' => 'Services'])
-            ->expectsOutputToContain('Container binding cache cleared successfully!');
+            ->expectsOutput('Container binding cache cleared successfully!');
         $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
         collect($services)->each(
             fn ($service, $interface) => $this->assertFalse($this->app->bound($interface))
@@ -119,7 +119,7 @@ class CacheTest extends TestCase
 
         $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
         $this->artisan(AutoBinderClearCommand::class, ['folder' => 'Models'])
-            ->expectsOutputToContain('Container binding cache cleared successfully!');
+            ->expectsOutput('Container binding cache cleared successfully!');
         $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
         collect($models)->each(
             fn ($model, $interface) => $this->assertFalse($this->app->bound($interface))
@@ -133,7 +133,7 @@ class CacheTest extends TestCase
         $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
         $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
         $this->artisan(AutoBinderClearCommand::class, ['folder' => 'Services,Models'])
-            ->expectsOutputToContain('Container binding cache cleared successfully!');
+            ->expectsOutput('Container binding cache cleared successfully!');
         $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
         $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
     }
