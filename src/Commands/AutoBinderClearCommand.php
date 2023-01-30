@@ -31,7 +31,9 @@ class AutoBinderClearCommand extends Command
             $clue = $this->getClueFor($folder);
 
             if (! $cache->has($clue)) {
-                throw new InvalidArgumentException('Cached folder ' . $folder . ' not found.');
+                $this->warn('Cached folder ' . $folder . ' not found.');
+
+                return;
             }
 
             $this->flushContainerBindings($cache, $clue);
