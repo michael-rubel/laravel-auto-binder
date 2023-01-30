@@ -141,11 +141,8 @@ class CacheTest extends TestCase
     /** @test */
     public function testCannotClearCacheForNonExistingFolders()
     {
-        try {
-            $this->artisan(AutoBinderClearCommand::class, ['folder' => 'Test']);
-        } catch (\InvalidArgumentException $e) {
-            $this->assertSame('Cached folder Test not found.', $e->getMessage());
-        }
+        $this->artisan(AutoBinderClearCommand::class, ['folder' => 'Test'])
+            ->expectsOutput('Cached folder Test not found.');
     }
 
     /** @test */
