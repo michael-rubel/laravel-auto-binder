@@ -5,7 +5,6 @@ namespace MichaelRubel\AutoBinder\Commands;
 use Illuminate\Cache\Repository;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use InvalidArgumentException;
 use MichaelRubel\AutoBinder\AutoBinder;
 
 class AutoBinderClearCommand extends Command
