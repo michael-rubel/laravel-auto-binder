@@ -18,6 +18,8 @@ class CacheTest extends TestCase
     /** @test */
     public function testCachesBindings()
     {
+        config(['app.name' => 'Testing $env']);
+
         AutoBinder::from('Services', 'Models')->each(
             fn ($binder) => $binder->basePath('tests/Boilerplate')
                 ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
@@ -27,17 +29,17 @@ class CacheTest extends TestCase
 
         $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
 
-        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
+        $this->assertTrue(cache()->has(config('app.name') . AutoBinder::CACHE_KEY . 'Services'));
         $services = [
             AnotherServiceInterface::class => AnotherService::class,
             ExampleServiceInterface::class => ExampleService::class,
             TestServiceInterface::class => TestService::class,
         ];
-        $this->assertSame($services, cache()->get(AutoBinder::CACHE_KEY . 'Services'));
+        $this->assertSame($services, cache()->get(config('app.name') . AutoBinder::CACHE_KEY . 'Services'));
 
-        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
+        $this->assertTrue(cache()->has(config('app.name') . AutoBinder::CACHE_KEY . 'Models'));
         $models = [ExampleInterface::class => Example::class];
-        $this->assertSame($models, cache()->get(AutoBinder::CACHE_KEY . 'Models'));
+        $this->assertSame($models, cache()->get(config('app.name') . AutoBinder::CACHE_KEY . 'Models'));
 
         $this->app->offsetUnset(ExampleServiceInterface::class);
         $this->assertFalse($this->app->bound(ExampleServiceInterface::class));
@@ -63,8 +65,8 @@ class CacheTest extends TestCase
                 ->bind()
         );
 
-        $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
-        $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
+        $this->assertFalse(cache()->has(config('app.name') . AutoBinder::CACHE_KEY . 'Services'));
+        $this->assertFalse(cache()->has(config('app.name') . AutoBinder::CACHE_KEY . 'Models'));
     }
 
     /** @test */
@@ -109,18 +111,18 @@ class CacheTest extends TestCase
             fn ($service, $interface) => $this->assertTrue($this->app->bound($interface))
         );
 
-        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
+        $this->assertTrue(cache()->has(config('app.name') . AutoBinder::CACHE_KEY . 'Services'));
         $this->artisan(AutoBinderClearCommand::class, ['folder' => 'Services'])
             ->expectsOutput('Container binding cache cleared successfully!');
-        $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
+        $this->assertFalse(cache()->has(config('app.name') . AutoBinder::CACHE_KEY . 'Services'));
         collect($services)->each(
             fn ($service, $interface) => $this->assertFalse($this->app->bound($interface))
         );
 
-        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
+        $this->assertTrue(cache()->has(config('app.name') . AutoBinder::CACHE_KEY . 'Models'));
         $this->artisan(AutoBinderClearCommand::class, ['folder' => 'Models'])
             ->expectsOutput('Container binding cache cleared successfully!');
-        $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
+        $this->assertFalse(cache()->has(config('app.name') . AutoBinder::CACHE_KEY . 'Models'));
         collect($models)->each(
             fn ($model, $interface) => $this->assertFalse($this->app->bound($interface))
         );
@@ -130,12 +132,12 @@ class CacheTest extends TestCase
                 ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
                 ->bind();
         });
-        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
-        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
+        $this->assertTrue(cache()->has(config('app.name') . AutoBinder::CACHE_KEY . 'Services'));
+        $this->assertTrue(cache()->has(config('app.name') . AutoBinder::CACHE_KEY . 'Models'));
         $this->artisan(AutoBinderClearCommand::class, ['folder' => 'Services,Models'])
             ->expectsOutput('Container binding cache cleared successfully!');
-        $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
-        $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
+        $this->assertFalse(cache()->has(config('app.name') . AutoBinder::CACHE_KEY . 'Services'));
+        $this->assertFalse(cache()->has(config('app.name') . AutoBinder::CACHE_KEY . 'Models'));
     }
 
     /** @test */
@@ -153,13 +155,13 @@ class CacheTest extends TestCase
             ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
             ->bind();
 
-        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
+        $this->assertTrue(cache()->has(config('app.name') . AutoBinder::CACHE_KEY . 'Services'));
 
         AutoBinder::from('Services')
             ->basePath('tests/Boilerplate')
             ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
             ->bind();
 
-        $this->assertTrue(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
+        $this->assertTrue(cache()->has(config('app.name') . AutoBinder::CACHE_KEY . 'Services'));
     }
 }
