@@ -37,7 +37,7 @@ trait CachesBindings
      */
     public function cacheClue(): string
     {
-        return static::CACHE_KEY . $this->classFolder;
+        return config('app.name') . static::CACHE_KEY . $this->classFolder;
     }
 
     /**
