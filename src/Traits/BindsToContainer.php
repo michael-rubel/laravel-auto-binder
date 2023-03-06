@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MichaelRubel\AutoBinder\Traits;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Str;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -29,7 +29,7 @@ trait BindsToContainer
     protected function scan(): void
     {
         $this->getFolderFiles()->each(
-            fn (array $files, string $actualFolder) => LazyCollection::make($files)->each(
+            fn (array $files, string $actualFolder) => collect($files)->each(
                 function (SplFileInfo $file) use ($actualFolder) {
                     $relativePath = $file->getRelativePathname();
                     $filenameWithoutExtension = $file->getFilenameWithoutExtension();
@@ -63,11 +63,11 @@ trait BindsToContainer
     /**
      * Get the folder files except for ignored ones.
      *
-     * @return LazyCollection<string, array<SplFileInfo>>
+     * @return Collection<string, array<SplFileInfo>>
      */
-    protected function getFolderFiles(): LazyCollection
+    protected function getFolderFiles(): Collection
     {
-        return LazyCollection::make(File::directories(base_path($this->basePath . DIRECTORY_SEPARATOR . $this->classFolder)))
+        return collect(File::directories(base_path($this->basePath . DIRECTORY_SEPARATOR . $this->classFolder)))
             ->reject(fn (string $folder) => in_array(basename($folder), $this->excludesFolders))
             ->mapWithKeys(fn (string $folder) => [basename($folder) => File::allFiles($folder)]);
     }
