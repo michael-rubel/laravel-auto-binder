@@ -38,15 +38,15 @@ trait CachesBindings
      */
     protected function cacheEnabled(): bool
     {
-        return isset($this->caching) && $this->caching && ! app()->isLocal();
+        return $this->caching && ! app()->isLocal();
     }
 
     /**
-     * Check if the caching is enabled.
+     * Check if bindings are cached.
      */
     protected function hasCache(): bool
     {
-        return $this->cacheEnabled() && cache()->has($this->cacheClue());
+        return cache()->has($this->cacheClue());
     }
 
     /**
