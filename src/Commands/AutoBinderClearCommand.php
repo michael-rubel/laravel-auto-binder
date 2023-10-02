@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MichaelRubel\AutoBinder\Commands;
 
 use Illuminate\Cache\Repository;
@@ -20,9 +22,7 @@ class AutoBinderClearCommand extends Command
     protected $description = 'Clear a cached bindings';
 
     /**
-     * @param  Repository  $cache
-     *
-     * @return void
+     * Execute the command.
      */
     public function handle(Repository $cache): void
     {
@@ -57,10 +57,6 @@ class AutoBinderClearCommand extends Command
 
     /**
      * Retrieves the cache clue for the specified folder.
-     *
-     * @param  string  $folder
-     *
-     * @return string
      */
     private function getClueFor(string $folder): string
     {
@@ -69,11 +65,6 @@ class AutoBinderClearCommand extends Command
 
     /**
      * Cleans up the application container bindings.
-     *
-     * @param  Repository  $cache
-     * @param  string  $clue
-     *
-     * @return void
      */
     private function flushContainerBindings(Repository $cache, string $clue): void
     {

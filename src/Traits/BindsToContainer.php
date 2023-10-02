@@ -13,15 +13,10 @@ use Symfony\Component\Finder\SplFileInfo;
 
 trait BindsToContainer
 {
-    /**
-     * @var bool|null
-     */
     private ?bool $providesCache = null;
 
     /**
      * Run the directory scanning & bind the results.
-     *
-     * @return void
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
@@ -74,10 +69,6 @@ trait BindsToContainer
 
     /**
      * Prepare the filename.
-     *
-     * @param  string  $filename
-     *
-     * @return string
      */
     protected function prepareFilename(string $filename): string
     {
@@ -89,10 +80,6 @@ trait BindsToContainer
 
     /**
      * Get the namespace from a given path.
-     *
-     * @param  string  $path
-     *
-     * @return string
      */
     protected function namespaceFrom(string $path): string
     {
@@ -104,11 +91,6 @@ trait BindsToContainer
 
     /**
      * Get the concrete from filename.
-     *
-     * @param  string  $folder
-     * @param  string  $filenameWithRelativePath
-     *
-     * @return string
      */
     protected function concreteFrom(string $folder, string $filenameWithRelativePath): string
     {
@@ -120,10 +102,6 @@ trait BindsToContainer
 
     /**
      * Get the interface from filename.
-     *
-     * @param  string  $filenameWithoutExtension
-     *
-     * @return string
      */
     protected function interfaceFrom(string $filenameWithoutExtension): string
     {
@@ -136,10 +114,6 @@ trait BindsToContainer
 
     /**
      * Guess the interface with a given filename.
-     *
-     * @param  string  $filenameWithoutExtension
-     *
-     * @return string|null
      */
     protected function guessInterfaceBy(string $filenameWithoutExtension): ?string
     {
@@ -150,10 +124,6 @@ trait BindsToContainer
 
     /**
      * Build the interface class-string.
-     *
-     * @param  string  $filename
-     *
-     * @return string
      */
     protected function buildInterfaceBy(string $filename): string
     {
@@ -164,10 +134,6 @@ trait BindsToContainer
 
     /**
      * Build the interface class-string based on the class folder.
-     *
-     * @param  string  $filename
-     *
-     * @return string
      */
     protected function buildInterfaceFromClassBy(string $filename): string
     {
@@ -180,10 +146,6 @@ trait BindsToContainer
 
     /**
      * Cleans up filename to append the desired interface name.
-     *
-     * @param  string  $filename
-     *
-     * @return string
      */
     protected function prepareNamingFor(string $filename): string
     {
@@ -192,10 +154,6 @@ trait BindsToContainer
 
     /**
      * prepares an actual folder.
-     *
-     * @param  string  $folder
-     *
-     * @return string
      */
     protected function prepareActual(string $folder): string
     {
@@ -204,8 +162,6 @@ trait BindsToContainer
 
     /**
      * Check if the class use `CachesBindings` trait.
-     *
-     * @return bool
      */
     protected function providesCache(): bool
     {

@@ -9,9 +9,6 @@ use MichaelRubel\AutoBinder\AutoBinder;
 
 class BootServiceProvider extends ServiceProvider
 {
-    /**
-     * @return void
-     */
     public function boot(): void
     {
         AutoBinder::from(folder: 'Services')

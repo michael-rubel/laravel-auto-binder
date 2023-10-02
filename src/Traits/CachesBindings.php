@@ -7,21 +7,16 @@ namespace MichaelRubel\AutoBinder\Traits;
 use Closure;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Psr\SimpleCache\InvalidArgumentException;
 
 trait CachesBindings
 {
     /**
      * Determines if the caching is enabled.
-     *
-     * @var bool
      */
     public bool $caching = true;
 
     /**
      * Disables the caching.
-     *
-     * @return static
      */
     public function withoutCaching(): static
     {
@@ -32,8 +27,6 @@ trait CachesBindings
 
     /**
      * Get the clue to access the cache.
-     *
-     * @return string
      */
     public function cacheClue(): string
     {
@@ -42,8 +35,6 @@ trait CachesBindings
 
     /**
      * Check if the caching is enabled.
-     *
-     * @return bool
      */
     protected function cacheEnabled(): bool
     {
@@ -52,10 +43,6 @@ trait CachesBindings
 
     /**
      * Check if the caching is enabled.
-     *
-     * @return bool
-     *
-     * @throws InvalidArgumentException
      */
     protected function hasCache(): bool
     {
@@ -64,8 +51,6 @@ trait CachesBindings
 
     /**
      * Use the bindings from the cache.
-     *
-     * @return void
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
@@ -79,11 +64,6 @@ trait CachesBindings
 
     /**
      * Cache the binding.
-     *
-     * @param  string  $interface
-     * @param  Closure|string  $concrete
-     *
-     * @return void
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
