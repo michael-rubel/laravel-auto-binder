@@ -14,6 +14,8 @@ parameters:
        - '#Parameter \#1 \$classFolder of class MichaelRubel\\AutoBinder\\AutoBinder constructor expects string\|null, array\|bool\|string\|null given\.#'
        - '#Parameter \#1 \$value of function collect expects Illuminate\\Contracts\\Support\\Arrayable\<\(int\|string\), mixed\>\|iterable\<\(int\|string\), mixed\>\|null, mixed given\.#'
        - '#Parameter \#1 \$callback of method Illuminate\\Support\\LazyCollection\<\(int\|string\),mixed\>\:\:each\(\) expects callable\(mixed, \(int\|string\)\)\: mixed, Closure\(array, string\)\: Illuminate\\Support\\LazyCollection\<\(int\|string\), mixed\> given\.#'
+       - '#Method MichaelRubel\\AutoBinder\\AutoBinder\:\:prepareNamingFor\(\) should return string but returns array\<string\>\|string\.#'
+       - '#Method MichaelRubel\\AutoBinder\\AutoBinder\:\:prepareActual\(\) should return string but returns array\<string\>\|string\.#'
        - '#Parameter \#2 \$string of function explode expects string, array\|bool\|string\|null given\.#'
        - '#Unable to resolve the template type (.*) in call to function collect#'
        - '#Cannot call method (.*) on mixed\.#'
