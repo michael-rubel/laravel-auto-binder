@@ -22,12 +22,14 @@ class CacheTest extends TestCase
     {
         config(['app.name' => 'Testing $env']);
 
-        AutoBinder::from('Services', 'Models')->each(
-            fn ($binder) => $binder->basePath('tests/Boilerplate')
+        AutoBinder::from('Services', 'Models')->each(function ($binder) {
+            $this->assertTrue($binder->caching);
+
+            return $binder->basePath('tests/Boilerplate')
                 ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
                 ->as('singleton')
-                ->bind()
-        );
+                ->bind();
+        });
 
         $this->assertTrue($this->app->bound(ExampleServiceInterface::class));
 
@@ -59,13 +61,15 @@ class CacheTest extends TestCase
     /** @test */
     public function testAvoidsCaching()
     {
-        AutoBinder::from('Services', 'Models')->each(
-            fn ($binder) => $binder->basePath('tests/Boilerplate')
-                ->withoutCaching()
+        AutoBinder::from('Services', 'Models')->each(function ($binder) {
+            $binder->withoutCaching()
+                ->basePath('tests/Boilerplate')
                 ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
                 ->as('singleton')
-                ->bind()
-        );
+                ->bind();
+
+            $this->assertFalse($binder->caching);
+        });
 
         $this->assertFalse(cache()->has(config('app.name') . AutoBinder::CACHE_KEY . 'Services'));
         $this->assertFalse(cache()->has(config('app.name') . AutoBinder::CACHE_KEY . 'Models'));
@@ -83,8 +87,8 @@ class CacheTest extends TestCase
                 ->bind()
         );
 
-        $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Services'));
-        $this->assertFalse(cache()->has(AutoBinder::CACHE_KEY . 'Models'));
+        $this->assertFalse(cache()->has(config('app.name') . AutoBinder::CACHE_KEY . 'Services'));
+        $this->assertFalse(cache()->has(config('app.name') . AutoBinder::CACHE_KEY . 'Models'));
     }
 
     /** @test */
