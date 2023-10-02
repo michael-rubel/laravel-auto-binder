@@ -9,9 +9,6 @@ use MichaelRubel\AutoBinder\AutoBinder;
 
 class RegisterServiceProvider extends ServiceProvider
 {
-    /**
-     * @return void
-     */
     public function register(): void
     {
         AutoBinder::from(folder: 'Services')

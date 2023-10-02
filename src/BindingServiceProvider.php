@@ -14,10 +14,6 @@ class BindingServiceProvider extends PackageServiceProvider
 {
     /**
      * Configure the package.
-     *
-     * @param  Package  $package
-     *
-     * @return void
      */
     public function configurePackage(Package $package): void
     {
@@ -27,7 +23,7 @@ class BindingServiceProvider extends PackageServiceProvider
     }
 
     /**
-     * @return void
+     * Register bindings.
      */
     public function registeringPackage(): void
     {
