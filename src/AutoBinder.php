@@ -77,7 +77,7 @@ class AutoBinder implements ShouldCache
      *
      * @param  string|null  $classFolder
      */
-    final public function __construct(?string $classFolder = null)
+    final public function __construct(string $classFolder = null)
     {
         if ($classFolder) {
             $this->classFolder = $classFolder;
