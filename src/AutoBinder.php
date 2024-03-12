@@ -59,7 +59,7 @@ class AutoBinder implements ShouldCache
     /**
      * Assign a new class folder.
      */
-    final public function __construct(string $classFolder = null)
+    final public function __construct(?string $classFolder = null)
     {
         if ($classFolder) {
             $this->classFolder = $classFolder;
@@ -171,6 +171,14 @@ class AutoBinder implements ShouldCache
      */
     public function bind(): void
     {
-        $this->hasCache() ? $this->fromCache() : $this->scan();
+        if ($this->hasCache()) {
+            $this->usesCache = true;
+
+            $this->fromCache();
+
+            return;
+        }
+
+        $this->scan();
     }
 }

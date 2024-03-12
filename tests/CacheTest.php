@@ -62,13 +62,14 @@ class CacheTest extends TestCase
     public function testAvoidsCaching()
     {
         AutoBinder::from('Services', 'Models')->each(function ($binder) {
-            $binder->withoutCaching()
-                ->basePath('tests/Boilerplate')
+            $binder = $binder->withoutCaching();
+
+            $binder->basePath('tests/Boilerplate')
                 ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
                 ->as('singleton')
                 ->bind();
 
-            $this->assertFalse($binder->caching);
+            $this->assertFalse($binder->usesCache);
         });
 
         $this->assertFalse(cache()->has(config('app.name') . AutoBinder::CACHE_KEY . 'Services'));
@@ -163,10 +164,13 @@ class CacheTest extends TestCase
 
         $this->assertTrue(cache()->has(config('app.name') . AutoBinder::CACHE_KEY . 'Services'));
 
-        AutoBinder::from('Services')
+        $binder = AutoBinder::from('Services')
             ->basePath('tests/Boilerplate')
-            ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate')
-            ->bind();
+            ->classNamespace('MichaelRubel\\AutoBinder\\Tests\\Boilerplate');
+
+        $binder->bind();
+
+        $this->assertTrue($binder->usesCache);
 
         $this->assertTrue(cache()->has(config('app.name') . AutoBinder::CACHE_KEY . 'Services'));
     }
