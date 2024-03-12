@@ -1,28 +1,28 @@
 name: bc-check
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
 
 jobs:
-  backwards-compatibility-check:
-    name: Backwards Compatibility Check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: "Install PHP"
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.3"
-      - name: "Install dependencies"
-        run: "composer install"
-      -   name: "Install BC check"
-          run: "composer require --dev roave/backward-compatibility-check"
-      - name: "Check for BC breaks"
-        run: "vendor/bin/roave-backward-compatibility-check"
+    backwards-compatibility-check:
+        name: Backwards Compatibility Check
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v3
+                with:
+                    fetch-depth: 0
+            -   name: "Install PHP"
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: "8.3"
+            -   name: "Install dependencies"
+                run: "composer install"
+            -   name: "Install BC check"
+                run: "composer require --dev roave/backward-compatibility-check"
+            -   name: "Check for BC breaks"
+                run: "vendor/bin/roave-backward-compatibility-check"
