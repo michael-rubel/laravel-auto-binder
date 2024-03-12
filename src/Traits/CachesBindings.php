@@ -16,6 +16,12 @@ trait CachesBindings
     public bool $caching = true;
 
     /**
+     * Determines if the caching is being used
+     * by the automatic binder instance.
+     */
+    public bool $usesCache = false;
+
+    /**
      * Disables the caching.
      */
     public function withoutCaching(): static
@@ -42,11 +48,11 @@ trait CachesBindings
     }
 
     /**
-     * Check if bindings are cached.
+     * Check if the caching is enabled.
      */
     protected function hasCache(): bool
     {
-        return cache()->has($this->cacheClue());
+        return $this->cacheEnabled() && cache()->has($this->cacheClue());
     }
 
     /**

@@ -74,7 +74,7 @@ trait BindsToContainer
     {
         return str($filename)
             ->replace('/', '\\')
-            ->substr(0, strrpos($filename, '.'))
+            ->substr(0, strrpos($filename, '.') ?: null)
             ->value();
     }
 
