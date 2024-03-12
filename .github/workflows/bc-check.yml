@@ -19,8 +19,10 @@ jobs:
       - name: "Install PHP"
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.1"
+          php-version: "8.2"
       - name: "Install dependencies"
         run: "composer install"
+      -   name: "Install BC check"
+          run: "composer require roave-backward-compatibility-check --dev"
       - name: "Check for BC breaks"
         run: "vendor/bin/roave-backward-compatibility-check"
